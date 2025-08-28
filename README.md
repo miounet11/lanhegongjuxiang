@@ -171,6 +171,7 @@ class QuantumCpuScheduler {
 - **最低SDK**：API 24 (Android 7.0)
 - **目标SDK**：API 36 (Android 14)
 - **编译SDK**：API 36
+- **GitHub**：https://github.com/miounet11/lanhegongjuxiang
 
 ## 📁 项目结构
 
