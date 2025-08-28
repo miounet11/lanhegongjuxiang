@@ -28,7 +28,9 @@ class UpdateActivity : AppCompatActivity() {
     private lateinit var tvCurrentVersion: MaterialTextView
     private lateinit var tvLatestVersion: MaterialTextView
     private lateinit var tvReleaseDate: MaterialTextView
+    private lateinit var tvLoadingMessage: MaterialTextView
     private lateinit var tvUpdateMessage: MaterialTextView
+    private lateinit var tvUpToDateMessage: MaterialTextView
     private lateinit var tvErrorMessage: MaterialTextView
 
     private lateinit var btnDownloadUpdate: MaterialButton
@@ -58,7 +60,9 @@ class UpdateActivity : AppCompatActivity() {
         tvCurrentVersion = findViewById(R.id.tvCurrentVersion)
         tvLatestVersion = findViewById(R.id.tvLatestVersion)
         tvReleaseDate = findViewById(R.id.tvReleaseDate)
-        tvUpdateMessage = findViewById(R.id.tvUpdateMessage)
+        tvLoadingMessage = findViewById(R.id.tvUpdateMessage) // 用于加载状态
+        tvUpdateMessage = findViewById(R.id.tvUpdateMessage) // 用于更新信息
+        tvUpToDateMessage = findViewById(R.id.tvUpToDateMessage) // 用于已是最新版本
         tvErrorMessage = findViewById(R.id.tvErrorMessage)
 
         btnDownloadUpdate = findViewById(R.id.btnDownloadUpdate)
@@ -120,7 +124,8 @@ class UpdateActivity : AppCompatActivity() {
         cardError.visibility = View.GONE
 
         // 显示加载状态
-        tvUpdateMessage.text = "🧠 正在检查NEURAL更新..."
+        tvLoadingMessage.visibility = View.VISIBLE
+        tvUpdateMessage.visibility = View.GONE
         cardUpdateAvailable.visibility = View.VISIBLE
     }
 
@@ -131,6 +136,10 @@ class UpdateActivity : AppCompatActivity() {
         tvCurrentVersion.text = "当前版本: ${getCurrentVersion()}"
         tvLatestVersion.text = "最新版本: ${versionInfo.version}"
         tvReleaseDate.text = "发布日期: ${versionInfo.releaseDate}"
+
+        // 隐藏加载消息，显示更新消息
+        tvLoadingMessage.visibility = View.GONE
+        tvUpdateMessage.visibility = View.VISIBLE
 
         // 设置更新消息
         val message = buildString {
@@ -152,7 +161,7 @@ class UpdateActivity : AppCompatActivity() {
 
     private fun showUpToDate() {
         hideAllCards()
-        tvUpdateMessage.text = "✅ NEURAL 已是最新版本\n\n您的系统运行在最优状态！"
+        tvUpToDateMessage.text = "✅ NEURAL 已是最新版本\n\n您的系统运行在最优状态！"
         cardUpToDate.visibility = View.VISIBLE
     }
 

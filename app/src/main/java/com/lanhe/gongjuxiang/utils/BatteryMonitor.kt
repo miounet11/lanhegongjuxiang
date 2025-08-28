@@ -294,12 +294,12 @@ class BatteryMonitor(private val context: Context) {
         val currentLevel = _batteryStats.value.level
 
         val remainingHours = if (drainRate > 0) {
-            currentLevel / drainRate
+            (currentLevel / drainRate).toDouble()
         } else {
-            0
+            0.0
         }
 
-        val remainingMinutes = (remainingHours * 60).roundToInt()
+        val remainingMinutes = (remainingHours * 60).toInt()
 
         val status = when {
             remainingHours > 8 -> "电量充足"
@@ -309,7 +309,7 @@ class BatteryMonitor(private val context: Context) {
             else -> "电量严重不足"
         }
 
-        return BatteryLifeEstimate(remainingHours.roundToInt(), remainingMinutes, status)
+        return BatteryLifeEstimate(remainingHours.toInt(), remainingMinutes, status)
     }
 
     // 私有方法
@@ -385,9 +385,11 @@ class BatteryMonitor(private val context: Context) {
 
     private fun enableBatteryOptimization(): Boolean {
         return try {
-            ShizukuManager.putGlobalSetting("adaptive_battery_management_enabled", "1")
-            ShizukuManager.putGlobalSetting("app_standby_enabled", "1")
-            true
+            // 暂时禁用Shizuku设置，需要Android隐藏API支持
+            // ShizukuManager.putGlobalSetting("adaptive_battery_management_enabled", "1")
+            // ShizukuManager.putGlobalSetting("app_standby_enabled", "1")
+            Log.i("BatteryMonitor", "电池优化功能暂时禁用，等待Shizuku高级API实现")
+            false
         } catch (e: Exception) {
             false
         }
@@ -395,10 +397,12 @@ class BatteryMonitor(private val context: Context) {
 
     private fun optimizeScreenSettings(): Boolean {
         return try {
-            ShizukuManager.putSystemSetting("screen_brightness_mode", "0")
-            ShizukuManager.putSystemSetting("screen_off_timeout", "300000") // 5分钟
-            ShizukuManager.putSystemSetting("screen_brightness", "80") // 降低亮度
-            true
+            // 暂时禁用Shizuku设置，需要Android隐藏API支持
+            // ShizukuManager.putSystemSetting("screen_brightness_mode", "0")
+            // ShizukuManager.putSystemSetting("screen_off_timeout", "300000") // 5分钟
+            // ShizukuManager.putSystemSetting("screen_brightness", "80") // 降低亮度
+            Log.i("BatteryMonitor", "屏幕设置优化功能暂时禁用，等待Shizuku高级API实现")
+            false
         } catch (e: Exception) {
             false
         }
@@ -411,8 +415,10 @@ class BatteryMonitor(private val context: Context) {
 
     private fun enablePowerSavingMode(): Boolean {
         return try {
-            ShizukuManager.putGlobalSetting("low_power", "1")
-            true
+            // 暂时禁用Shizuku设置，需要Android隐藏API支持
+            // ShizukuManager.putGlobalSetting("low_power", "1")
+            Log.i("BatteryMonitor", "省电模式功能暂时禁用，等待Shizuku高级API实现")
+            false
         } catch (e: Exception) {
             false
         }
@@ -425,10 +431,11 @@ class BatteryMonitor(private val context: Context) {
 
     private fun optimizeVivoBattery(): Boolean {
         return try {
-            // vivo设备专用电池优化
-            ShizukuManager.putGlobalSetting("vivo_super_power_save", "1")
-            ShizukuManager.putGlobalSetting("vivo_battery_optimization", "1")
-            true
+            // vivo设备专用电池优化 - 暂时禁用Shizuku设置，需要Android隐藏API支持
+            // ShizukuManager.putGlobalSetting("vivo_super_power_save", "1")
+            // ShizukuManager.putGlobalSetting("vivo_battery_optimization", "1")
+            Log.i("BatteryMonitor", "vivo设备电池优化功能暂时禁用，等待Shizuku高级API实现")
+            false
         } catch (e: Exception) {
             false
         }

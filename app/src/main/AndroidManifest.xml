@@ -15,8 +15,14 @@
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" 
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
+
+    <!-- Shizuku相关权限 -->
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
 
     <!-- 硬件特性声明 -->
     <uses-feature android:name="android.hardware.telephony" android:required="false" />
@@ -32,6 +38,9 @@
         <intent>
             <action android:name="android.settings.MANAGE_APPLICATIONS_SETTINGS" />
         </intent>
+        <!-- Shizuku应用查询 -->
+        <package android:name="moe.shizuku.privileged.api" />
+        <package android:name="rikka.shizuku" />
     </queries>
 
     <application
@@ -68,6 +77,111 @@
             android:exported="false"
             android:label="应用管理"
             android:parentActivityName=".MainActivity" />
+
+        <!-- CPU管理活动 -->
+        <activity
+            android:name=".activities.CpuManagerActivity"
+            android:exported="false"
+            android:label="CPU管理"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- 内存管理活动 -->
+        <activity
+            android:name=".activities.MemoryManagerActivity"
+            android:exported="false"
+            android:label="内存管理"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- 电磁管理活动 -->
+        <activity
+            android:name=".activities.ElectromagneticManagerActivity"
+            android:exported="false"
+            android:label="电磁管理"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- 存储管理活动 -->
+        <activity
+            android:name=".activities.StorageManagerActivity"
+            android:exported="false"
+            android:label="存储管理"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- 电池管理活动 -->
+        <activity
+            android:name=".activities.BatteryManagerActivity"
+            android:exported="false"
+            android:label="电池管理"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- 快速设置活动 -->
+        <activity
+            android:name=".activities.QuickSettingsActivity"
+            android:exported="false"
+            android:label="快速设置"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- Shizuku授权活动 -->
+        <activity
+            android:name=".activities.ShizukuAuthActivity"
+            android:exported="false"
+            android:label="Shizuku授权"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- 系统监控活动 -->
+        <activity
+            android:name=".activities.SystemMonitorActivity"
+            android:exported="false"
+            android:label="系统监控"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- 游戏加速活动 -->
+        <activity
+            android:name=".activities.GameAccelerationActivity"
+            android:exported="false"
+            android:label="游戏加速"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- 网络诊断活动 -->
+        <activity
+            android:name=".activities.NetworkDiagnosticActivity"
+            android:exported="false"
+            android:label="网络诊断"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- 性能对比活动 -->
+        <activity
+            android:name=".activities.PerformanceComparisonActivity"
+            android:exported="false"
+            android:label="性能对比"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- 更新活动 -->
+        <activity
+            android:name=".activities.UpdateActivity"
+            android:exported="false"
+            android:label="检查更新"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- 测试活动 -->
+        <activity
+            android:name=".activities.TestActivity"
+            android:exported="false"
+            android:label="测试页面"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

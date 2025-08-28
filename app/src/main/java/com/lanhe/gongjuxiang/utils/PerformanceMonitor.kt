@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.io.*
-import java.lang.management.ManagementFactory
 import kotlin.math.roundToInt
 
 /**
@@ -322,6 +321,8 @@ data class MemoryInfo(
         return String.format("%.1f %s", value, units[unitIndex])
     }
 }
+
+// SystemInfo类已在ShizukuManager.kt中定义
 
 /**
  * 电池信息类

@@ -13,6 +13,10 @@ import com.lanhe.gongjuxiang.R
 import com.lanhe.gongjuxiang.activities.AppManagerActivity
 import com.lanhe.gongjuxiang.databinding.FragmentAdvancedBinding
 import com.lanhe.gongjuxiang.utils.SystemUtils
+import com.lanhe.gongjuxiang.utils.ShizukuManager
+import com.lanhe.gongjuxiang.utils.ShizukuStateObserver
+import com.lanhe.gongjuxiang.activities.ShizukuAuthActivity
+import com.lanhe.gongjuxiang.utils.ShizukuState
 
 class AdvancedFragment : Fragment() {
 
@@ -32,18 +36,19 @@ class AdvancedFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupClickListeners()
         setupSwitches()
+        setupShizukuStateObserver()
+        updateShizukuStatusDisplay()
     }
 
     private fun setupClickListeners() {
         // Shizuku授权
         binding.llShizukuAuthorization.setOnClickListener {
             try {
-                // 检查Shizuku是否安装
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse("https://github.com/RikkaApps/Shizuku")
+                // 直接启动Shizuku授权流程
+                val intent = Intent(requireContext(), ShizukuAuthActivity::class.java)
                 startActivity(intent)
             } catch (e: Exception) {
-                Toast.makeText(context, "无法打开Shizuku下载页面", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "无法启动Shizuku授权", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -171,6 +176,25 @@ class AdvancedFragment : Fragment() {
                 Toast.makeText(context, "操作失败，需要Shizuku权限", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun setupShizukuStateObserver() {
+        ShizukuStateObserver(this) { state ->
+            updateShizukuStatusDisplay()
+        }
+    }
+
+    private fun updateShizukuStatusDisplay() {
+        // 更新Shizuku状态显示
+        val statusText = when (ShizukuManager.shizukuState.value) {
+            ShizukuState.Granted -> "🔑 Shizuku权限：已授权 ✅"
+            ShizukuState.Denied -> "🔑 Shizuku权限：已拒绝 ❌"
+            ShizukuState.Unavailable -> "🔑 Shizuku权限：服务不可用 ⚠️"
+        }
+
+        // 这里需要假设布局中有对应的TextView来显示状态
+        // 如果布局中没有，我们可以暂时注释掉或者添加到其他地方
+        // binding.tvShizukuStatus?.text = statusText
     }
 
     override fun onDestroyView() {

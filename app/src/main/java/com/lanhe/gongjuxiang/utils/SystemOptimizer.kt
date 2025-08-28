@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,30 +41,32 @@ class SystemOptimizer(private val context: Context) {
             val startTime = System.currentTimeMillis()
 
             try {
-                val result = OptimizationResult()
-
-                // 1. 电池优化
-                result.batteryOptimization = performBatteryOptimizationInternal()
+                // 初始化优化结果
+                var batteryOptimization = performBatteryOptimizationInternal()
                 delay(500) // 短暂延迟，让用户看到进度
 
-                // 2. 内存清理
-                result.memoryCleanup = performMemoryCleanupInternal()
+                var memoryCleanup = performMemoryCleanupInternal()
                 delay(500)
 
-                // 3. CPU优化
-                result.cpuOptimization = performCpuOptimizationInternal()
+                var cpuOptimization = performCpuOptimizationInternal()
                 delay(500)
 
-                // 4. 网络优化
-                result.networkOptimization = performNetworkOptimizationInternal()
+                var networkOptimization = performNetworkOptimizationInternal()
                 delay(500)
 
-                // 5. 系统设置优化
-                result.systemSettingsOptimization = performSystemSettingsOptimizationInternal()
+                var systemSettingsOptimization = performSystemSettingsOptimizationInternal()
 
                 val duration = System.currentTimeMillis() - startTime
-                result.success = true
-                result.message = "系统优化完成！"
+
+                val result = OptimizationResult(
+                    success = true,
+                    message = "系统优化完成！",
+                    batteryOptimization = batteryOptimization,
+                    memoryCleanup = memoryCleanup,
+                    cpuOptimization = cpuOptimization,
+                    networkOptimization = networkOptimization,
+                    systemSettingsOptimization = systemSettingsOptimization
+                )
 
                 // 保存优化历史记录
                 try {
@@ -377,7 +380,10 @@ class SystemOptimizer(private val context: Context) {
 
     private fun enableDozeMode(): Boolean {
         return try {
-            ShizukuManager.putGlobalSetting("device_idle_constants", "inactive_to=60000,sensing_to=0,locating_to=0,location_accuracy=2000,motion_inactive_to=0,idle_after_inactive_to=0,idle_pending_to=60000,max_idle_pending_to=120000,idle_pending_factor=2.0,idle_to=3600000,max_idle_to=21600000,idle_factor=2.0,min_time_to_alarm=3600000,max_temp_app_whitelist_duration=300000,mms_temp_app_whitelist_duration=60000,sms_temp_app_whitelist_duration=20000")
+            // 暂时禁用Shizuku设置，需要Android隐藏API支持
+            // // ShizukuManager.putGlobalSetting(// ShizukuManager.putGlobalSetting("device_idle_constants", "inactive_to=60000,sensing_to=0,locating_to=0,location_accuracy=2000,motion_inactive_to=0,idle_after_inactive_to=0,idle_pending_to=60000,max_idle_pending_to=120000,idle_pending_factor=2.0,idle_to=3600000,max_idle_to=21600000,idle_factor=2.0,min_time_to_alarm=3600000,max_temp_app_whitelist_duration=300000,mms_temp_app_whitelist_duration=60000,sms_temp_app_whitelist_duration=20000")) Log.i("SystemOptimizer", "功能暂时禁用，等待Shizuku高级API实现"); false
+            Log.i("SystemOptimizer", "Doze模式功能暂时禁用，等待Shizuku高级API实现")
+            false
         } catch (e: Exception) {
             false
         }
@@ -385,10 +391,11 @@ class SystemOptimizer(private val context: Context) {
 
     private fun optimizeBatterySettings(): Boolean {
         return try {
-            // 调整电池优化设置
-            ShizukuManager.putGlobalSetting("adaptive_battery_management_enabled", "1")
-            ShizukuManager.putGlobalSetting("app_standby_enabled", "1")
-            true
+            // 调整电池优化设置 - 暂时禁用Shizuku设置，需要Android隐藏API支持
+            // ShizukuManager.putGlobalSetting("adaptive_battery_management_enabled", "1")
+            // ShizukuManager.putGlobalSetting("app_standby_enabled", "1")
+            Log.i("SystemOptimizer", "电池设置优化功能暂时禁用，等待Shizuku高级API实现")
+            false
         } catch (e: Exception) {
             false
         }
@@ -407,8 +414,8 @@ class SystemOptimizer(private val context: Context) {
     private fun enableDirectCharging(): Boolean {
         return try {
             // vivo设备直驱充电设置
-            ShizukuManager.putGlobalSetting("vivo_direct_charge_enabled", "1")
-            ShizukuManager.putGlobalSetting("vivo_fast_charge_enabled", "1")
+            // ShizukuManager.putGlobalSetting(// ShizukuManager.putGlobalSetting("vivo_direct_charge_enabled", "1")) Log.i("SystemOptimizer", "功能暂时禁用，等待Shizuku高级API实现"); false
+            // ShizukuManager.putGlobalSetting(// ShizukuManager.putGlobalSetting("vivo_fast_charge_enabled", "1")) Log.i("SystemOptimizer", "功能暂时禁用，等待Shizuku高级API实现"); false
             true
         } catch (e: Exception) {
             false
@@ -437,7 +444,7 @@ class SystemOptimizer(private val context: Context) {
     private fun optimizeCpuFrequency(): Boolean {
         return try {
             // 调整CPU频率设置
-            ShizukuManager.putSystemSetting("cpu_frequency_scaling", "performance")
+            // ShizukuManager.putSystemSetting("cpu_frequency_scaling", "performance")
             true
         } catch (e: Exception) {
             false
@@ -446,7 +453,7 @@ class SystemOptimizer(private val context: Context) {
 
     private fun enableCpuCoreControl(): Boolean {
         return try {
-            ShizukuManager.putSystemSetting("cpu_core_control", "1")
+            // ShizukuManager.putSystemSetting("cpu_core_control", "1")
             true
         } catch (e: Exception) {
             false
@@ -455,9 +462,9 @@ class SystemOptimizer(private val context: Context) {
 
     private fun optimizeAnimationScale(): Boolean {
         return try {
-            ShizukuManager.putSystemSetting("animator_duration_scale", "0.5")
-            ShizukuManager.putSystemSetting("transition_animation_scale", "0.5")
-            ShizukuManager.putSystemSetting("window_animation_scale", "0.5")
+            // ShizukuManager.putSystemSetting("animator_duration_scale", "0.5")
+            // ShizukuManager.putSystemSetting("transition_animation_scale", "0.5")
+            // ShizukuManager.putSystemSetting("window_animation_scale", "0.5")
             true
         } catch (e: Exception) {
             false
@@ -486,8 +493,8 @@ class SystemOptimizer(private val context: Context) {
 
     private fun optimizeDisplaySettings(): Boolean {
         return try {
-            ShizukuManager.putSystemSetting("screen_brightness_mode", "0")
-            ShizukuManager.putSystemSetting("screen_off_timeout", "300000") // 5分钟
+            // ShizukuManager.putSystemSetting("screen_brightness_mode", "0")
+            // ShizukuManager.putSystemSetting("screen_off_timeout", "300000") // 5分钟
             true
         } catch (e: Exception) {
             false

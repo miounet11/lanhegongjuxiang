@@ -55,4 +55,23 @@
     <!-- 渐变背景色 -->
     <color name="gradient_start">#0D1117</color>
     <color name="gradient_end">#161B22</color>
+
+    <!-- 网络诊断专用颜色 -->
+    <color name="signal_excellent">#00E5FF</color>
+    <color name="signal_good">#10B981</color>
+    <color name="signal_fair">#F97316</color>
+    <color name="signal_poor">#EF4444</color>
+    <color name="signal_weak">#6B7280</color>
+    <color name="signal_none">#9CA3AF</color>
+
+    <color name="network_blue">#2196F3</color>
+    <color name="warning_red">#F44336</color>
+    <color name="warning_orange">#FF9800</color>
+    <color name="danger_red">#D32F2F</color>
+
+    <!-- 背景颜色 -->
+    <color name="background_normal">#FFFFFF</color>
+    <color name="background_light">#F5F5F5</color>
+    <color name="background_warning">#FFF3E0</color>
+    <color name="gray_light">#E0E0E0</color>
 </resources>

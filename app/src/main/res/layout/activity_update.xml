@@ -109,14 +109,26 @@
                     android:layout_marginBottom="16dp" />
 
                 <TextView
-                    android:id="@+id/tvUpdateMessage"
+                    android:id="@+id/tvLoadingMessage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="正在检查更新..."
+                    android:text="🧠 正在检查NEURAL更新..."
                     android:textColor="@color/text_primary"
                     android:textSize="14sp"
                     android:fontFamily="monospace"
-                    android:layout_marginBottom="20dp" />
+                    android:layout_marginBottom="20dp"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tvUpdateMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="发现新版本！"
+                    android:textColor="@color/text_primary"
+                    android:textSize="14sp"
+                    android:fontFamily="monospace"
+                    android:layout_marginBottom="20dp"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -176,7 +188,7 @@
                     android:layout_marginBottom="12dp" />
 
                 <TextView
-                    android:id="@+id/tvUpdateMessage"
+                    android:id="@+id/tvUpToDateMessage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="您的系统运行在最优状态！"
