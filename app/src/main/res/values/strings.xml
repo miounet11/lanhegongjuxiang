@@ -1,0 +1,77 @@
+<resources>
+    <string name="app_name">NEURAL</string>
+    
+    <!-- 底部导航 -->
+    <string name="tab_functions">功能</string>
+    <string name="tab_advanced">高级</string>
+    <string name="tab_my">我的</string>
+    
+    <!-- NEURAL 系统工具 -->
+    <string name="system_tools">神经优化系统</string>
+    <string name="native_settings">原生设置</string>
+    <string name="native_settings_desc">访问Android系统核心设置</string>
+    <string name="notification_management">通知矩阵</string>
+    <string name="notification_management_desc">智能通知管理系统，精确控制通知行为</string>
+    <string name="power_saving_management">量子电池管理</string>
+    <string name="power_saving_management_desc">AI驱动的智能省电算法</string>
+    <string name="usage_statistics">性能分析矩阵</string>
+    <string name="usage_statistics_desc">实时系统性能数据分析</string>
+    <string name="system_interface_tools">界面神经网络</string>
+    <string name="system_interface_tools_desc">深度定制系统界面体验</string>
+    <string name="carrier_video_call">通信协议优化</string>
+    <string name="carrier_video_call_desc">优化运营商服务，减少资源占用</string>
+    
+    <!-- NEURAL 高级功能 -->
+    <string name="advanced_features">量子级控制中心</string>
+    <string name="shizuku_permission_required">需要Shizuku量子权限引擎授权</string>
+    <string name="shizuku_authorization">Shizuku量子授权</string>
+    <string name="shizuku_not_running">Shizuku神经网络未激活，请安装并启动Shizuku应用</string>
+    <string name="usage_guide">技术文档</string>
+    <string name="usage_guide_desc">访问NEURAL技术文档，了解深度优化原理</string>
+    <string name="feature_switches">神经开关矩阵</string>
+    <string name="force_direct_power">量子直驱供电</string>
+    <string name="force_direct_power_desc">激活量子级充电算法，减少发热，提升性能输出</string>
+    <string name="global_frame_insertion">全局帧率增强</string>
+    <string name="global_frame_insertion_desc">启用神经网络帧率优化，稳定输出，流畅体验</string>
+    <string name="change_phone_name">设备身份重构</string>
+    <string name="change_phone_name_desc">重新定义设备数字身份，无需外部验证</string>
+    <string name="colorful_charging_animation">霓虹充电矩阵</string>
+    <string name="colorful_charging_animation_desc">激活彩色充电视觉效果，增强沉浸体验</string>
+    <string name="clear_update_reminders">系统更新矩阵清理</string>
+    <string name="clear_update_reminders_desc">清除系统更新提醒缓存，保持界面清洁</string>
+    <string name="freeze_applications">应用量子冻结</string>
+    <string name="freeze_applications_desc">⚠️ 高级操作：量子级应用冻结技术，谨慎使用</string>
+    <string name="memory_management">神经内存矩阵</string>
+    <string name="memory_management_desc">AI驱动的智能内存管理算法</string>
+    <string name="developer_options">开发者量子空间</string>
+    <string name="developer_options_desc">进入Android系统开发者维度</string>
+    <string name="hide_system_notifications">系统通知隐形</string>
+    <string name="hide_system_notifications_desc">使系统通知透明化，保持专注状态</string>
+    <string name="device_controller">智能设备矩阵</string>
+    <string name="device_controller_desc">连接物联网设备网络，实现智能控制生态</string>
+    
+    <!-- NEURAL 通用 -->
+    <string name="ok">确认</string>
+    <string name="cancel">取消</string>
+    <string name="confirm">执行</string>
+    <string name="back">返回</string>
+    <string name="settings">配置矩阵</string>
+    <string name="permission_required">需要量子权限</string>
+    <string name="permission_denied">权限矩阵拒绝</string>
+    <string name="feature_not_available">神经网络未激活</string>
+    <string name="operation_successful">优化完成</string>
+    <string name="operation_failed">量子操作失败</string>
+    <string name="warning">⚠️ 系统警告</string>
+    <string name="error">🚨 神经错误</string>
+    <string name="info">ℹ️ 信息矩阵</string>
+
+    <!-- NEURAL 特色字符串 -->
+    <string name="neural_engine">神经引擎</string>
+    <string name="quantum_optimization">量子优化</string>
+    <string name="performance_boost">性能增强</string>
+    <string name="system_analysis">系统分析</string>
+    <string name="neural_processing">神经处理中...</string>
+    <string name="optimization_complete">优化矩阵完成</string>
+    <string name="ai_learning">AI学习模式</string>
+    <string name="deep_system_access">深度系统访问</string>
+</resources>

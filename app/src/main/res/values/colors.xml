@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    
+    <!-- NEURAL 主题颜色 - 极客风格 -->
+    <color name="primary">#00E5FF</color>        <!-- 青色霓虹 -->
+    <color name="primary_dark">#00B8D4</color>   <!-- 深青色 -->
+    <color name="primary_light">#80F0FF</color>  <!-- 浅青色 -->
+    <color name="accent">#FF1744</color>         <!-- 红色霓虹 -->
+    
+    <!-- NEURAL 文本颜色 - 深色主题适配 -->
+    <color name="text_primary">#F0F6FC</color>     <!-- 浅白 -->
+    <color name="text_secondary">#C9D1D9</color>   <!-- 浅灰 -->
+    <color name="text_hint">#8B949E</color>        <!-- 中灰 -->
+    <color name="text_disabled">#484F58</color>    <!-- 深灰 -->
+    
+    <!-- NEURAL 深色主题背景 -->
+    <color name="background">#0D1117</color>      <!-- 深蓝黑 -->
+    <color name="surface">#161B22</color>        <!-- 深灰黑 -->
+    <color name="card_background">#21262D</color> <!-- 卡片深色 -->
+    
+    <!-- 分割线颜色 -->
+    <color name="divider">#E0E0E0</color>
+    <color name="divider_light">#F0F0F0</color>
+    
+    <!-- 状态颜色 -->
+    <color name="success">#4CAF50</color>
+    <color name="warning">#FF9800</color>
+    <color name="error">#F44336</color>
+    <color name="info">#2196F3</color>
+    
+    <!-- 导航栏颜色 -->
+    <color name="nav_selected">#2196F3</color>
+    <color name="nav_unselected">#757575</color>
+    
+    <!-- 开关颜色 -->
+    <color name="switch_track">#30363D</color>
+    <color name="switch_thumb">#484F58</color>
+    <color name="switch_thumb_checked">#00E5FF</color>
+
+    <!-- NEURAL 特色颜色 -->
+    <color name="neural_cyan">#00E5FF</color>
+    <color name="neural_purple">#A855F7</color>
+    <color name="neural_green">#10B981</color>
+    <color name="neural_orange">#F97316</color>
+    <color name="neural_red">#EF4444</color>
+
+    <!-- 性能状态指示色 -->
+    <color name="performance_excellent">#00E5FF</color>
+    <color name="performance_good">#10B981</color>
+    <color name="performance_warning">#F97316</color>
+    <color name="performance_critical">#EF4444</color>
+
+    <!-- 渐变背景色 -->
+    <color name="gradient_start">#0D1117</color>
+    <color name="gradient_end">#161B22</color>
+</resources>

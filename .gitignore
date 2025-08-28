@@ -1,0 +1,26 @@
+# Android Studio
+*.iml
+.gradle/
+local.properties
+.idea/
+.DS_Store
+build/
+captures/
+*.log
+
+# NEURAL specific
+*.apk
+*.aab
+release/
+debug/
+
+# Kotlin
+.kotlin/
+
+# Gradle
+gradle-app.setting
+!gradle-wrapper.jar
+
+# Local configuration
+local.properties
+*.keystore
