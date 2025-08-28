@@ -2,6 +2,7 @@ package com.lanhe.gongjuxiang.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +22,9 @@ import com.lanhe.gongjuxiang.activities.MemoryManagerActivity
 
 import com.lanhe.gongjuxiang.activities.StorageManagerActivity
 import com.lanhe.gongjuxiang.activities.TestActivity
+import com.lanhe.gongjuxiang.activities.CoreOptimizationActivity
 import com.lanhe.gongjuxiang.fragments.OptimizationProgressDialogFragment
+import com.lanhe.gongjuxiang.utils.PreferencesManager
 import com.lanhe.gongjuxiang.databinding.FragmentFunctionsBinding
 import com.lanhe.gongjuxiang.utils.AnimationUtils
 import com.lanhe.gongjuxiang.utils.DataManager
@@ -48,6 +51,7 @@ class FunctionsFragment : Fragment() {
 
     // 数据管理器
     private lateinit var dataManager: DataManager
+    private lateinit var preferencesManager: PreferencesManager
 
     // 优化前的性能数据
     private var beforeOptimizationData: PerformanceData? = null
@@ -67,6 +71,7 @@ class FunctionsFragment : Fragment() {
 
         // 初始化数据管理器
         dataManager = DataManager(requireContext())
+        preferencesManager = PreferencesManager(requireContext())
 
         return binding.root
     }
@@ -94,6 +99,11 @@ class FunctionsFragment : Fragment() {
         // 一键深度优化
         binding.btnDeepOptimization.setOnClickListener {
             performDeepOptimization()
+        }
+
+        // 核心优化功能
+        binding.cardCoreOptimization.setOnClickListener {
+            openCoreOptimization()
         }
 
         // 快速设置按钮
@@ -544,6 +554,7 @@ class FunctionsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         startPerformanceMonitoring()
+        updateCoreOptimizationStatus()
     }
 
     override fun onPause() {
@@ -1085,6 +1096,46 @@ class FunctionsFragment : Fragment() {
         super.onDestroyView()
         performanceMonitor.stopMonitoring()
         _binding = null
+    }
+
+    /**
+     * 打开核心优化界面
+     */
+    private fun openCoreOptimization() {
+        try {
+            val intent = Intent(requireContext(), CoreOptimizationActivity::class.java)
+            startActivity(intent)
+            AnimationUtils.buttonPressFeedback(binding.cardCoreOptimization)
+        } catch (e: Exception) {
+            Toast.makeText(context, "无法打开核心优化: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    /**
+     * 更新核心优化功能状态显示
+     */
+    private fun updateCoreOptimizationStatus() {
+        try {
+            val totalRemainingUses = preferencesManager.getTotalRemainingUses()
+            val activeFeaturesCount = preferencesManager.getActiveFeaturesCount()
+
+            // 更新剩余使用次数
+            binding.tvCoreOptimizationStatus.text = "今日可使用: $totalRemainingUses 次"
+
+            // 更新活跃功能状态
+            val activeText = when (activeFeaturesCount) {
+                0 -> "⚪ 无活跃功能"
+                1 -> "🟢 1个功能运行中"
+                2 -> "🟢 2个功能运行中"
+                3 -> "🟢 3个功能运行中"
+                4 -> "🟢 4个功能运行中"
+                else -> "🟢 功能运行中"
+            }
+            binding.tvActiveFeatures.text = activeText
+
+        } catch (e: Exception) {
+            Log.e("FunctionsFragment", "更新核心优化状态失败", e)
+        }
     }
 
     /**

@@ -182,6 +182,20 @@
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
 
+        <!-- 核心优化活动 -->
+        <activity
+            android:name=".activities.CoreOptimizationActivity"
+            android:exported="false"
+            android:label="核心性能优化"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- 核心优化服务 -->
+        <service
+            android:name=".services.CoreOptimizationService"
+            android:enabled="true"
+            android:exported="false" />
+
     </application>
 
 </manifest>
