@@ -23,6 +23,7 @@ import com.lanhe.gongjuxiang.activities.MemoryManagerActivity
 import com.lanhe.gongjuxiang.activities.StorageManagerActivity
 import com.lanhe.gongjuxiang.activities.TestActivity
 import com.lanhe.gongjuxiang.activities.CoreOptimizationActivity
+import com.lanhe.gongjuxiang.activities.PacketCaptureActivity
 import com.lanhe.gongjuxiang.fragments.OptimizationProgressDialogFragment
 import com.lanhe.gongjuxiang.utils.PreferencesManager
 import com.lanhe.gongjuxiang.databinding.FragmentFunctionsBinding
@@ -104,6 +105,16 @@ class FunctionsFragment : Fragment() {
         // 核心优化功能
         binding.cardCoreOptimization.setOnClickListener {
             openCoreOptimization()
+        }
+
+        // 网络抓包功能
+        binding.llPacketCapture.setOnClickListener {
+            openPacketCapture()
+        }
+
+        // 应用管理功能
+        binding.llAppManagementNew.setOnClickListener {
+            openAppManagement()
         }
 
         // 快速设置按钮
@@ -1108,6 +1119,32 @@ class FunctionsFragment : Fragment() {
             AnimationUtils.buttonPressFeedback(binding.cardCoreOptimization)
         } catch (e: Exception) {
             Toast.makeText(context, "无法打开核心优化: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    /**
+     * 打开网络抓包界面
+     */
+    private fun openPacketCapture() {
+        try {
+            val intent = Intent(requireContext(), PacketCaptureActivity::class.java)
+            startActivity(intent)
+            AnimationUtils.buttonPressFeedback(binding.llPacketCapture)
+        } catch (e: Exception) {
+            Toast.makeText(context, "无法打开网络抓包: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    /**
+     * 打开应用管理界面
+     */
+    private fun openAppManagement() {
+        try {
+            // 暂时显示提示，后续可以扩展为完整的应用管理功能
+            Toast.makeText(context, "📱 应用管理功能即将推出！", Toast.LENGTH_SHORT).show()
+            AnimationUtils.buttonPressFeedback(binding.llAppManagementNew)
+        } catch (e: Exception) {
+            Toast.makeText(context, "应用管理功能暂不可用: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
 
