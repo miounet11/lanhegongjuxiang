@@ -38,7 +38,11 @@ class CoreOptimizationService : Service() {
         Log.d(TAG, "CoreOptimizationService started")
 
         // 启动前台服务
-        startForeground(NOTIFICATION_ID, createNotification())
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            startForeground(NOTIFICATION_ID, createNotification(), android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+        } else {
+            startForeground(NOTIFICATION_ID, createNotification())
+        }
 
         // 检查并恢复活跃的优化功能
         restoreActiveOptimizations()

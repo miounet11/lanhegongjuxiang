@@ -2,76 +2,76 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    
-    <!-- NEURAL 主题颜色 - 极客风格 -->
-    <color name="primary">#00E5FF</color>        <!-- 青色霓虹 -->
-    <color name="primary_dark">#00B8D4</color>   <!-- 深青色 -->
-    <color name="primary_light">#80F0FF</color>  <!-- 浅青色 -->
-    <color name="accent">#FF1744</color>         <!-- 红色霓虹 -->
-    
-    <!-- NEURAL 文本颜色 - 深色主题适配 -->
-    <color name="text_primary">#F0F6FC</color>     <!-- 浅白 -->
-    <color name="text_secondary">#C9D1D9</color>   <!-- 浅灰 -->
-    <color name="text_hint">#8B949E</color>        <!-- 中灰 -->
-    <color name="text_disabled">#484F58</color>    <!-- 深灰 -->
-    
-    <!-- NEURAL 深色主题背景 -->
-    <color name="background">#0D1117</color>      <!-- 深蓝黑 -->
-    <color name="surface">#161B22</color>        <!-- 深灰黑 -->
-    <color name="card_background">#21262D</color> <!-- 卡片深色 -->
-    
-    <!-- 分割线颜色 -->
-    <color name="divider">#E0E0E0</color>
-    <color name="divider_light">#F0F0F0</color>
-    
-    <!-- 状态颜色 -->
-    <color name="success">#4CAF50</color>
-    <color name="warning">#FF9800</color>
-    <color name="error">#F44336</color>
-    <color name="info">#2196F3</color>
-    
-    <!-- 导航栏颜色 -->
-    <color name="nav_selected">#2196F3</color>
-    <color name="nav_unselected">#757575</color>
-    
-    <!-- 开关颜色 -->
-    <color name="switch_track">#30363D</color>
-    <color name="switch_thumb">#484F58</color>
-    <color name="switch_thumb_checked">#00E5FF</color>
 
-    <!-- NEURAL 特色颜色 -->
-    <color name="neural_cyan">#00E5FF</color>
-    <color name="neural_purple">#A855F7</color>
-    <color name="neural_green">#10B981</color>
-    <color name="neural_orange">#F97316</color>
-    <color name="neural_red">#EF4444</color>
+    <!-- 浅色模式主题颜色 -->
+    <color name="primary">#00B8D4</color>        <!-- 深青色 -->
+    <color name="primary_dark">#0088AA</color>   <!-- 更深青色 -->
+    <color name="primary_light">#00E5FF</color>  <!-- 浅青色 -->
+    <color name="accent">#D32F2F</color>         <!-- 深红色 -->
+
+    <!-- 浅色模式文本颜色 -->
+    <color name="text_primary">#1F2937</color>     <!-- 深黑 -->
+    <color name="text_secondary">#6B7280</color>   <!-- 中灰 -->
+    <color name="text_hint">#9CA3AF</color>        <!-- 浅灰 -->
+    <color name="text_disabled">#D1D5DB</color>    <!-- 更浅灰 -->
+
+    <!-- 浅色模式背景 -->
+    <color name="background">#FFFFFF</color>      <!-- 纯白 -->
+    <color name="surface">#F9FAFB</color>        <!-- 浅灰白 -->
+    <color name="card_background">#FFFFFF</color> <!-- 卡片白色 -->
+
+    <!-- 分割线颜色 -->
+    <color name="divider">#E5E7EB</color>
+    <color name="divider_light">#F3F4F6</color>
+
+    <!-- 状态颜色 -->
+    <color name="success">#059669</color>
+    <color name="warning">#D97706</color>
+    <color name="error">#DC2626</color>
+    <color name="info">#2563EB</color>
+
+    <!-- 导航栏颜色 -->
+    <color name="nav_selected">#00B8D4</color>
+    <color name="nav_unselected">#9CA3AF</color>
+
+    <!-- 开关颜色 -->
+    <color name="switch_track">#E5E7EB</color>
+    <color name="switch_thumb">#FFFFFF</color>
+    <color name="switch_thumb_checked">#00B8D4</color>
+
+    <!-- 特色颜色 -->
+    <color name="neural_cyan">#00B8D4</color>
+    <color name="neural_purple">#7C3AED</color>
+    <color name="neural_green">#059669</color>
+    <color name="neural_orange">#EA580C</color>
+    <color name="neural_red">#DC2626</color>
 
     <!-- 性能状态指示色 -->
-    <color name="performance_excellent">#00E5FF</color>
-    <color name="performance_good">#10B981</color>
-    <color name="performance_warning">#F97316</color>
-    <color name="performance_critical">#EF4444</color>
+    <color name="performance_excellent">#00B8D4</color>
+    <color name="performance_good">#059669</color>
+    <color name="performance_warning">#EA580C</color>
+    <color name="performance_critical">#DC2626</color>
 
     <!-- 渐变背景色 -->
-    <color name="gradient_start">#0D1117</color>
-    <color name="gradient_end">#161B22</color>
+    <color name="gradient_start">#FFFFFF</color>
+    <color name="gradient_end">#F9FAFB</color>
 
     <!-- 网络诊断专用颜色 -->
-    <color name="signal_excellent">#00E5FF</color>
-    <color name="signal_good">#10B981</color>
-    <color name="signal_fair">#F97316</color>
-    <color name="signal_poor">#EF4444</color>
+    <color name="signal_excellent">#00B8D4</color>
+    <color name="signal_good">#059669</color>
+    <color name="signal_fair">#EA580C</color>
+    <color name="signal_poor">#DC2626</color>
     <color name="signal_weak">#6B7280</color>
-    <color name="signal_none">#9CA3AF</color>
+    <color name="signal_none">#D1D5DB</color>
 
-    <color name="network_blue">#2196F3</color>
-    <color name="warning_red">#F44336</color>
-    <color name="warning_orange">#FF9800</color>
-    <color name="danger_red">#D32F2F</color>
+    <color name="network_blue">#2563EB</color>
+    <color name="warning_red">#DC2626</color>
+    <color name="warning_orange">#D97706</color>
+    <color name="danger_red">#B91C1C</color>
 
     <!-- 背景颜色 -->
     <color name="background_normal">#FFFFFF</color>
-    <color name="background_light">#F5F5F5</color>
-    <color name="background_warning">#FFF3E0</color>
-    <color name="gray_light">#E0E0E0</color>
+    <color name="background_light">#F9FAFB</color>
+    <color name="background_warning">#FEF3C7</color>
+    <color name="gray_light">#E5E7EB</color>
 </resources>

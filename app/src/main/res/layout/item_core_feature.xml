@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:layout_margin="6dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp"
+    android:background="@drawable/feature_card_background"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:strokeWidth="0.5dp"
+    app:strokeColor="#E5E5EA">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <!-- 功能图标区域 -->
+        <LinearLayout
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="@drawable/icon_circle_background"
+            android:layout_marginEnd="14dp">
+
+            <ImageView
+                android:id="@+id/ivFeatureIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:scaleType="centerCrop"
+                tools:src="@android:drawable/ic_menu_manage" />
+
+        </LinearLayout>
+
+        <!-- 功能信息区域 -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvFeatureTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="核心优化"
+                android:textColor="#1C1C1E"
+                android:textSize="16sp"
+                                        android:textStyle="normal"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginBottom="2dp" />
+
+            <TextView
+                android:id="@+id/tvFeatureDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="帧率提升 • 延迟优化"
+                android:textColor="#8E8E93"
+                android:textSize="13sp"
+                android:fontFamily="sans-serif"
+                android:maxLines="2" />
+
+        </LinearLayout>
+
+        <!-- 箭头指示器 -->
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@android:drawable/ic_menu_more"
+            android:rotation="0"
+            android:alpha="0.5"
+            android:tint="#C7C7CC" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

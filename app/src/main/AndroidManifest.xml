@@ -31,6 +31,10 @@
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
 
+    <!-- 前台服务权限 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+
     <!-- 硬件特性声明 -->
     <uses-feature android:name="android.hardware.telephony" android:required="false" />
 
@@ -84,6 +88,14 @@
             android:exported="false"
             android:label="应用管理"
             android:parentActivityName=".MainActivity" />
+
+        <!-- 主题设置活动 -->
+        <activity
+            android:name=".activities.ThemeSettingsActivity"
+            android:exported="false"
+            android:label="主题设置"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
 
         <!-- CPU管理活动 -->
         <activity
@@ -201,7 +213,8 @@
         <service
             android:name=".services.CoreOptimizationService"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
 
         <!-- 抓包分析活动 -->
         <activity
