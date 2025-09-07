@@ -374,4 +374,281 @@ object AnimationUtils {
             view.background = originalColor
         }, duration)
     }
+
+    /**
+     * 3D翻转动画
+     */
+    fun flip3D(view: View, duration: Long = DEFAULT_DURATION) {
+        val flipOutAnimator = ObjectAnimator.ofFloat(view, "rotationY", 0f, 90f)
+        val flipInAnimator = ObjectAnimator.ofFloat(view, "rotationY", -90f, 0f)
+
+        AnimatorSet().apply {
+            playSequentially(flipOutAnimator, flipInAnimator)
+            this.duration = duration / 2
+            interpolator = AccelerateDecelerateInterpolator()
+            start()
+        }
+    }
+
+    /**
+     * 弹性缩放动画
+     */
+    fun bounceScale(view: View, duration: Long = DEFAULT_DURATION) {
+        val scaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.3f, 0.8f, 1.1f, 1f)
+        val scaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY", 1f, 1.3f, 0.8f, 1.1f, 1f)
+
+        AnimatorSet().apply {
+            playTogether(scaleXAnimator, scaleYAnimator)
+            this.duration = duration
+            interpolator = BounceInterpolator()
+            start()
+        }
+    }
+
+    /**
+     * 波浪动画
+     */
+    fun waveAnimation(view: View, duration: Long = DEFAULT_DURATION) {
+        val waveAnimator = ObjectAnimator.ofFloat(
+            view,
+            "translationY",
+            0f, -20f, 0f, -10f, 0f
+        )
+
+        waveAnimator.apply {
+            this.duration = duration
+            interpolator = defaultInterpolator
+            start()
+        }
+    }
+
+    /**
+     * 发光效果动画
+     */
+    fun glowEffect(view: View, duration: Long = DEFAULT_DURATION) {
+        val glowAnimator = ObjectAnimator.ofFloat(view, "alpha", 0.5f, 1f, 0.5f)
+        glowAnimator.duration = duration
+        glowAnimator.repeatCount = 3
+        glowAnimator.interpolator = defaultInterpolator
+        glowAnimator.start()
+    }
+
+    /**
+     * 粒子爆炸动画
+     */
+    fun particleExplosion(view: View, duration: Long = DEFAULT_DURATION) {
+        val scaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX", 1f, 2f, 0f)
+        val scaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY", 1f, 2f, 0f)
+        val alphaAnimator = ObjectAnimator.ofFloat(view, "alpha", 1f, 0.5f, 0f)
+
+        AnimatorSet().apply {
+            playTogether(scaleXAnimator, scaleYAnimator, alphaAnimator)
+            this.duration = duration
+            interpolator = AccelerateInterpolator()
+            start()
+        }
+    }
+
+    /**
+     * 数字滚动动画
+     */
+    fun numberRolling(
+        startValue: Int,
+        endValue: Int,
+        duration: Long = LONG_DURATION,
+        onUpdate: (Int) -> Unit
+    ) {
+        val animator = ValueAnimator.ofInt(startValue, endValue)
+        animator.duration = duration
+        animator.interpolator = DecelerateInterpolator()
+        animator.addUpdateListener { animation ->
+            val value = animation.animatedValue as Int
+            onUpdate(value)
+        }
+        animator.start()
+    }
+
+    /**
+     * 进度条填充动画
+     */
+    fun progressFill(
+        progressBar: android.widget.ProgressBar,
+        targetProgress: Int,
+        duration: Long = DEFAULT_DURATION,
+        onComplete: (() -> Unit)? = null
+    ) {
+        val animator = ObjectAnimator.ofInt(progressBar, "progress", 0, targetProgress)
+        animator.duration = duration
+        animator.interpolator = defaultInterpolator
+        animator.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {}
+            override fun onAnimationEnd(animation: Animator) {
+                onComplete?.invoke()
+            }
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationRepeat(animation: Animator) {}
+        })
+        animator.start()
+    }
+
+    /**
+     * 卡片堆叠动画
+     */
+    fun cardStackAnimation(views: List<View>, duration: Long = DEFAULT_DURATION) {
+        views.forEachIndexed { index, view ->
+            view.translationY = (index * 20).toFloat()
+            view.alpha = 1f - (index * 0.1f)
+            view.scaleX = 1f - (index * 0.05f)
+            view.scaleY = 1f - (index * 0.05f)
+            
+            view.animate()
+                .translationY(0f)
+                .alpha(1f)
+                .scaleX(1f)
+                .scaleY(1f)
+                .setDuration(duration)
+                .setStartDelay(index * 100L)
+                .setInterpolator(defaultInterpolator)
+                .start()
+        }
+    }
+
+    /**
+     * 打字机效果动画
+     */
+    fun typewriterEffect(
+        textView: android.widget.TextView,
+        text: String,
+        duration: Long = 1000L,
+        onComplete: (() -> Unit)? = null
+    ) {
+        textView.text = ""
+        val charDuration = duration / text.length
+        
+        text.forEachIndexed { index, char ->
+            textView.postDelayed({
+                textView.text = text.substring(0, index + 1)
+                if (index == text.length - 1) {
+                    onComplete?.invoke()
+                }
+            }, index * charDuration)
+        }
+    }
+
+    /**
+     * 心跳动画
+     */
+    fun heartbeat(view: View, duration: Long = DEFAULT_DURATION) {
+        val scaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.1f, 1f, 1.1f, 1f)
+        val scaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY", 1f, 1.1f, 1f, 1.1f, 1f)
+
+        AnimatorSet().apply {
+            playTogether(scaleXAnimator, scaleYAnimator)
+            this.duration = duration
+            interpolator = defaultInterpolator
+            start()
+        }
+    }
+
+    /**
+     * 彩虹色彩动画
+     */
+    fun rainbowEffect(view: View, duration: Long = DEFAULT_DURATION) {
+        val colors = intArrayOf(
+            android.graphics.Color.RED,
+            android.graphics.Color.ORANGE,
+            android.graphics.Color.YELLOW,
+            android.graphics.Color.GREEN,
+            android.graphics.Color.BLUE,
+            android.graphics.Color.MAGENTA
+        )
+        
+        val colorAnimator = ValueAnimator.ofInt(*colors)
+        colorAnimator.duration = duration
+        colorAnimator.repeatCount = ValueAnimator.INFINITE
+        colorAnimator.addUpdateListener { animation ->
+            val color = animation.animatedValue as Int
+            view.setBackgroundColor(color)
+        }
+        colorAnimator.start()
+        
+        // 存储动画以便后续停止
+        view.tag = colorAnimator
+    }
+
+    /**
+     * 停止彩虹动画
+     */
+    fun stopRainbowEffect(view: View) {
+        (view.tag as? ValueAnimator)?.cancel()
+        view.tag = null
+    }
+
+    /**
+     * 磁铁吸附动画
+     */
+    fun magneticAttraction(view: View, targetX: Float, targetY: Float, duration: Long = DEFAULT_DURATION) {
+        val translateXAnimator = ObjectAnimator.ofFloat(view, "translationX", view.translationX, targetX)
+        val translateYAnimator = ObjectAnimator.ofFloat(view, "translationY", view.translationY, targetY)
+        val scaleAnimator = ObjectAnimator.ofFloat(view, "scaleX", view.scaleX, 1.2f)
+        val scaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY", view.scaleY, 1.2f)
+
+        AnimatorSet().apply {
+            playTogether(translateXAnimator, translateYAnimator, scaleAnimator, scaleYAnimator)
+            this.duration = duration
+            interpolator = AccelerateInterpolator()
+            start()
+        }
+    }
+
+    /**
+     * 液体流动动画
+     */
+    fun liquidFlow(view: View, duration: Long = DEFAULT_DURATION) {
+        val flowAnimator = ObjectAnimator.ofFloat(
+            view,
+            "translationX",
+            0f, 50f, -30f, 20f, -10f, 0f
+        )
+
+        flowAnimator.apply {
+            this.duration = duration
+            interpolator = AccelerateDecelerateInterpolator()
+            start()
+        }
+    }
+
+    /**
+     * 全屏过渡动画
+     */
+    fun fullScreenTransition(
+        fromView: View,
+        toView: View,
+        duration: Long = DEFAULT_DURATION,
+        onComplete: (() -> Unit)? = null
+    ) {
+        // 淡出当前视图
+        fadeOut(fromView, duration / 2)
+        
+        // 延迟显示新视图
+        toView.postDelayed({
+            fadeIn(toView, duration / 2)
+            onComplete?.invoke()
+        }, duration / 2)
+    }
+
+    /**
+     * 创建自定义插值器
+     */
+    fun createCustomInterpolator(): Interpolator {
+        return object : Interpolator {
+            override fun getInterpolation(input: Float): Float {
+                return if (input < 0.5f) {
+                    2 * input * input
+                } else {
+                    1 - 2 * (1 - input) * (1 - input)
+                }
+            }
+        }
+    }
 }
