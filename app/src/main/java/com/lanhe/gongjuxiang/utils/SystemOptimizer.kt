@@ -423,13 +423,103 @@ class SystemOptimizer(private val context: Context) {
     }
 
     private fun clearAppCache(): Long {
-        // 实现缓存清理逻辑
-        return 0L
+        return try {
+            var totalCleared = 0L
+            val packageManager = context.packageManager
+            val packages = packageManager.getInstalledPackages(0)
+            
+            packages.forEach { packageInfo ->
+                try {
+                    val cacheDir = File(context.cacheDir.parent, "cache")
+                    if (cacheDir.exists()) {
+                        val files = cacheDir.listFiles()
+                        files?.forEach { file ->
+                            if (file.isFile && file.canWrite()) {
+                                totalCleared += file.length()
+                                file.delete()
+                            }
+                        }
+                    }
+                } catch (e: Exception) {
+                    // 忽略单个应用的清理失败
+                }
+            }
+            
+            // 清理系统缓存目录
+            val systemCacheDirs = listOf(
+                "/data/local/tmp",
+                "/cache",
+                "/data/cache"
+            )
+            
+            systemCacheDirs.forEach { dirPath ->
+                try {
+                    val dir = File(dirPath)
+                    if (dir.exists() && dir.canWrite()) {
+                        dir.listFiles()?.forEach { file ->
+                            if (file.isFile && file.canWrite()) {
+                                totalCleared += file.length()
+                                file.delete()
+                            }
+                        }
+                    }
+                } catch (e: Exception) {
+                    // 忽略系统目录清理失败
+                }
+            }
+            
+            totalCleared
+        } catch (e: Exception) {
+            0L
+        }
     }
 
     private fun killBackgroundProcesses(): Int {
-        // 实现后台进程清理逻辑
-        return 0
+        return try {
+            var killedCount = 0
+            val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as android.app.ActivityManager
+            
+            // 获取运行中的应用进程
+            val runningProcesses = activityManager.runningAppProcesses
+            
+            runningProcesses?.forEach { processInfo ->
+                // 跳过系统关键进程
+                if (isSystemProcess(processInfo.processName)) {
+                    return@forEach
+                }
+                
+                // 跳过当前应用
+                if (processInfo.processName == context.packageName) {
+                    return@forEach
+                }
+                
+                try {
+                    // 杀死后台进程
+                    android.os.Process.killProcess(processInfo.pid)
+                    killedCount++
+                } catch (e: Exception) {
+                    // 忽略无法杀死的进程
+                }
+            }
+            
+            killedCount
+        } catch (e: Exception) {
+            0
+        }
+    }
+    
+    private fun isSystemProcess(processName: String): Boolean {
+        val systemProcesses = listOf(
+            "system",
+            "com.android.systemui",
+            "com.android.phone",
+            "com.android.settings",
+            "android.process.acore",
+            "android.process.media",
+            "com.android.launcher",
+            "com.android.inputmethod"
+        )
+        return systemProcesses.any { processName.contains(it) }
     }
 
     private fun forceGc(): Boolean {
