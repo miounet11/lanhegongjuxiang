@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="首页" />
+    <item
+        android:id="@+id/nav_performance"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="性能" />
+    <item
+        android:id="@+id/nav_browser"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="浏览器" />
+    <item
+        android:id="@+id/nav_security"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="安全" />
+    <item
+        android:id="@+id/nav_settings"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="设置" />
+</menu>

@@ -1,381 +1,211 @@
 package com.lanhe.gongjuxiang.utils
 
+import android.app.ActivityManager
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.os.BatteryManager
 import android.os.Build
 import android.os.Debug
+import android.os.Process
 import android.system.Os
-import android.system.StructStat
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import java.io.*
+import android.system.OsConstants
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.io.BufferedReader
+import java.io.FileReader
+import java.io.IOException
 import kotlin.math.roundToInt
 
 /**
- * 性能监控器
- * 负责收集系统性能数据，包括CPU、内存、电池等信息
+ * 性能监控工具类
+ * 提供CPU、内存、存储等系统性能指标的实时监控
  */
 class PerformanceMonitor(private val context: Context) {
 
-    private val dataManager = DataManager(context)
-
-    // 性能数据状态
-    private val _performanceData = MutableStateFlow<PerformanceData>(PerformanceData())
-    val performanceData: StateFlow<PerformanceData> = _performanceData.asStateFlow()
-
-    // 监控任务
-    private var monitoringJob: Job? = null
-    private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
-
-    // CPU使用率计算相关
-    private var lastCpuTime: Long = 0
-    private var lastAppCpuTime: Long = 0
-
-    // 内存信息
-    private var totalMemory: Long = 0
-    private var availableMemory: Long = 0
-
-    init {
-        updateMemoryInfo()
-    }
+    private val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
 
     /**
-     * 开始性能监控
+     * CPU使用率数据类
      */
-    fun startMonitoring(interval: Long = 1000) {
-        stopMonitoring()
-        monitoringJob = scope.launch {
-            while (isActive) {
-                updatePerformanceData()
-                delay(interval)
-            }
-        }
-    }
+    data class CpuUsage(
+        val totalUsage: Float,      // 总CPU使用率
+        val userUsage: Float,       // 用户空间使用率
+        val systemUsage: Float,     // 系统空间使用率
+        val cores: Int             // CPU核心数
+    )
 
     /**
-     * 停止性能监控
+     * 内存信息数据类
      */
-    fun stopMonitoring() {
-        monitoringJob?.cancel()
-        monitoringJob = null
-    }
-
-    /**
-     * 更新性能数据
-     */
-    private suspend fun updatePerformanceData() = withContext(Dispatchers.Default) {
-        val currentData = _performanceData.value
-
-        val newData = currentData.copy(
-            cpuUsage = getCpuUsage(),
-            memoryUsage = getMemoryUsage(),
-            batteryInfo = getBatteryInfo(),
-            networkStats = getNetworkStats(),
-            timestamp = System.currentTimeMillis()
-        )
-
-        _performanceData.value = newData
-
-        // 保存到数据库
-        try {
-            dataManager.savePerformanceData(newData, "realtime")
-        } catch (e: Exception) {
-            // 记录保存失败，但不影响监控继续进行
-            println("Failed to save performance data: ${e.message}")
-        }
-    }
+    data class MemoryInfo(
+        val totalMemory: Long,      // 总内存 (MB)
+        val availableMemory: Long,  // 可用内存 (MB)
+        val usedMemory: Long,       // 已用内存 (MB)
+        val usagePercent: Float     // 使用率百分比
+    )
 
     /**
      * 获取CPU使用率
      */
-    private fun getCpuUsage(): Float {
-        return try {
-            val statFile = File("/proc/stat")
-            if (!statFile.exists()) return 0f
+    suspend fun getCpuUsage(): CpuUsage = withContext(Dispatchers.IO) {
+        try {
+            val cpuInfo = readCpuInfo()
+            val cores = Runtime.getRuntime().availableProcessors()
 
-            val reader = BufferedReader(FileReader(statFile))
-            val cpuLine = reader.readLine()
-            reader.close()
-
-            val parts = cpuLine.split("\\s+".toRegex())
-            if (parts.size < 8) return 0f
-
-            val user = parts[1].toLong()
-            val nice = parts[2].toLong()
-            val system = parts[3].toLong()
-            val idle = parts[4].toLong()
-            val iowait = parts[5].toLong()
-            val irq = parts[6].toLong()
-            val softirq = parts[7].toLong()
-
-            val totalCpuTime = user + nice + system + idle + iowait + irq + softirq
-            val totalDiff = totalCpuTime - lastCpuTime
-            val idleDiff = idle - (lastCpuTime - totalCpuTime + idle)
-
-            lastCpuTime = totalCpuTime
-
-            if (totalDiff == 0L) return 0f
-            val usage = ((totalDiff - idleDiff).toFloat() / totalDiff.toFloat()) * 100f
-            usage.coerceIn(0f, 100f)
-
+            CpuUsage(
+                totalUsage = cpuInfo.total.toFloat(),
+                userUsage = cpuInfo.user.toFloat(),
+                systemUsage = cpuInfo.system.toFloat(),
+                cores = cores
+            )
         } catch (e: Exception) {
-            0f
+            CpuUsage(0f, 0f, 0f, Runtime.getRuntime().availableProcessors())
         }
     }
 
     /**
-     * 获取内存使用率
+     * 获取内存信息
      */
-    private fun getMemoryUsage(): MemoryInfo {
-        return try {
-            val memInfoFile = File("/proc/meminfo")
-            if (!memInfoFile.exists()) return MemoryInfo()
+    fun getMemoryInfo(): MemoryInfo {
+        val memoryInfo = ActivityManager.MemoryInfo()
+        activityManager.getMemoryInfo(memoryInfo)
 
-            val reader = BufferedReader(FileReader(memInfoFile))
-            var totalMem = 0L
-            var availableMem = 0L
+        val totalMemory = memoryInfo.totalMem / (1024 * 1024) // MB
+        val availableMemory = memoryInfo.availMem / (1024 * 1024) // MB
+        val usedMemory = totalMemory - availableMemory
+        val usagePercent = (usedMemory.toFloat() / totalMemory.toFloat()) * 100
 
-            reader.useLines { lines ->
-                lines.forEach { line ->
-                    when {
-                        line.startsWith("MemTotal:") -> {
-                            totalMem = parseMemValue(line)
-                        }
-                        line.startsWith("MemAvailable:") -> {
-                            availableMem = parseMemValue(line)
-                        }
-                    }
+        return MemoryInfo(
+            totalMemory = totalMemory,
+            availableMemory = availableMemory,
+            usedMemory = usedMemory,
+            usagePercent = usagePercent
+        )
+    }
+
+    /**
+     * 获取应用内存使用情况
+     */
+    fun getAppMemoryUsage(): Long {
+        val pid = Process.myPid()
+        val memoryInfo = activityManager.getProcessMemoryInfo(intArrayOf(pid))
+        return memoryInfo[0].totalPss.toLong() // KB
+    }
+
+    /**
+     * 获取存储空间信息
+     */
+    fun getStorageInfo(): StorageInfo {
+        val stat = android.os.StatFs(context.filesDir.absolutePath)
+        val blockSize = stat.blockSizeLong
+        val totalBlocks = stat.blockCountLong
+        val availableBlocks = stat.availableBlocksLong
+
+        val totalSpace = totalBlocks * blockSize / (1024 * 1024 * 1024) // GB
+        val availableSpace = availableBlocks * blockSize / (1024 * 1024 * 1024) // GB
+        val usedSpace = totalSpace - availableSpace
+        val usagePercent = (usedSpace.toFloat() / totalSpace.toFloat()) * 100
+
+        return StorageInfo(
+            totalSpace = totalSpace,
+            availableSpace = availableSpace,
+            usedSpace = usedSpace,
+            usagePercent = usagePercent
+        )
+    }
+
+    /**
+     * 读取CPU信息
+     */
+    private fun readCpuInfo(): CpuStats {
+        var reader: BufferedReader? = null
+        try {
+            reader = BufferedReader(FileReader("/proc/stat"))
+            val line = reader.readLine()
+            if (line != null) {
+                val parts = line.split("\\s+".toRegex())
+                if (parts.size >= 8) {
+                    val user = parts[1].toLong()
+                    val nice = parts[2].toLong()
+                    val system = parts[3].toLong()
+                    val idle = parts[4].toLong()
+                    val iowait = parts[5].toLong()
+                    val irq = parts[6].toLong()
+                    val softirq = parts[7].toLong()
+
+                    val total = user + nice + system + idle + iowait + irq + softirq
+                    val active = total - idle
+
+                    return CpuStats(
+                        total = total,
+                        active = active,
+                        user = user,
+                        system = system
+                    )
                 }
             }
-
-            if (totalMem > 0) {
-                val usedMem = totalMem - availableMem
-                val usagePercent = (usedMem.toFloat() / totalMem.toFloat() * 100f).roundToInt()
-                MemoryInfo(totalMem, availableMem, usedMem, usagePercent)
-            } else {
-                MemoryInfo()
-            }
-        } catch (e: Exception) {
-            MemoryInfo()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } finally {
+            reader?.close()
         }
+        return CpuStats(0, 0, 0, 0)
     }
 
     /**
-     * 解析内存值
+     * CPU统计数据类
      */
-    private fun parseMemValue(line: String): Long {
-        val parts = line.split("\\s+".toRegex())
-        return if (parts.size >= 2) {
-            parts[1].toLong() * 1024 // KB转字节
-        } else {
+    private data class CpuStats(
+        val total: Long,
+        val active: Long,
+        val user: Long,
+        val system: Long
+    )
+
+    /**
+     * 存储信息数据类
+     */
+    data class StorageInfo(
+        val totalSpace: Long,       // 总空间 (GB)
+        val availableSpace: Long,   // 可用空间 (GB)
+        val usedSpace: Long,        // 已用空间 (GB)
+        val usagePercent: Float     // 使用率百分比
+    )
+
+    /**
+     * 获取设备基本信息
+     */
+    fun getDeviceInfo(): DeviceInfo {
+        return DeviceInfo(
+            model = Build.MODEL,
+            brand = Build.BRAND,
+            androidVersion = Build.VERSION.RELEASE,
+            apiLevel = Build.VERSION.SDK_INT,
+            cpuCores = Runtime.getRuntime().availableProcessors(),
+            totalMemory = getTotalMemory()
+        )
+    }
+
+    /**
+     * 获取总内存大小
+     */
+    private fun getTotalMemory(): Long {
+        return try {
+            val memoryInfo = ActivityManager.MemoryInfo()
+            activityManager.getMemoryInfo(memoryInfo)
+            memoryInfo.totalMem / (1024 * 1024) // MB
+        } catch (e: Exception) {
             0L
         }
     }
 
     /**
-     * 获取电池信息
+     * 设备信息数据类
      */
-    private fun getBatteryInfo(): BatteryInfo {
-        return try {
-            val batteryIntent = context.registerReceiver(null,
-                IntentFilter(Intent.ACTION_BATTERY_CHANGED)) ?: return BatteryInfo()
-
-            val level = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
-            val scale = batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
-            val temperature = batteryIntent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, -1)
-            val voltage = batteryIntent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1)
-            val status = batteryIntent.getIntExtra(BatteryManager.EXTRA_STATUS, -1)
-            val plugged = batteryIntent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1)
-
-            val batteryPercent = if (level >= 0 && scale > 0) {
-                (level.toFloat() / scale.toFloat() * 100f).roundToInt()
-            } else {
-                0
-            }
-
-            val isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
-                           status == BatteryManager.BATTERY_STATUS_FULL
-            val isPlugged = plugged != 0
-
-            BatteryInfo(
-                level = batteryPercent,
-                temperature = temperature / 10f, // 转换为摄氏度
-                voltage = voltage / 1000f, // 转换为伏特
-                isCharging = isCharging,
-                isPlugged = isPlugged
-            )
-        } catch (e: Exception) {
-            BatteryInfo()
-        }
-    }
-
-    /**
-     * 获取网络统计
-     */
-    private fun getNetworkStats(): NetworkStats {
-        // 这里可以集成更详细的网络统计
-        // 暂时返回空实现
-        return NetworkStats()
-    }
-
-    /**
-     * 更新内存信息
-     */
-    private fun updateMemoryInfo() {
-        try {
-            val memInfo = Debug.MemoryInfo()
-            Debug.getMemoryInfo(memInfo)
-            totalMemory = Runtime.getRuntime().totalMemory()
-            availableMemory = Runtime.getRuntime().freeMemory()
-        } catch (e: Exception) {
-            // 忽略异常
-        }
-    }
-
-    /**
-     * 获取设备温度
-     */
-    fun getDeviceTemperature(): Float {
-        return try {
-            // 尝试读取CPU温度
-            val cpuTempFile = File("/sys/class/thermal/thermal_zone0/temp")
-            if (cpuTempFile.exists()) {
-                val temp = BufferedReader(FileReader(cpuTempFile)).use { it.readLine().toFloat() }
-                temp / 1000f // 转换为摄氏度
-            } else {
-                0f
-            }
-        } catch (e: Exception) {
-            0f
-        }
-    }
-
-    /**
-     * 获取存储使用情况
-     */
-    fun getStorageInfo(): StorageInfo {
-        return try {
-            val stat = android.os.StatFs(android.os.Environment.getDataDirectory().path)
-            val totalBytes = stat.totalBytes
-            val availableBytes = stat.availableBytes
-            val usedBytes = totalBytes - availableBytes
-            val usagePercent = if (totalBytes > 0) {
-                (usedBytes.toFloat() / totalBytes.toFloat() * 100f).roundToInt()
-            } else {
-                0
-            }
-
-            StorageInfo(totalBytes, availableBytes, usedBytes, usagePercent)
-        } catch (e: Exception) {
-            StorageInfo()
-        }
-    }
-}
-
-/**
- * 性能数据类
- */
-data class PerformanceData(
-    val cpuUsage: Float = 0f,
-    val memoryUsage: MemoryInfo = MemoryInfo(),
-    val batteryInfo: BatteryInfo = BatteryInfo(),
-    val networkStats: NetworkStats = NetworkStats(),
-    val timestamp: Long = System.currentTimeMillis()
-)
-
-/**
- * 内存信息类
- */
-data class MemoryInfo(
-    val total: Long = 0L,
-    val available: Long = 0L,
-    val used: Long = 0L,
-    val usagePercent: Int = 0
-) {
-    fun formatTotalMemory(): String {
-        return formatBytes(total)
-    }
-
-    fun formatUsedMemory(): String {
-        return formatBytes(used)
-    }
-
-    fun formatAvailableMemory(): String {
-        return formatBytes(available)
-    }
-
-    private fun formatBytes(bytes: Long): String {
-        val units = arrayOf("B", "KB", "MB", "GB", "TB")
-        var value = bytes.toDouble()
-        var unitIndex = 0
-
-        while (value >= 1024 && unitIndex < units.size - 1) {
-            value /= 1024
-            unitIndex++
-        }
-
-        return String.format("%.1f %s", value, units[unitIndex])
-    }
-}
-
-// SystemInfo类已在ShizukuManager.kt中定义
-
-/**
- * 电池信息类
- */
-data class BatteryInfo(
-    val level: Int = 0,
-    val temperature: Float = 0f,
-    val voltage: Float = 0f,
-    val isCharging: Boolean = false,
-    val isPlugged: Boolean = false
-)
-
-/**
- * 网络统计类
- */
-data class NetworkStats(
-    val rxBytes: Long = 0L,
-    val txBytes: Long = 0L,
-    val rxPackets: Long = 0L,
-    val txPackets: Long = 0L
-)
-
-/**
- * 存储信息类
- */
-data class StorageInfo(
-    val total: Long = 0L,
-    val available: Long = 0L,
-    val used: Long = 0L,
-    val usagePercent: Int = 0
-) {
-    fun formatTotalStorage(): String {
-        return formatBytes(total)
-    }
-
-    fun formatUsedStorage(): String {
-        return formatBytes(used)
-    }
-
-    fun formatAvailableStorage(): String {
-        return formatBytes(available)
-    }
-
-    private fun formatBytes(bytes: Long): String {
-        val units = arrayOf("B", "KB", "MB", "GB", "TB")
-        var value = bytes.toDouble()
-        var unitIndex = 0
-
-        while (value >= 1024 && unitIndex < units.size - 1) {
-            value /= 1024
-            unitIndex++
-        }
-
-        return String.format("%.1f %s", value, units[unitIndex])
-    }
+    data class DeviceInfo(
+        val model: String,
+        val brand: String,
+        val androidVersion: String,
+        val apiLevel: Int,
+        val cpuCores: Int,
+        val totalMemory: Long // MB
+    )
 }

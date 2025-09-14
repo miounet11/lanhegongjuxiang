@@ -1,0 +1,35 @@
+{
+  "app_name": "蓝河工具箱",
+  "version_code": 1,
+  "version_name": "1.0",
+  "build_date": "2024-08-29",
+  "build_type": "release",
+  "signed": true,
+  "file_size": "7.0MB",
+  "min_sdk": 24,
+  "target_sdk": 36,
+  "features": [
+    "系统性能监控",
+    "一键智能优化",
+    "核心性能优化",
+    "网络抓包分析",
+    "应用管理",
+    "电池管理",
+    "存储管理",
+    "网络诊断",
+    "深色模式支持",
+    "现代化UI设计"
+  ],
+  "permissions": [
+    "android.permission.INTERNET",
+    "android.permission.ACCESS_NETWORK_STATE",
+    "android.permission.ACCESS_WIFI_STATE",
+    "android.permission.CHANGE_NETWORK_STATE",
+    "android.permission.INTERACT_ACROSS_USERS_FULL",
+    "android.permission.QUERY_ALL_PACKAGES",
+    "android.permission.FOREGROUND_SERVICE",
+    "android.permission.FOREGROUND_SERVICE_DATA_SYNC"
+  ],
+  "developer": "蓝河工具箱团队",
+  "description": "一款功能强大的Android系统管理工具，提供全面的系统优化和监控功能"
+}

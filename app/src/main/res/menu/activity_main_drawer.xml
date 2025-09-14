@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_drawer_browser"
+            android:icon="@android:drawable/ic_menu_manage"
+            android:title="YCWebView浏览器" />
+        <item
+            android:id="@+id/nav_drawer_battery"
+            android:icon="@android:drawable/ic_menu_manage"
+            android:title="电池优化设置" />
+        <item
+            android:id="@+id/nav_drawer_browser_settings"
+            android:icon="@android:drawable/ic_menu_manage"
+            android:title="浏览器设置" />
+    </group>
+
+    <item android:title="其他">
+        <menu>
+            <item
+                android:id="@+id/nav_drawer_about"
+                android:icon="@android:drawable/ic_menu_manage"
+                android:title="关于" />
+        </menu>
+    </item>
+
+</menu>

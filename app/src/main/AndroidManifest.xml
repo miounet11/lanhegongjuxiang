@@ -55,6 +55,7 @@
     </queries>
 
     <application
+        android:name=".LanheApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -207,6 +208,63 @@
             android:exported="false"
             android:label="核心性能优化"
             android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- 浏览器活动 -->
+        <activity
+            android:name=".activities.BrowserActivity"
+            android:exported="false"
+            android:label="智能浏览器"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+
+        <!-- 浏览器设置活动 -->
+        <activity
+            android:name=".activities.BrowserSettingsActivity"
+            android:exported="false"
+            android:label="浏览器设置"
+            android:parentActivityName=".activities.BrowserActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- 文件浏览器活动 -->
+        <activity
+            android:name=".activities.FileBrowserActivity"
+            android:exported="false"
+            android:label="文件浏览器"
+            android:parentActivityName=".activities.BrowserActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- 图片查看器活动 -->
+        <activity
+            android:name=".activities.ImageViewerActivity"
+            android:exported="false"
+            android:label="图片查看器"
+            android:parentActivityName=".activities.FileBrowserActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- PDF查看器活动 -->
+        <activity
+            android:name=".activities.PdfViewerActivity"
+            android:exported="false"
+            android:label="PDF查看器"
+            android:parentActivityName=".activities.FileBrowserActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- Office文档查看器活动 -->
+        <activity
+            android:name=".activities.OfficeViewerActivity"
+            android:exported="false"
+            android:label="Office查看器"
+            android:parentActivityName=".activities.FileBrowserActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- 文本文件查看器活动 -->
+        <activity
+            android:name=".activities.TextViewerActivity"
+            android:exported="false"
+            android:label="文本查看器"
+            android:parentActivityName=".activities.FileBrowserActivity"
             android:screenOrientation="portrait" />
 
         <!-- 核心优化服务 -->

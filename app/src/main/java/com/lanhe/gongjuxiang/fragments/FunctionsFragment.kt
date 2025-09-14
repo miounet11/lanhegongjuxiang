@@ -18,9 +18,10 @@ import com.lanhe.gongjuxiang.utils.AnimationUtils
 import com.lanhe.gongjuxiang.utils.PreferencesManager
 import com.lanhe.gongjuxiang.utils.DataManager
 import com.lanhe.gongjuxiang.utils.PerformanceMonitor
+import com.lanhe.gongjuxiang.utils.PerformanceMonitorManager
 import com.lanhe.gongjuxiang.utils.SystemOptimizer
-import com.lanhe.gongjuxiang.utils.PerformanceData
-import com.lanhe.gongjuxiang.utils.BatteryInfo
+import com.lanhe.gongjuxiang.models.PerformanceData
+import com.lanhe.gongjuxiang.models.BatteryInfo
 import androidx.recyclerview.widget.GridLayoutManager
 import com.lanhe.gongjuxiang.utils.OptimizationState
 import com.lanhe.gongjuxiang.utils.OptimizationResult
@@ -34,6 +35,7 @@ class FunctionsFragment : Fragment() {
     private lateinit var preferencesManager: PreferencesManager
     private lateinit var dataManager: DataManager
     private lateinit var performanceMonitor: PerformanceMonitor
+    private lateinit var performanceManager: PerformanceMonitorManager
     private lateinit var systemOptimizer: SystemOptimizer
 
     // 性能数据
@@ -63,6 +65,7 @@ class FunctionsFragment : Fragment() {
         preferencesManager = PreferencesManager(requireContext())
         dataManager = DataManager(requireContext())
         performanceMonitor = PerformanceMonitor(requireContext())
+        performanceManager = PerformanceMonitorManager(requireContext())
         systemOptimizer = SystemOptimizer(requireContext())
 
         setupClickListeners()
@@ -168,7 +171,7 @@ class FunctionsFragment : Fragment() {
     }
 
     private fun startPerformanceMonitoring() {
-        performanceMonitor.startMonitoring()
+        performanceManager.startMonitoring()
         updateSystemStatus()
     }
 
@@ -394,6 +397,15 @@ class FunctionsFragment : Fragment() {
         }
     }
 
+    private fun openSmartBrowser() {
+        try {
+            val intent = Intent(requireContext(), BrowserActivity::class.java)
+            startActivity(intent)
+        } catch (e: Exception) {
+            Toast.makeText(context, "无法打开智能浏览器: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private fun openCpuManager() {
         try {
             val intent = Intent(requireContext(), CpuManagerActivity::class.java)
@@ -509,6 +521,13 @@ class FunctionsFragment : Fragment() {
                 "Real-time monitoring • System resources • Process management",
                 android.R.drawable.ic_menu_info_details,
                 android.R.color.holo_orange_light
+            ),
+            CoreFeature(
+                "smart_browser",
+                "智能浏览器",
+                "Web browsing • Bookmarks • Downloads • Ad blocking • Image optimization",
+                android.R.drawable.ic_menu_view,
+                android.R.color.holo_blue_bright
             )
         )
 
@@ -518,6 +537,7 @@ class FunctionsFragment : Fragment() {
                 "packet_capture" -> openPacketCapture()
                 "app_management" -> openAppManagement()
                 "system_monitor" -> openSystemMonitoring()
+                "smart_browser" -> openSmartBrowser()
             }
         }
 
@@ -535,7 +555,7 @@ class FunctionsFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        performanceMonitor.stopMonitoring()
+        performanceManager.stopMonitoring()
     }
 
     override fun onDestroyView() {

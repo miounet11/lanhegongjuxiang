@@ -12,8 +12,11 @@ import androidx.lifecycle.lifecycleScope
 // import com.github.mikephil.charting.formatter.ValueFormatter
 import com.lanhe.gongjuxiang.R
 import com.lanhe.gongjuxiang.databinding.ActivityPerformanceComparisonBinding
-import com.lanhe.gongjuxiang.utils.PerformanceData
+import com.lanhe.gongjuxiang.models.PerformanceData
+import com.lanhe.gongjuxiang.models.BatteryInfo
+import com.lanhe.gongjuxiang.models.MemoryInfo
 import com.lanhe.gongjuxiang.utils.PerformanceMonitor
+import com.lanhe.gongjuxiang.utils.PerformanceMonitorManager
 import com.lanhe.gongjuxiang.utils.ShizukuManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -27,6 +30,7 @@ class PerformanceComparisonActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPerformanceComparisonBinding
     private lateinit var performanceMonitor: PerformanceMonitor
+    private lateinit var performanceManager: PerformanceMonitorManager
 
     // 优化前后的数据
     private var beforeData: PerformanceData? = null
@@ -38,6 +42,7 @@ class PerformanceComparisonActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         performanceMonitor = PerformanceMonitor(this)
+        performanceManager = PerformanceMonitorManager(this)
 
         setupToolbar()
         setupClickListeners()
@@ -73,20 +78,40 @@ class PerformanceComparisonActivity : AppCompatActivity() {
         // 如果没有传入数据，则模拟一些数据用于演示
         if (beforeData == null) {
             beforeData = PerformanceData(
+                timestamp = System.currentTimeMillis(),
                 cpuUsage = 45.2f,
-                memoryUsage = com.lanhe.gongjuxiang.utils.MemoryInfo(
+                memoryUsage = MemoryInfo(
                     total = 8L * 1024 * 1024 * 1024, // 8GB
                     available = 2L * 1024 * 1024 * 1024, // 2GB
                     used = 6L * 1024 * 1024 * 1024, // 6GB
-                    usagePercent = 75
+                    usagePercent = 75f
                 ),
-                batteryInfo = com.lanhe.gongjuxiang.utils.BatteryInfo(
+                totalMemory = 8L * 1024 * 1024 * 1024, // 8GB
+                availableMemory = 2L * 1024 * 1024 * 1024, // 2GB
+                storageUsage = 60f,
+                totalStorage = 128L * 1024 * 1024 * 1024, // 128GB
+                availableStorage = 50L * 1024 * 1024 * 1024, // 50GB
+                batteryInfo = BatteryInfo(
                     level = 65,
                     temperature = 38.5f,
                     voltage = 4.2f,
+                    current = 0.0f,
+                    status = 0,
+                    health = 0,
+                    technology = "Li-ion",
+                    capacity = 4000L,
                     isCharging = false,
-                    isPlugged = false
-                )
+                    chargeType = "None",
+                    timeToFull = 0L,
+                    timeToEmpty = 0L
+                ),
+                batteryLevel = 65,
+                batteryTemperature = 38.5f,
+                isCharging = false,
+                networkType = "WiFi",
+                wifiSignalStrength = -45,
+                mobileSignalStrength = 0,
+                deviceTemperature = 35.0f
             )
         }
 
@@ -94,7 +119,7 @@ class PerformanceComparisonActivity : AppCompatActivity() {
         lifecycleScope.launch {
             // 等待一段时间让性能监控器收集数据
             delay(1000)
-            afterData = performanceMonitor.performanceData.value
+            afterData = performanceManager.getCurrentPerformance()
 
             updateComparisonDisplay()
             setupCharts()
@@ -345,7 +370,7 @@ class PerformanceComparisonActivity : AppCompatActivity() {
 
             // 重新获取当前性能数据
             delay(1000) // 模拟刷新时间
-            afterData = performanceMonitor.performanceData.value
+            afterData = performanceManager.getCurrentPerformance()
 
             updateComparisonDisplay()
             setupCharts()
@@ -356,20 +381,22 @@ class PerformanceComparisonActivity : AppCompatActivity() {
     }
 
     private fun startRealtimeMonitoring() {
-        performanceMonitor.startMonitoring(1000)
+        performanceManager.startMonitoring()
         binding.btnStartRealtimeMonitor.visibility = View.GONE
         binding.btnStopMonitor.visibility = View.VISIBLE
 
+        // 简化实时监控实现
         lifecycleScope.launch {
-            performanceMonitor.performanceData.collect { data ->
-                // 实时更新数据
-                updateRealtimeData(data)
+            while (performanceManager.isMonitoring()) {
+                delay(2000) // 每2秒更新一次
+                val currentData = performanceManager.getCurrentPerformance()
+                currentData?.let { updateRealtimeData(it) }
             }
         }
     }
 
     private fun stopRealtimeMonitoring() {
-        performanceMonitor.stopMonitoring()
+        performanceManager.stopMonitoring()
         binding.btnStartRealtimeMonitor.visibility = View.VISIBLE
         binding.btnStopMonitor.visibility = View.GONE
     }
@@ -404,6 +431,7 @@ class PerformanceComparisonActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        performanceMonitor.stopMonitoring()
+        performanceManager.stopMonitoring()
+        performanceManager.cleanup()
     }
 }

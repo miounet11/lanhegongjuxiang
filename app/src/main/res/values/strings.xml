@@ -1,77 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">蓝河工具箱</string>
+    <string name="nav_header_title">蓝河工具箱</string>
+    <string name="nav_header_subtitle">智能安全平台</string>
+    <string name="nav_header_desc">应用图标</string>
+    <string name="navigation_drawer_open">打开导航抽屉</string>
+    <string name="navigation_drawer_close">关闭导航抽屉</string>
+    <string name="action_settings">设置</string>
+    <string name="action_help">帮助</string>
+    <string name="action_feedback">反馈</string>
 
-    <!-- 底部导航 -->
+    <!-- Advanced Fragment Strings -->
+    <string name="advanced_features">高级功能</string>
+    <string name="shizuku_permission_required">需要Shizuku权限</string>
+    <string name="shizuku_authorization">Shizuku授权</string>
+    <string name="shizuku_not_running">Shizuku未运行</string>
+    <string name="usage_guide">使用指南</string>
+    <string name="usage_guide_desc">了解如何使用高级功能</string>
+    <string name="feature_switches">功能开关</string>
+    <string name="force_direct_power">强制直连电源</string>
+    <string name="force_direct_power_desc">强制使用直连电源模式</string>
+    <string name="global_frame_insertion">全局帧插入</string>
+    <string name="global_frame_insertion_desc">在所有应用中插入帧</string>
+    <string name="change_phone_name">修改手机名称</string>
+    <string name="change_phone_name_desc">修改设备在网络中的显示名称</string>
+    <string name="colorful_charging_animation">多彩充电动画</string>
+    <string name="colorful_charging_animation_desc">启用多彩充电动画效果</string>
+    <string name="clear_update_reminders">清除更新提醒</string>
+    <string name="clear_update_reminders_desc">清除系统更新提醒通知</string>
+    <string name="freeze_applications">冻结应用</string>
+    <string name="freeze_applications_desc">冻结不常用的应用以节省资源</string>
+    <string name="memory_management">内存管理</string>
+    <string name="memory_management_desc">智能管理内存使用</string>
+    <string name="developer_options">开发者选项</string>
+    <string name="developer_options_desc">高级开发者功能设置</string>
+    <string name="hide_system_notifications">隐藏系统通知</string>
+    <string name="hide_system_notifications_desc">隐藏不需要的系统通知</string>
+    <string name="device_controller">设备控制器</string>
+    <string name="device_controller_desc">控制设备高级功能</string>
+
+    <!-- Tab Strings -->
     <string name="tab_functions">功能</string>
     <string name="tab_advanced">高级</string>
     <string name="tab_my">我的</string>
-
-    <!-- 蓝河工具箱 系统工具 -->
-    <string name="system_tools">系统工具箱</string>
-    <string name="native_settings">原生设置</string>
-    <string name="native_settings_desc">访问Android系统核心设置</string>
-    <string name="notification_management">通知管理</string>
-    <string name="notification_management_desc">智能通知管理系统，精确控制通知行为</string>
-    <string name="power_saving_management">电池管理</string>
-    <string name="power_saving_management_desc">智能省电算法，延长电池续航</string>
-    <string name="usage_statistics">性能分析</string>
-    <string name="usage_statistics_desc">实时系统性能数据分析</string>
-    <string name="system_interface_tools">界面工具</string>
-    <string name="system_interface_tools_desc">深度定制系统界面体验</string>
-    <string name="carrier_video_call">通信优化</string>
-    <string name="carrier_video_call_desc">优化运营商服务，减少资源占用</string>
-    
-    <!-- 蓝河工具箱 高级功能 -->
-    <string name="advanced_features">高级控制中心</string>
-    <string name="shizuku_permission_required">需要Shizuku权限授权</string>
-    <string name="shizuku_authorization">Shizuku授权</string>
-    <string name="shizuku_not_running">Shizuku未激活，请安装并启动Shizuku应用</string>
-    <string name="usage_guide">使用指南</string>
-    <string name="usage_guide_desc">访问蓝河工具箱使用指南，了解各项功能</string>
-    <string name="feature_switches">功能开关</string>
-    <string name="force_direct_power">直驱供电</string>
-    <string name="force_direct_power_desc">激活充电算法，减少发热，提升充电效率</string>
-    <string name="global_frame_insertion">帧率增强</string>
-    <string name="global_frame_insertion_desc">启用帧率优化，稳定输出，流畅体验</string>
-    <string name="change_phone_name">修改设备名称</string>
-    <string name="change_phone_name_desc">修改设备显示名称，无需外部验证</string>
-    <string name="colorful_charging_animation">彩色充电动画</string>
-    <string name="colorful_charging_animation_desc">激活彩色充电视觉效果，增强使用体验</string>
-    <string name="clear_update_reminders">清理更新提醒</string>
-    <string name="clear_update_reminders_desc">清除系统更新提醒缓存，保持界面清洁</string>
-    <string name="freeze_applications">冻结应用</string>
-    <string name="freeze_applications_desc">⚠️ 高级操作：冻结应用功能，谨慎使用</string>
-    <string name="memory_management">内存管理</string>
-    <string name="memory_management_desc">智能内存管理算法</string>
-    <string name="developer_options">开发者选项</string>
-    <string name="developer_options_desc">进入Android系统开发者选项</string>
-    <string name="hide_system_notifications">隐藏系统通知</string>
-    <string name="hide_system_notifications_desc">隐藏系统通知，保持专注状态</string>
-    <string name="device_controller">设备控制</string>
-    <string name="device_controller_desc">连接物联网设备，实现智能控制</string>
-    
-    <!-- 蓝河工具箱 通用 -->
-    <string name="ok">确认</string>
-    <string name="cancel">取消</string>
-    <string name="confirm">执行</string>
-    <string name="back">返回</string>
-    <string name="settings">设置</string>
-    <string name="permission_required">需要权限</string>
-    <string name="permission_denied">权限被拒绝</string>
-    <string name="feature_not_available">功能未激活</string>
-    <string name="operation_successful">操作成功</string>
-    <string name="operation_failed">操作失败</string>
-    <string name="warning">⚠️ 系统警告</string>
-    <string name="error">🚨 系统错误</string>
-    <string name="info">ℹ️ 系统信息</string>
-
-    <!-- 蓝河工具箱 特色字符串 -->
-    <string name="system_engine">系统引擎</string>
-    <string name="smart_optimization">智能优化</string>
-    <string name="performance_boost">性能提升</string>
-    <string name="system_analysis">系统分析</string>
-    <string name="processing">处理中...</string>
-    <string name="optimization_complete">优化完成</string>
-    <string name="smart_mode">智能模式</string>
-    <string name="system_access">系统访问</string>
 </resources>

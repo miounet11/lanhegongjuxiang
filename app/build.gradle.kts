@@ -1,8 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("kotlin-kapt")
-    id("kotlin-parcelize")
+    alias(libs.plugins.kotlin.kapt)
 }
 
 android {
@@ -19,6 +18,15 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file(project.property("RELEASE_STORE_FILE").toString())
+            storePassword = project.property("RELEASE_STORE_PASSWORD").toString()
+            keyAlias = project.property("RELEASE_KEY_ALIAS").toString()
+            keyPassword = project.property("RELEASE_KEY_PASSWORD").toString()
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -26,6 +34,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
@@ -48,53 +57,62 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0")
-    implementation("androidx.activity:activity-ktx:1.8.2")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.recyclerview:recyclerview:1.3.2")
-    implementation("androidx.cardview:cardview:1.0.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.6")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.6")
+    // Core AndroidX
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.fragment)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.cardview)
+    implementation(libs.androidx.viewpager2)
+
+    // Architecture Components
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
 
     // Shizuku框架 - 系统级操作
-    implementation("dev.rikka.shizuku:api:13.1.0")
-    implementation("dev.rikka.shizuku:provider:13.1.0")
+    implementation(libs.shizuku.api)
+    implementation(libs.shizuku.provider)
 
     // Android隐藏API绕过
-    implementation("org.lsposed.hiddenapibypass:hiddenapibypass:4.3")
+    implementation(libs.hiddenapibypass)
 
     // 协程和异步操作
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    implementation("androidx.work:work-runtime-ktx:2.9.0")
-
-    // Kotlin元数据兼容性修复
-    implementation("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.7.0")
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.work.runtime.ktx)
 
     // 数据存储
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
-    implementation("androidx.room:room-runtime:2.7.0")
-    implementation("androidx.room:room-ktx:2.7.0")
-    kapt("androidx.room:room-compiler:2.7.0")
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    kapt(libs.androidx.room.compiler)
 
     // 网络请求
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
-
-    // 图表展示 - 暂时注释掉，因为可能需要额外的仓库配置
-    // implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.okhttp.logging)
 
     // 动画库
-    implementation("com.airbnb.android:lottie:6.4.0")
+    implementation(libs.lottie)
 
     // 权限管理
-    implementation("com.karumi:dexter:6.2.3")
+    implementation(libs.dexter)
 
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    // 图片处理库 (Glide)
+    implementation(libs.glide)
+    kapt(libs.glide.compiler)
+
+    // 蓝河工具箱模块库集成
+    implementation(project(":mokuai:mokuai:modules:network"))
+    implementation(project(":mokuai:mokuai:modules:performance-monitor"))
+    implementation(project(":mokuai:mokuai:modules:memory-manager"))
+    implementation(project(":mokuai:mokuai:modules:filesystem"))
+
+    // Testing
+    testImplementation(libs.junit)
+    testImplementation(libs.mockito.core)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 }
