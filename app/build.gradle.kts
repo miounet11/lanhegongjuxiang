@@ -104,6 +104,9 @@ dependencies {
     implementation(libs.glide)
     kapt(libs.glide.compiler)
 
+    // Fluent System Icons - Microsoft官方图标库
+    implementation("com.microsoft.design:fluent-system-icons:1.1.307@aar")
+
     // 蓝河工具箱模块库集成
     implementation(project(":mokuai:mokuai:modules:network"))
     implementation(project(":mokuai:mokuai:modules:performance-monitor"))

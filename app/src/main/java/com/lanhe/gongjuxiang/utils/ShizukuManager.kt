@@ -3,17 +3,15 @@ package com.lanhe.gongjuxiang.utils
 import android.content.Context
 import android.widget.Toast
 import rikka.shizuku.Shizuku
-import rikka.shizuku.ShizukuBinderWrapper
 import rikka.shizuku.SystemServiceHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import android.util.Log
-import kotlin.concurrent.thread
 
 /**
- * Shizuku权限管理器 - 完整系统控制
- * 启用所有Shizuku高级功能，展现强大系统控制能力
+ * Shizuku权限管理器 - 核心管理器
+ * 负责Shizuku权限管理和状态监控
  */
 object ShizukuManager {
 
@@ -21,7 +19,7 @@ object ShizukuManager {
     private val _shizukuState = MutableStateFlow<ShizukuState>(ShizukuState.Unavailable)
     val shizukuState: StateFlow<ShizukuState> = _shizukuState.asStateFlow()
 
-    // 系统服务管理器 - 使用反射调用
+    // 系统服务管理器
     private var systemServicesAvailable = false
 
     init {
@@ -81,7 +79,6 @@ object ShizukuManager {
      */
     fun requestPermission(context: Context) {
         if (Shizuku.shouldShowRequestPermissionRationale()) {
-            // 显示权限说明
             Toast.makeText(context, "需要Shizuku权限来执行强大的系统级操作", Toast.LENGTH_LONG).show()
         }
         Shizuku.requestPermission(SHIZUKU_PERMISSION_REQUEST_CODE)
@@ -93,6 +90,11 @@ object ShizukuManager {
     fun isShizukuAvailable(): Boolean {
         return Shizuku.pingBinder() && Shizuku.checkSelfPermission() == 0
     }
+
+    /**
+     * 检查系统服务是否可用
+     */
+    fun isSystemServicesAvailable(): Boolean = systemServicesAvailable
 
     /**
      * 显示Shizuku状态信息
@@ -626,105 +628,6 @@ object ShizukuManager {
             0
         }
     }
-}
-
-// ==============================
-// 数据类定义
-// ==============================
-
-/**
- * 进程信息
- */
-data class ProcessInfo(
-    val pid: Int,
-    val processName: String,
-    val packageName: String,
-    val uid: Int,
-    val memoryUsage: Long
-)
-
-/**
- * 系统信息类
- */
-data class SystemInfo(
-    val kernelVersion: String = "Unknown",
-    val uptime: Long = 0L,
-    val cpuCores: Int = 0,
-    val totalMemory: Long = 0L,
-    val availableMemory: Long = 0L,
-    val batteryLevel: Int = 0,
-    val deviceBrand: String = "Unknown",
-    val deviceModel: String = "Unknown",
-    val androidVersion: String = "Unknown",
-    val performanceBoost: String = "0-30%",
-    val batteryOptimization: String = "+10-15%"
-)
-
-/**
- * 网络信息类
- */
-data class NetworkInfo(
-    val type: String = "Unknown",
-    val downloadSpeed: Double = 0.0,
-    val uploadSpeed: Double = 0.0,
-    val latency: Long = 0L,
-    val signalStrength: Int = 0,
-    val isConnected: Boolean = false
-)
-
-/**
- * 性能指标类
- */
-data class PerformanceMetrics(
-    val cpuUsage: Float = 0f,
-    val memoryUsed: Long = 0L,
-    val networkLatency: Long = 0L,
-    val imageLoadTime: Double = 0.0,
-    val networkEfficiency: Float = 0f,
-    val batteryEfficiency: Float = 0f,
-    val cacheSize: Long = 0L,
-    val uptime: Long = 0L
-)
-
-/**
- * 可加速应用类
- */
-data class AcceleratableApp(
-    val name: String,
-    val packageName: String,
-    val icon: String = "",
-    val latencyReduction: Long = 0L,
-    val speedIncrease: Double = 0.0,
-    val isAccelerated: Boolean = false
-)
-
-/**
- * 性能提升结果类
- */
-data class PerformanceBoostResult(
-    val success: Boolean,
-    val performanceIncrease: String = "",
-    val batteryImpact: String = "",
-    val message: String = ""
-)
-
-/**
- * 电池优化结果类
- */
-data class BatteryOptimizationResult(
-    val success: Boolean,
-    val batteryLifeIncrease: String = "",
-    val performanceImpact: String = "",
-    val message: String = ""
-)
-
-/**
- * Shizuku状态枚举
- */
-enum class ShizukuState {
-    Unavailable,  // Shizuku不可用
-    Denied,       // 权限被拒绝
-    Granted       // 权限已授予
 }
 
 /*

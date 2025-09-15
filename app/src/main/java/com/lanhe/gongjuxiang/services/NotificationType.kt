@@ -1,0 +1,63 @@
+package com.lanhe.gongjuxiang.services
+
+/**
+ * 通知类型枚举
+ * 定义所有系统通知的类型
+ */
+enum class NotificationType(val id: Int) {
+    // 充电连接状态
+    CHARGING_CONNECTED(2001),
+    CHARGING_DISCONNECTED(2002),
+
+    // 温度相关
+    TEMPERATURE_WARNING(2003),
+    TEMPERATURE_DANGER(2004),
+    TEMPERATURE_LOW(2005),
+
+    // 电压相关
+    VOLTAGE_WARNING(2006),
+    VOLTAGE_LOW(2007),
+
+    // 充电类型
+    AC_CHARGING(2008),
+    USB_CHARGING(2009),
+    WIRELESS_CHARGING(2010),
+
+    // 电池状态
+    BATTERY_FULL(2011),
+    BATTERY_HIGH(2012),
+    BATTERY_LOW(2013),
+    BATTERY_CRITICAL(2014),
+    BATTERY_HEALTH(2015),
+
+    // 安全提醒
+    SAFETY_WARNING(2016),
+    LONG_CHARGING(2017),
+    FAST_CHARGING(2018),
+
+    // 特殊情况
+    COMPUTER_CHARGING(2019),
+
+    // WiFi相关
+    WIFI_CONNECTED(3001),
+    WIFI_DISCONNECTED(3002),
+    WIFI_SIGNAL_WEAK(3003),
+    WIFI_SIGNAL_STRONG(3004),
+
+    // 短信相关
+    SMS_RECEIVED(4001),
+    SMS_SPAM_DETECTED(4002),
+
+    // 文件相关
+    FILE_BACKUP_COMPLETED(5001),
+    FILE_CLEANUP_COMPLETED(5002),
+
+    // 号码卫士
+    CALL_BLOCKED(6001),
+    CALL_FROM_BLACKLIST(6002),
+
+    // AI助手
+    AI_RESPONSE_RECEIVED(7001),
+    AI_ANALYSIS_COMPLETED(7002),
+    AI_ERROR_OCCURRED(7003)
+}
