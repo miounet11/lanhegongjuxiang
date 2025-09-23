@@ -14,7 +14,10 @@
             <option value="$PROJECT_DIR$/mokuai" />
             <option value="$PROJECT_DIR$/mokuai/mokuai" />
             <option value="$PROJECT_DIR$/mokuai/mokuai/modules" />
+            <option value="$PROJECT_DIR$/mokuai/mokuai/modules/filesystem" />
+            <option value="$PROJECT_DIR$/mokuai/mokuai/modules/memory-manager" />
             <option value="$PROJECT_DIR$/mokuai/mokuai/modules/network" />
+            <option value="$PROJECT_DIR$/mokuai/mokuai/modules/performance-monitor" />
           </set>
         </option>
       </GradleProjectSettings>

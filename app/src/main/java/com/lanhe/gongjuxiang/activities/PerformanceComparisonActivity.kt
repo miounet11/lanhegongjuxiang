@@ -86,11 +86,7 @@ class PerformanceComparisonActivity : AppCompatActivity() {
                     used = 6L * 1024 * 1024 * 1024, // 6GB
                     usagePercent = 75f
                 ),
-                totalMemory = 8L * 1024 * 1024 * 1024, // 8GB
-                availableMemory = 2L * 1024 * 1024 * 1024, // 2GB
                 storageUsage = 60f,
-                totalStorage = 128L * 1024 * 1024 * 1024, // 128GB
-                availableStorage = 50L * 1024 * 1024 * 1024, // 50GB
                 batteryInfo = BatteryInfo(
                     level = 65,
                     temperature = 38.5f,
@@ -105,12 +101,7 @@ class PerformanceComparisonActivity : AppCompatActivity() {
                     timeToFull = 0L,
                     timeToEmpty = 0L
                 ),
-                batteryLevel = 65,
-                batteryTemperature = 38.5f,
-                isCharging = false,
                 networkType = "WiFi",
-                wifiSignalStrength = -45,
-                mobileSignalStrength = 0,
                 deviceTemperature = 35.0f
             )
         }

@@ -436,13 +436,13 @@ class CountdownReminder(private val context: Context) {
                 val vibrationEnabled = sharedPrefs.getBoolean("${keyPrefix}_vibration", true)
 
                 val repeatType = try {
-                    RepeatType.valueOf(repeatTypeStr)
+                    RepeatType.valueOf(repeatTypeStr ?: RepeatType.NONE.name)
                 } catch (e: Exception) {
                     RepeatType.NONE
                 }
 
                 val priority = try {
-                    Priority.valueOf(priorityStr)
+                    Priority.valueOf(priorityStr ?: Priority.NORMAL.name)
                 } catch (e: Exception) {
                     Priority.NORMAL
                 }

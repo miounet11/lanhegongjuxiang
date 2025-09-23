@@ -37,13 +37,13 @@ class BatteryOptimizationAdapter(
         fun bind(item: BatteryOptimizationItem) {
             // 设置图标
             val iconRes = when (item.manufacturer) {
-                "华为" -> R.drawable.ic_huawei
-                "小米" -> R.drawable.ic_xiaomi
-                "OPPO" -> R.drawable.ic_oppo
-                "vivo" -> R.drawable.ic_vivo
-                "三星" -> R.drawable.ic_samsung
-                "魅族" -> R.drawable.ic_meizu
-                else -> R.drawable.ic_battery
+                "华为" -> android.R.drawable.ic_menu_manage
+                "小米" -> android.R.drawable.ic_menu_manage
+                "OPPO" -> android.R.drawable.ic_menu_manage
+                "vivo" -> android.R.drawable.ic_menu_manage
+                "三星" -> android.R.drawable.ic_menu_manage
+                "魅族" -> android.R.drawable.ic_menu_manage
+                else -> android.R.drawable.ic_lock_idle_lock
             }
             iconImageView.setImageResource(iconRes)
 
@@ -53,13 +53,13 @@ class BatteryOptimizationAdapter(
 
             // 设置制造商标签的背景色
             val backgroundRes = when (item.manufacturer) {
-                "华为" -> R.drawable.bg_manufacturer_huawei
-                "小米" -> R.drawable.bg_manufacturer_xiaomi
-                "OPPO" -> R.drawable.bg_manufacturer_oppo
-                "vivo" -> R.drawable.bg_manufacturer_vivo
-                "三星" -> R.drawable.bg_manufacturer_samsung
-                "魅族" -> R.drawable.bg_manufacturer_meizu
-                else -> R.drawable.bg_manufacturer_generic
+                "华为" -> android.R.drawable.editbox_background
+                "小米" -> android.R.drawable.editbox_background
+                "OPPO" -> android.R.drawable.editbox_background
+                "vivo" -> android.R.drawable.editbox_background
+                "三星" -> android.R.drawable.editbox_background
+                "魅族" -> android.R.drawable.editbox_background
+                else -> android.R.drawable.editbox_background
             }
             manufacturerTextView.setBackgroundResource(backgroundRes)
 

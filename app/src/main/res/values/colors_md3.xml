@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Material Design 3.0 Color System -->
+    
+    <!-- Primary Colors - Modern Blue Scheme -->
+    <color name="md_theme_light_primary">#137fec</color>
+    <color name="md_theme_light_onPrimary">#FFFFFF</color>
+    <color name="md_theme_light_primaryContainer">#E8F2FF</color>
+    <color name="md_theme_light_onPrimaryContainer">#001D35</color>
+    
+    <!-- Secondary Colors -->
+    <color name="md_theme_light_secondary">#4A635C</color>
+    <color name="md_theme_light_onSecondary">#FFFFFF</color>
+    <color name="md_theme_light_secondaryContainer">#CCE9DF</color>
+    <color name="md_theme_light_onSecondaryContainer">#06201B</color>
+    
+    <!-- Tertiary Colors -->
+    <color name="md_theme_light_tertiary">#416650</color>
+    <color name="md_theme_light_onTertiary">#FFFFFF</color>
+    <color name="md_theme_light_tertiaryContainer">#C2ECCF</color>
+    <color name="md_theme_light_onTertiaryContainer">#002111</color>
+    
+    <!-- Error Colors -->
+    <color name="md_theme_light_error">#BA1A1A</color>
+    <color name="md_theme_light_onError">#FFFFFF</color>
+    <color name="md_theme_light_errorContainer">#FFDAD6</color>
+    <color name="md_theme_light_onErrorContainer">#410002</color>
+    
+    <!-- Surface Colors - Modern Light Background -->
+    <color name="md_theme_light_background">#f6f7f8</color>
+    <color name="md_theme_light_onBackground">#1a1c1e</color>
+    <color name="md_theme_light_surface">#FFFFFF</color>
+    <color name="md_theme_light_onSurface">#1a1c1e</color>
+    <color name="md_theme_light_surfaceVariant">#e3e8ed</color>
+    <color name="md_theme_light_onSurfaceVariant">#43474e</color>
+    
+    <!-- Outline Colors -->
+    <color name="md_theme_light_outline">#707973</color>
+    <color name="md_theme_light_outlineVariant">#BFC9C2</color>
+    
+    <!-- Dark Theme Colors - Modern Dark Mode -->
+    <color name="md_theme_dark_primary">#137fec</color>
+    <color name="md_theme_dark_onPrimary">#FFFFFF</color>
+    <color name="md_theme_dark_primaryContainer">#0056B3</color>
+    <color name="md_theme_dark_onPrimaryContainer">#E8F2FF</color>
+    
+    <color name="md_theme_dark_secondary">#B0CCC3</color>
+    <color name="md_theme_dark_onSecondary">#1C352F</color>
+    <color name="md_theme_dark_secondaryContainer">#334B45</color>
+    <color name="md_theme_dark_onSecondaryContainer">#CCE9DF</color>
+    
+    <color name="md_theme_dark_tertiary">#A7D0B4</color>
+    <color name="md_theme_dark_onTertiary">#133725</color>
+    <color name="md_theme_dark_tertiaryContainer">#2A4E3A</color>
+    <color name="md_theme_dark_onTertiaryContainer">#C2ECCF</color>
+    
+    <color name="md_theme_dark_error">#FFB4AB</color>
+    <color name="md_theme_dark_onError">#690005</color>
+    <color name="md_theme_dark_errorContainer">#93000A</color>
+    <color name="md_theme_dark_onErrorContainer">#FFDAD6</color>
+    
+    <color name="md_theme_dark_background">#101922</color>
+    <color name="md_theme_dark_onBackground">#e1e3e6</color>
+    <color name="md_theme_dark_surface">#1e2329</color>
+    <color name="md_theme_dark_onSurface">#e1e3e6</color>
+    <color name="md_theme_dark_surfaceVariant">#43474e</color>
+    <color name="md_theme_dark_onSurfaceVariant">#c3c7cf</color>
+    
+    <color name="md_theme_dark_outline">#8A938C</color>
+    <color name="md_theme_dark_outlineVariant">#404943</color>
+    
+    <!-- 功能状态色彩 -->
+    <color name="status_success">#4CAF50</color>
+    <color name="status_warning">#FF9800</color>
+    <color name="status_danger">#F44336</color>
+    <color name="status_info">#2196F3</color>
+    
+    <!-- 性能指示色彩 - 使用原有定义避免冲突 -->
+    <color name="performance_moderate">#FFC107</color>
+    <color name="performance_poor">#FF9800</color>
+    
+    <!-- 透明度变体 -->
+    <color name="surface_overlay_light">#19000000</color>
+    <color name="surface_overlay_medium">#33000000</color>
+    <color name="surface_overlay_heavy">#4D000000</color>
+    
+    <!-- 蓝河助手品牌色 - Modern Update -->
+    <color name="brand_primary">#137fec</color>
+    <color name="brand_secondary">#4A635C</color>
+    <color name="brand_accent">#6CDBBC</color>
+
+    <!-- Modern UI Accent Colors -->
+    <color name="accent_blue">#137fec</color>
+    <color name="accent_blue_light">#E8F2FF</color>
+    <color name="accent_blue_alpha">#1A137fec</color>
+
+    <!-- Icon Background Colors -->
+    <color name="icon_bg_primary">#E8F2FF</color>
+    <color name="icon_bg_secondary">#F3F4F6</color>
+    <color name="icon_bg_success">#ECFDF5</color>
+    <color name="icon_bg_warning">#FFFBEB</color>
+    <color name="icon_bg_error">#FEF2F2</color>
+
+    <!-- Dark Mode Icon Backgrounds -->
+    <color name="icon_bg_primary_dark">#1e2329</color>
+    <color name="icon_bg_secondary_dark">#374151</color>
+    <color name="icon_bg_success_dark">#065f46</color>
+    <color name="icon_bg_warning_dark">#92400e</color>
+    <color name="icon_bg_error_dark">#991b1b</color>
+
+    <!-- Shimmer Loading Colors -->
+    <color name="shimmer_placeholder">#E0E0E0</color>
+    <color name="shimmer_placeholder_dark">#444444</color>
+    <color name="shimmer_highlight">#F5F5F5</color>
+    <color name="shimmer_highlight_dark">#555555</color>
+</resources>

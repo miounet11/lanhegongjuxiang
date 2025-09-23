@@ -2,76 +2,71 @@ package com.lanhe.gongjuxiang
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.lanhe.gongjuxiang.databinding.ActivityMainBinding
-import com.lanhe.gongjuxiang.fragments.AdvancedFragment
-import com.lanhe.gongjuxiang.fragments.FunctionsFragment
-import com.lanhe.gongjuxiang.fragments.MyFragment
 import com.lanhe.gongjuxiang.utils.ShizukuManager
 import rikka.shizuku.Shizuku
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupViewPager()
+        setupNavigation()
         setupBottomNavigation()
     }
 
-    private fun setupViewPager() {
-        binding.viewPager.adapter = object : FragmentStateAdapter(this) {
-            override fun getItemCount(): Int = 3
+    private fun setupNavigation() {
+        // 获取NavHostFragment
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
+        val navController = navHostFragment.navController
 
-            override fun createFragment(position: Int): Fragment {
-                return when (position) {
-                    0 -> FunctionsFragment()
-                    1 -> AdvancedFragment()
-                    2 -> MyFragment()
-                    else -> FunctionsFragment()
-                }
-            }
-        }
+        // 设置Toolbar与Navigation的集成
+        setSupportActionBar(binding.toolbar)
+        appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.nav_home,
+                R.id.nav_performance,
+                R.id.nav_browser,
+                R.id.nav_security,
+                R.id.nav_settings
+            ),
+            binding.drawerLayout
+        )
+        setupActionBarWithNavController(navController, appBarConfiguration)
 
-        // 禁用ViewPager2的滑动
-        binding.viewPager.isUserInputEnabled = false
+        // 设置侧边栏导航
+        binding.navView.setupWithNavController(navController)
     }
 
     private fun setupBottomNavigation() {
-        // 设置BottomNavigationView的选中监听器
-        binding.bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.navigation_functions -> {
-                    binding.viewPager.currentItem = 0
-                    true
-                }
-                R.id.navigation_advanced -> {
-                    binding.viewPager.currentItem = 1
-                    true
-                }
-                R.id.navigation_my -> {
-                    binding.viewPager.currentItem = 2
-                    true
-                }
-                else -> false
-            }
-        }
+        // 获取NavHostFragment
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
+        val navController = navHostFragment.navController
 
-        // 设置ViewPager2的页面变化监听器来同步BottomNavigationView
-        binding.viewPager.registerOnPageChangeCallback(object : androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                binding.bottomNavigation.menu.getItem(position).isChecked = true
-            }
-        })
+        // 使用ViewBinding设置底部导航与Navigation Controller的绑定
+        binding.bottomNavView.setupWithNavController(navController)
 
         // 设置初始选中状态
-        binding.bottomNavigation.selectedItemId = R.id.navigation_functions
+        binding.bottomNavView.selectedItemId = R.id.nav_home
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
+        val navController = navHostFragment.navController
+        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
     // 处理Shizuku权限请求结果

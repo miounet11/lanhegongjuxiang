@@ -73,6 +73,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
+    // Navigation Component
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
+
     // Shizuku框架 - 系统级操作
     implementation(libs.shizuku.api)
     implementation(libs.shizuku.provider)
@@ -100,12 +104,55 @@ dependencies {
     // 权限管理
     implementation(libs.dexter)
 
+    // UI增强库
+    implementation(libs.shimmer)
+    implementation(libs.androidx.swiperefreshlayout)
+
     // 图片处理库 (Glide)
     implementation(libs.glide)
     kapt(libs.glide.compiler)
 
+    // Advanced UI Components for premium experience
+    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation("androidx.dynamicanimation:dynamicanimation:1.0.0")
+    implementation("androidx.transition:transition:1.5.1")
+    implementation("androidx.interpolator:interpolator:1.0.0")
+
+    // Haptic feedback
+    implementation("androidx.compose.ui:ui-hapticfeedback:1.7.8")
+
+    // Photo zoom and gesture libraries
+    implementation("com.github.chrisbanes:PhotoView:2.3.0")
+
+    // Advanced RecyclerView animations
+    implementation("jp.wasabeef:recyclerview-animators:4.0.2")
+
     // Fluent System Icons - Microsoft官方图标库
     implementation("com.microsoft.design:fluent-system-icons:1.1.307@aar")
+
+    // Analytics & Monitoring
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
+    debugImplementation(libs.leakcanary)
+
+    // Advanced Features
+    implementation(libs.play.review)
+    implementation(libs.play.review.ktx)
+    implementation(libs.androidx.splashscreen)
+    implementation(libs.androidx.dynamic.animation)
+    implementation(libs.androidx.transition)
+
+    // Enhanced Image Processing
+    implementation(libs.glide.transformations)
+    implementation(libs.photo.view)
+
+    // Biometric & Security
+    implementation(libs.androidx.biometric)
+    implementation(libs.androidx.security.crypto)
+
+    // System Features
+    implementation("androidx.appwidget:appwidget:1.0.0")
+    implementation("androidx.window:window:1.3.0")
 
     // 蓝河工具箱模块库集成
     implementation(project(":mokuai:mokuai:modules:network"))

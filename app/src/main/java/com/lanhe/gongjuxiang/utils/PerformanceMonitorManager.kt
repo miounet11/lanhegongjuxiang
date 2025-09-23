@@ -134,20 +134,16 @@ class PerformanceMonitorManager(private val context: Context) {
         return@withContext PerformanceData(
             timestamp = System.currentTimeMillis(),
             cpuUsage = cpuUsage.totalUsage,
-            memoryUsage = memoryInfo,
-            totalMemory = memoryInfo.totalMemory,
-            availableMemory = memoryInfo.availableMemory,
+            memoryUsage = com.lanhe.gongjuxiang.models.MemoryInfo(
+                total = memoryInfo.totalMemory,
+                available = memoryInfo.availableMemory,
+                used = memoryInfo.usedMemory,
+                usagePercent = memoryInfo.usagePercent
+            ),
             storageUsage = storageInfo.usagePercent,
-            totalStorage = storageInfo.totalSpace,
-            availableStorage = storageInfo.availableSpace,
             batteryInfo = batteryInfo,
-            batteryLevel = batteryInfo.level,
-            batteryTemperature = batteryInfo.temperature,
-            isCharging = batteryInfo.isCharging,
             networkType = wifiInfo?.networkType ?: "Unknown",
-            wifiSignalStrength = wifiInfo?.signalStrength ?: -100,
-            mobileSignalStrength = 0, // 需要实际实现
-            deviceTemperature = 0.0f // 需要实际实现
+            deviceTemperature = 0f
         )
     }
 

@@ -83,7 +83,7 @@ class Converters {
         return try {
             OptimizationState.valueOf(value)
         } catch (e: Exception) {
-            OptimizationState.Idle
+            OptimizationState.IDLE
         }
     }
 

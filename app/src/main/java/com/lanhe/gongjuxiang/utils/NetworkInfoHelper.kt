@@ -28,7 +28,7 @@ class NetworkInfoHelper(private val context: Context) {
     /**
      * 获取当前网络信息
      */
-    fun getCurrentNetworkInfo(): NetworkInfo {
+    fun getCurrentNetworkInfo(): NetworkInfoHelper.NetworkInfo {
         try {
             val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
@@ -69,7 +69,7 @@ class NetworkInfoHelper(private val context: Context) {
                 isConnected = wifiInfo.networkId != -1
             )
         } catch (e: Exception) {
-            return NetworkInfo(type = "未知", isConnected = false)
+            return NetworkInfoHelper.NetworkInfo(type = "未知", ssid = "", bssid = "", signalStrength = 0, rssi = 0, estimatedDistance = 0.0, linkSpeed = 0, frequency = 0, isConnected = false)
         }
     }
 

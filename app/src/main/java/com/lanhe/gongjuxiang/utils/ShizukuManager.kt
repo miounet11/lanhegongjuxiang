@@ -88,7 +88,11 @@ object ShizukuManager {
      * 检查Shizuku是否可用
      */
     fun isShizukuAvailable(): Boolean {
-        return Shizuku.pingBinder() && Shizuku.checkSelfPermission() == 0
+        return try {
+            Shizuku.pingBinder() && Shizuku.checkSelfPermission() == 0
+        } catch (e: Exception) {
+            false // 如果Shizuku不可用，返回false
+        }
     }
 
     /**
@@ -195,8 +199,13 @@ object ShizukuManager {
     /**
      * 获取内存信息
      */
-    fun getMemoryInfo(): MemoryInfo {
-        if (!isShizukuAvailable()) return MemoryInfo()
+    fun getMemoryInfo(): com.lanhe.gongjuxiang.models.MemoryInfo {
+        if (!isShizukuAvailable()) return com.lanhe.gongjuxiang.models.MemoryInfo(
+            total = 0L,
+            available = 0L,
+            used = 0L,
+            usagePercent = 0f
+        )
 
         return try {
             val activityManager = android.app.ActivityManager::class.java
@@ -204,30 +213,68 @@ object ShizukuManager {
                 .invoke(android.content.Context.ACTIVITY_SERVICE,
                        android.app.ActivityManager.MemoryInfo()) as android.app.ActivityManager.MemoryInfo
 
-            MemoryInfo(
+            com.lanhe.gongjuxiang.models.MemoryInfo(
                 total = activityManager.totalMem,
                 available = activityManager.availMem,
                 used = activityManager.totalMem - activityManager.availMem,
-                usagePercent = ((activityManager.totalMem - activityManager.availMem).toFloat() / activityManager.totalMem.toFloat() * 100).toInt()
+                usagePercent = (activityManager.totalMem - activityManager.availMem).toFloat() / activityManager.totalMem.toFloat() * 100
             )
         } catch (e: Exception) {
             Log.e("ShizukuManager", "获取内存信息失败", e)
-            MemoryInfo()
+            com.lanhe.gongjuxiang.models.MemoryInfo(
+                total = 0L,
+                available = 0L,
+                used = 0L,
+                usagePercent = 0f
+            )
         }
     }
 
     /**
      * 获取网络统计信息
      */
-    fun getNetworkStats(): NetworkStats {
-        if (!systemServicesAvailable) return NetworkStats()
+    fun getNetworkStats(): com.lanhe.gongjuxiang.models.NetworkStats {
+        if (!systemServicesAvailable) return com.lanhe.gongjuxiang.models.NetworkStats(
+            interfaceName = "unknown",
+            rxBytes = 0L,
+            txBytes = 0L,
+            rxPackets = 0L,
+            txPackets = 0L,
+            rxErrors = 0L,
+            txErrors = 0L,
+            rxDropped = 0L,
+            txDropped = 0L,
+            timestamp = System.currentTimeMillis()
+        )
 
         return try {
             // 这里可以实现更详细的网络统计
-            NetworkStats()
+            com.lanhe.gongjuxiang.models.NetworkStats(
+                interfaceName = "unknown",
+                rxBytes = 0L,
+                txBytes = 0L,
+                rxPackets = 0L,
+                txPackets = 0L,
+                rxErrors = 0L,
+                txErrors = 0L,
+                rxDropped = 0L,
+                txDropped = 0L,
+                timestamp = System.currentTimeMillis()
+            )
         } catch (e: Exception) {
             Log.e("ShizukuManager", "获取网络统计失败", e)
-            NetworkStats()
+            com.lanhe.gongjuxiang.models.NetworkStats(
+                interfaceName = "unknown",
+                rxBytes = 0L,
+                txBytes = 0L,
+                rxPackets = 0L,
+                txPackets = 0L,
+                rxErrors = 0L,
+                txErrors = 0L,
+                rxDropped = 0L,
+                txDropped = 0L,
+                timestamp = System.currentTimeMillis()
+            )
         }
     }
 
@@ -628,15 +675,35 @@ object ShizukuManager {
             0
         }
     }
-}
 
-/*
- * 注意：高级系统操作功能（如包管理、活动管理、通知管理等）
- * 暂时被禁用，因为它们依赖Android隐藏API。
- * 这些API在编译时无法被标准Android SDK识别。
- *
- * 如需启用这些功能，需要：
- * 1. 使用Android隐藏API访问方式
- * 2. 添加适当的反射调用
- * 3. 处理API兼容性问题
- */
+    /**
+     * 命令执行结果数据类
+     */
+    data class CommandResult(
+        val isSuccess: Boolean,
+        val output: String?,
+        val error: String?
+    )
+
+    /**
+     * 执行系统命令（需要Shizuku权限）
+     */
+    fun executeCommand(command: String): CommandResult {
+        return try {
+            if (!isShizukuAvailable()) {
+                return CommandResult(false, null, "Shizuku不可用")
+            }
+
+            // 这里应该实现实际的命令执行逻辑
+            // 由于Shizuku API的复杂性，这里提供一个简化实现
+            val process = Runtime.getRuntime().exec(command)
+            val output = process.inputStream.bufferedReader().use { it.readText() }
+            val error = process.errorStream.bufferedReader().use { it.readText() }
+            val exitCode = process.waitFor()
+
+            CommandResult(exitCode == 0, output, error)
+        } catch (e: Exception) {
+            CommandResult(false, null, e.message)
+        }
+    }
+}

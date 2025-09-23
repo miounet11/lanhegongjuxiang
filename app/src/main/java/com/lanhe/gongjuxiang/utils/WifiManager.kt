@@ -17,7 +17,8 @@ import kotlinx.coroutines.withContext
 class WifiManager(private val context: Context) {
 
     private val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
-    private val shizukuManager = ShizukuManager(context)
+    // ShizukuManager 是单例对象，无需创建实例
+    // private val shizukuManager = ShizukuManager(context)
 
     /**
      * WiFi网络信息数据类
@@ -72,13 +73,13 @@ class WifiManager(private val context: Context) {
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getWifiPassword(ssid: String): String? = withContext(Dispatchers.IO) {
         try {
-            if (!shizukuManager.isShizukuAvailable()) {
+            if (!ShizukuManager.isShizukuAvailable()) {
                 return@withContext null
             }
 
             // 使用Shizuku执行系统命令获取WiFi密码
             val command = "cat /data/misc/wifi/WifiConfigStore.xml | grep -A 5 '$ssid' | grep '<string name=\"PreSharedKey\">' | sed -n 's/.*<string name=\"PreSharedKey\">\\(.*\\)<\\/string>.*/\\1/p'"
-            val result = shizukuManager.executeCommand(command)
+            val result = ShizukuManager.executeCommand(command)
 
             if (result.isSuccess) {
                 result.output?.trim()?.removeSurrounding("\"")

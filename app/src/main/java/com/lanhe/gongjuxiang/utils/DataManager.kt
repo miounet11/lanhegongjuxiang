@@ -5,6 +5,9 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import java.util.concurrent.TimeUnit
+import com.lanhe.gongjuxiang.models.PerformanceData
+import com.lanhe.gongjuxiang.models.MemoryInfo
+import com.lanhe.gongjuxiang.models.BatteryInfo
 
 /**
  * 数据管理器
@@ -27,15 +30,15 @@ class DataManager(private val context: Context) {
             val entity = PerformanceDataEntity(
                 timestamp = data.timestamp,
                 cpuUsage = data.cpuUsage,
-                memoryUsagePercent = data.memoryUsage.usagePercent,
+                memoryUsagePercent = (data.memoryUsage.used.toFloat() / data.memoryUsage.total * 100).toInt(),
                 memoryUsedMB = data.memoryUsage.used / (1024 * 1024),
                 memoryTotalMB = data.memoryUsage.total / (1024 * 1024),
                 batteryLevel = data.batteryInfo.level,
-                batteryTemperature = data.batteryInfo.temperature,
-                batteryVoltage = data.batteryInfo.voltage,
+                batteryTemperature = data.batteryInfo.temperature.toFloat(),
+                batteryVoltage = 0f, // 暂时不支持电池电压
                 batteryIsCharging = data.batteryInfo.isCharging,
-                batteryIsPlugged = data.batteryInfo.isPlugged,
-                deviceTemperature = 0f, // 暂时不支持设备温度
+                batteryIsPlugged = false, // 暂时不支持充电状态
+                deviceTemperature = data.deviceTemperature,
                 isScreenOn = false, // 暂时不支持屏幕状态
                 dataType = dataType
             )
@@ -52,15 +55,15 @@ class DataManager(private val context: Context) {
                 PerformanceDataEntity(
                     timestamp = data.timestamp,
                     cpuUsage = data.cpuUsage,
-                    memoryUsagePercent = data.memoryUsage.usagePercent,
+                    memoryUsagePercent = (data.memoryUsage.used.toFloat() / data.memoryUsage.total * 100).toInt(),
                     memoryUsedMB = data.memoryUsage.used / (1024 * 1024),
                     memoryTotalMB = data.memoryUsage.total / (1024 * 1024),
                     batteryLevel = data.batteryInfo.level,
-                    batteryTemperature = data.batteryInfo.temperature,
-                    batteryVoltage = data.batteryInfo.voltage,
+                    batteryTemperature = data.batteryInfo.temperature.toFloat(),
+                    batteryVoltage = 0f,
                     batteryIsCharging = data.batteryInfo.isCharging,
-                    batteryIsPlugged = data.batteryInfo.isPlugged,
-                    deviceTemperature = 0f,
+                    batteryIsPlugged = false,
+                    deviceTemperature = data.deviceTemperature,
                     isScreenOn = false,
                     dataType = dataType
                 )

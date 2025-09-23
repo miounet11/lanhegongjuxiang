@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Splash Screen Theme for Android 12+ -->
+    <style name="Theme.LanheZhushou.SplashScreen" parent="Theme.SplashScreen">
+        <!-- Primary brand color -->
+        <item name="postSplashScreenTheme">@style/AppTheme</item>
+
+        <!-- Splash screen background color -->
+        <item name="android:windowSplashScreenBackground">@color/colorPrimary</item>
+
+        <!-- Splash screen animated vector drawable -->
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/animated_splash_icon</item>
+
+        <!-- Splash screen icon animation duration -->
+        <item name="android:windowSplashScreenAnimationDuration">1000</item>
+
+        <!-- Splash screen branding image -->
+        <item name="android:windowSplashScreenBrandingImage">@drawable/splash_branding</item>
+
+        <!-- Status bar and navigation bar -->
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+        <item name="android:navigationBarColor">@color/colorPrimary</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>

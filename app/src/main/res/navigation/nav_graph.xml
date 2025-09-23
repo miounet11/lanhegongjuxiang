@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/nav_home">
+
+    <!-- 首页Fragment -->
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.lanhe.gongjuxiang.fragments.HomeFragment"
+        android:label="首页"
+        tools:layout="@layout/fragment_home" />
+
+    <!-- 性能监控Fragment -->
+    <fragment
+        android:id="@+id/nav_performance"
+        android:name="com.lanhe.gongjuxiang.fragments.PerformanceFragment"
+        android:label="性能监控"
+        tools:layout="@layout/fragment_performance" />
+
+    <!-- 浏览器Fragment -->
+    <fragment
+        android:id="@+id/nav_browser"
+        android:name="com.lanhe.gongjuxiang.fragments.BrowserFragment"
+        android:label="浏览器"
+        tools:layout="@layout/fragment_browser" />
+
+    <!-- 安全中心Fragment -->
+    <fragment
+        android:id="@+id/nav_security"
+        android:name="com.lanhe.gongjuxiang.fragments.SecurityFragment"
+        android:label="安全中心"
+        tools:layout="@layout/fragment_security" />
+
+    <!-- 设置Fragment -->
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.lanhe.gongjuxiang.fragments.SettingsFragment"
+        android:label="设置"
+        tools:layout="@layout/fragment_settings" />
+
+</navigation>

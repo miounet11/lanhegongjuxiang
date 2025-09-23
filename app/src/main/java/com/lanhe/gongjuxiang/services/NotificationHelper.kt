@@ -39,7 +39,7 @@ class NotificationHelper(private val context: Context) {
 
     fun createServiceNotification(): Notification {
         return NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_fluent_battery_0_24_regular)
+            .setSmallIcon(android.R.drawable.ic_lock_idle_lock)
             .setContentTitle("蓝河工具箱服务")
             .setContentText("正在监控系统状态")
             .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -75,48 +75,48 @@ class NotificationHelper(private val context: Context) {
     private fun getNotificationIcon(type: NotificationType): Int {
         return when (type) {
             // 充电相关
-            NotificationType.CHARGING_CONNECTED -> R.drawable.ic_fluent_battery_charge_24_regular
-            NotificationType.CHARGING_DISCONNECTED -> R.drawable.ic_fluent_battery_0_24_regular
-            NotificationType.TEMPERATURE_WARNING -> R.drawable.ic_fluent_temperature_24_regular
-            NotificationType.TEMPERATURE_DANGER -> R.drawable.ic_fluent_warning_24_regular
-            NotificationType.TEMPERATURE_LOW -> R.drawable.ic_fluent_weather_snowflake_24_regular
-            NotificationType.VOLTAGE_WARNING -> R.drawable.ic_fluent_flash_24_regular
-            NotificationType.VOLTAGE_LOW -> R.drawable.ic_fluent_battery_warning_24_regular
-            NotificationType.AC_CHARGING -> R.drawable.ic_fluent_plug_connected_24_regular
-            NotificationType.USB_CHARGING -> R.drawable.ic_fluent_usb_stick_24_regular
-            NotificationType.WIRELESS_CHARGING -> R.drawable.ic_fluent_phone_24_regular
-            NotificationType.BATTERY_FULL -> R.drawable.ic_fluent_battery_10_24_regular
-            NotificationType.BATTERY_HIGH -> R.drawable.ic_fluent_battery_7_24_regular
-            NotificationType.BATTERY_LOW -> R.drawable.ic_fluent_battery_3_24_regular
-            NotificationType.BATTERY_CRITICAL -> R.drawable.ic_fluent_battery_1_24_regular
-            NotificationType.BATTERY_HEALTH -> R.drawable.ic_fluent_heart_24_regular
-            NotificationType.SAFETY_WARNING -> R.drawable.ic_fluent_shield_error_24_regular
-            NotificationType.LONG_CHARGING -> R.drawable.ic_fluent_clock_24_regular
-            NotificationType.FAST_CHARGING -> R.drawable.ic_fluent_lightning_24_regular
-            NotificationType.COMPUTER_CHARGING -> R.drawable.ic_fluent_desktop_24_regular
+            NotificationType.CHARGING_CONNECTED -> android.R.drawable.ic_lock_idle_lock
+            NotificationType.CHARGING_DISCONNECTED -> android.R.drawable.ic_lock_idle_lock
+            NotificationType.TEMPERATURE_WARNING -> android.R.drawable.ic_menu_manage
+            NotificationType.TEMPERATURE_DANGER -> android.R.drawable.ic_delete
+            NotificationType.TEMPERATURE_LOW -> android.R.drawable.ic_menu_manage
+            NotificationType.VOLTAGE_WARNING -> android.R.drawable.ic_popup_sync
+            NotificationType.VOLTAGE_LOW -> android.R.drawable.ic_delete
+            NotificationType.AC_CHARGING -> android.R.drawable.ic_lock_idle_lock
+            NotificationType.USB_CHARGING -> android.R.drawable.ic_menu_manage
+            NotificationType.WIRELESS_CHARGING -> android.R.drawable.ic_menu_manage
+            NotificationType.BATTERY_FULL -> android.R.drawable.checkbox_on_background
+            NotificationType.BATTERY_HIGH -> android.R.drawable.checkbox_on_background
+            NotificationType.BATTERY_LOW -> android.R.drawable.ic_delete
+            NotificationType.BATTERY_CRITICAL -> android.R.drawable.ic_delete
+            NotificationType.BATTERY_HEALTH -> android.R.drawable.checkbox_on_background
+            NotificationType.SAFETY_WARNING -> android.R.drawable.ic_delete
+            NotificationType.LONG_CHARGING -> android.R.drawable.ic_popup_sync
+            NotificationType.FAST_CHARGING -> android.R.drawable.ic_popup_sync
+            NotificationType.COMPUTER_CHARGING -> android.R.drawable.ic_menu_manage
 
             // WiFi相关
-            NotificationType.WIFI_CONNECTED -> R.drawable.ic_fluent_wifi_1_24_regular
-            NotificationType.WIFI_DISCONNECTED -> R.drawable.ic_fluent_wifi_off_24_regular
-            NotificationType.WIFI_SIGNAL_WEAK -> R.drawable.ic_fluent_wifi_warning_24_regular
-            NotificationType.WIFI_SIGNAL_STRONG -> R.drawable.ic_fluent_wifi_4_24_regular
+            NotificationType.WIFI_CONNECTED -> android.R.drawable.ic_menu_manage
+            NotificationType.WIFI_DISCONNECTED -> android.R.drawable.ic_delete
+            NotificationType.WIFI_SIGNAL_WEAK -> android.R.drawable.ic_delete
+            NotificationType.WIFI_SIGNAL_STRONG -> android.R.drawable.checkbox_on_background
 
             // 短信相关
-            NotificationType.SMS_RECEIVED -> R.drawable.ic_fluent_comment_24_regular
-            NotificationType.SMS_SPAM_DETECTED -> R.drawable.ic_fluent_mail_inbox_dismiss_24_regular
+            NotificationType.SMS_RECEIVED -> android.R.drawable.ic_menu_manage
+            NotificationType.SMS_SPAM_DETECTED -> android.R.drawable.ic_delete
 
             // 文件相关
-            NotificationType.FILE_BACKUP_COMPLETED -> R.drawable.ic_fluent_cloud_backup_24_regular
-            NotificationType.FILE_CLEANUP_COMPLETED -> R.drawable.ic_fluent_broom_24_regular
+            NotificationType.FILE_BACKUP_COMPLETED -> android.R.drawable.checkbox_on_background
+            NotificationType.FILE_CLEANUP_COMPLETED -> android.R.drawable.ic_menu_manage
 
             // 号码卫士
-            NotificationType.CALL_BLOCKED -> R.drawable.ic_fluent_call_blocked_24_regular
-            NotificationType.CALL_FROM_BLACKLIST -> R.drawable.ic_fluent_shield_person_24_regular
+            NotificationType.CALL_BLOCKED -> android.R.drawable.ic_delete
+            NotificationType.CALL_FROM_BLACKLIST -> android.R.drawable.ic_lock_idle_lock
 
             // AI助手
-            NotificationType.AI_RESPONSE_RECEIVED -> R.drawable.ic_fluent_bot_24_regular
-            NotificationType.AI_ANALYSIS_COMPLETED -> R.drawable.ic_fluent_data_trending_24_regular
-            NotificationType.AI_ERROR_OCCURRED -> R.drawable.ic_fluent_error_circle_24_regular
+            NotificationType.AI_RESPONSE_RECEIVED -> android.R.drawable.ic_menu_manage
+            NotificationType.AI_ANALYSIS_COMPLETED -> android.R.drawable.checkbox_on_background
+            NotificationType.AI_ERROR_OCCURRED -> android.R.drawable.ic_delete
         }
     }
 

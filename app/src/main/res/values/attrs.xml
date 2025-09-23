@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 自定义主题属性 -->
+    <declare-styleable name="AppTheme">
+        <attr name="heroCardStyle" format="reference" />
+        <attr name="featureCardStyle" format="reference" />
+        <attr name="primaryButtonStyle" format="reference" />
+        <attr name="secondaryButtonStyle" format="reference" />
+        <attr name="largeButtonStyle" format="reference" />
+    </declare-styleable>
+    
+    <!-- Splash Screen 属性 -->
+    <attr name="windowSplashScreenBackground" format="color|reference" />
+    <attr name="windowSplashScreenAnimatedIcon" format="reference" />
+    <attr name="windowSplashScreenAnimationDuration" format="integer" />
+    <attr name="postSplashScreenTheme" format="reference" />
+    
+    <!-- Slider 属性 -->
+    <attr name="activeTrackColor" format="color|reference" />
+    <attr name="inactiveTrackColor" format="color|reference" />
+    
+    <!-- Snackbar 属性 -->
+    <attr name="actionTextColor" format="color|reference" />
+
+    <!-- Background color attribute -->
+    <attr name="colorBackground" format="color|reference" />
+</resources>

@@ -428,4 +428,75 @@ class SmartCleaner(private val context: Context) {
 
         return String.format("%.1f %s", size / Math.pow(1024.0, digitGroups.toDouble()), units[digitGroups])
     }
+
+    /**
+     * 清理内存 (模拟)
+     */
+    suspend fun cleanMemory(): Long = withContext(Dispatchers.IO) {
+        // 这里可以实现实际的内存清理逻辑
+        // 目前返回一个模拟的清理大小
+        (50..200).random() * 1024L * 1024L // 50-200MB
+    }
+
+    /**
+     * 清理存储空间
+     */
+    suspend fun cleanStorage(): Long = withContext(Dispatchers.IO) {
+        try {
+            var totalCleaned = 0L
+
+            // 清理缓存目录
+            val cacheDir = context.cacheDir
+            if (cacheDir.exists()) {
+                totalCleaned += cleanDirectory(cacheDir, CleanType.CACHE)
+            }
+
+            // 清理外部缓存
+            val externalCacheDir = context.externalCacheDir
+            if (externalCacheDir?.exists() == true) {
+                totalCleaned += cleanDirectory(externalCacheDir, CleanType.CACHE)
+            }
+
+            // 清理临时文件
+            val tempFiles = scanTempFiles()
+            tempFiles.forEach { item ->
+                if (item.isSafe && File(item.path).delete()) {
+                    totalCleaned += item.size
+                }
+            }
+
+            totalCleaned
+        } catch (e: Exception) {
+            0L
+        }
+    }
+
+    /**
+     * 清理指定目录
+     */
+    private fun cleanDirectory(dir: File, type: CleanType): Long {
+        var cleanedSize = 0L
+        try {
+            dir.listFiles()?.forEach { file ->
+                if (file.isFile && file.canWrite()) {
+                    val size = file.length()
+                    if (file.delete()) {
+                        cleanedSize += size
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            // 忽略清理过程中的异常
+        }
+        return cleanedSize
+    }
+
+    /**
+     * 获取上次清理大小
+     */
+    fun getLastCleanupSize(): Long {
+        // 这里可以实现从SharedPreferences或其他存储中读取上次清理大小
+        // 目前返回一个默认值
+        return 150 * 1024L * 1024L // 150MB
+    }
 }

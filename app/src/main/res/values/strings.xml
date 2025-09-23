@@ -43,4 +43,70 @@
     <string name="tab_functions">功能</string>
     <string name="tab_advanced">高级</string>
     <string name="tab_my">我的</string>
+
+    <!-- Navigation Strings -->
+    <string name="nav_home">首页</string>
+    <string name="nav_performance">性能</string>
+    <string name="nav_browser">浏览器</string>
+
+    <!-- Widget Strings -->
+    <string name="widget_description">蓝河助手桌面小部件 - 实时监控系统状态</string>
+
+    <!-- Analytics & Features -->
+    <string name="analytics_enabled">启用分析统计</string>
+    <string name="biometric_auth">生物识别验证</string>
+    <string name="floating_bubble">悬浮气泡</string>
+    <string name="onboarding_welcome">欢迎使用</string>
+    <string name="data_backup">数据备份</string>
+    <string name="data_import">数据导入</string>
+
+    <!-- Permissions -->
+    <string name="permission_overlay">悬浮窗权限</string>
+    <string name="permission_biometric">生物识别权限</string>
+    <string name="permission_notification">通知权限</string>
+    <string name="nav_security">安全</string>
+    <string name="nav_settings">设置</string>
+
+    <!-- UI Strings -->
+    <string name="quick_optimize">一键优化</string>
+    <string name="system_status">系统状态</string>
+    <string name="performance_score">性能评分</string>
+    <string name="cpu_usage">CPU使用率</string>
+    <string name="memory_usage">内存使用</string>
+    <string name="battery_level">电池电量</string>
+    <string name="select_item_to_view_details">选择项目以查看详细信息</string>
+
+    <!-- Activity Titles -->
+    <string name="about_title">关于</string>
+    <string name="settings_title">设置</string>
+    <string name="help_title">帮助</string>
+    <string name="feedback_title">反馈</string>
+
+    <!-- Browser Activity -->
+    <string name="browser_title">浏览器</string>
+    <string name="browser_settings_title">浏览器设置</string>
+
+    <!-- App Manager -->
+    <string name="app_manager_title">应用管理</string>
+    <string name="battery_manager_title">电池管理</string>
+    <string name="core_optimization_title">核心优化</string>
+    <string name="cpu_manager_title">CPU管理</string>
+    <string name="electromagnetic_manager_title">电磁管理</string>
+    <string name="file_browser_title">文件浏览器</string>
+    <string name="game_acceleration_title">游戏加速</string>
+    <string name="image_viewer_title">图片查看器</string>
+    <string name="memory_manager_title">内存管理</string>
+    <string name="network_diagnostic_title">网络诊断</string>
+    <string name="notification_manager_title">通知管理</string>
+    <string name="office_viewer_title">办公文档查看器</string>
+    <string name="packet_capture_title">数据包捕获</string>
+    <string name="pdf_viewer_title">PDF查看器</string>
+    <string name="performance_comparison_title">性能对比</string>
+    <string name="quick_settings_title">快速设置</string>
+    <string name="shizuku_auth_title">Shizuku授权</string>
+    <string name="storage_manager_title">存储管理</string>
+    <string name="system_monitor_title">系统监控</string>
+    <string name="text_viewer_title">文本查看器</string>
+    <string name="theme_settings_title">主题设置</string>
+    <string name="update_title">更新</string>
 </resources>

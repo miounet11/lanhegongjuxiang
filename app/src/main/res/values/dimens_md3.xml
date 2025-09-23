@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Material Design 3.0 Spacing System -->
+    
+    <!-- 基础间距单位 -->
+    <dimen name="spacing_unit">8dp</dimen>
+    
+    <!-- 组件间距 -->
+    <dimen name="spacing_xs">4dp</dimen>     <!-- 0.5x -->
+    <dimen name="spacing_sm">8dp</dimen>     <!-- 1x -->
+    <dimen name="spacing_md">16dp</dimen>    <!-- 2x -->
+    <dimen name="spacing_lg">24dp</dimen>    <!-- 3x -->
+    <dimen name="spacing_xl">32dp</dimen>    <!-- 4x -->
+    <dimen name="spacing_xxl">48dp</dimen>   <!-- 6x -->
+    <dimen name="spacing_xxxl">64dp</dimen>  <!-- 8x -->
+    
+    <!-- 页面边距 -->
+    <dimen name="margin_page">16dp</dimen>
+    <dimen name="margin_section">24dp</dimen>
+    <dimen name="margin_card">12dp</dimen>
+    
+    <!-- 卡片规格 -->
+    <dimen name="card_radius">12dp</dimen>
+    <dimen name="card_radius_large">16dp</dimen>
+    <dimen name="card_radius_small">8dp</dimen>
+    <dimen name="card_elevation">2dp</dimen>
+    <dimen name="card_elevation_focus">6dp</dimen>
+    <dimen name="card_padding">16dp</dimen>
+    <dimen name="card_padding_large">20dp</dimen>
+    
+    <!-- 按钮规格 -->
+    <dimen name="button_height">48dp</dimen>
+    <dimen name="button_height_large">56dp</dimen>
+    <dimen name="button_height_small">40dp</dimen>
+    <dimen name="button_radius">12dp</dimen>
+    <dimen name="button_padding_horizontal">24dp</dimen>
+    <dimen name="button_padding_vertical">12dp</dimen>
+    
+    <!-- 输入框规格 -->
+    <dimen name="input_height">56dp</dimen>
+    <dimen name="input_radius">8dp</dimen>
+    <dimen name="input_padding">16dp</dimen>
+    
+    <!-- 图标规格 -->
+    <dimen name="icon_size_small">16dp</dimen>
+    <dimen name="icon_size_medium">24dp</dimen>
+    <dimen name="icon_size_large">32dp</dimen>
+    <dimen name="icon_size_xlarge">48dp</dimen>
+    <dimen name="icon_size_hero">64dp</dimen>
+    
+    <!-- 进度条规格 -->
+    <dimen name="progress_height">4dp</dimen>
+    <dimen name="progress_height_large">8dp</dimen>
+    <dimen name="progress_radius">2dp</dimen>
+    
+    <!-- AppBar 规格 -->
+    <dimen name="appbar_height">64dp</dimen>
+    <dimen name="appbar_elevation">4dp</dimen>
+    
+    <!-- 底部导航规格 -->
+    <dimen name="bottom_nav_height">80dp</dimen>
+    <dimen name="bottom_nav_elevation">8dp</dimen>
+    
+    <!-- 系统状态卡片规格 -->
+    <dimen name="hero_card_height">120dp</dimen>
+    <dimen name="hero_card_radius">16dp</dimen>
+    <dimen name="hero_card_elevation">4dp</dimen>
+    
+    <!-- 功能网格规格 -->
+    <dimen name="feature_card_height">90dp</dimen>
+    <dimen name="feature_card_spacing">8dp</dimen>
+    <dimen name="feature_icon_size">32dp</dimen>
+    
+    <!-- 列表项规格 -->
+    <dimen name="list_item_height">72dp</dimen>
+    <dimen name="list_item_height_small">56dp</dimen>
+    <dimen name="list_item_height_large">88dp</dimen>
+    <dimen name="list_item_padding">16dp</dimen>
+    
+    <!-- 分隔线规格 -->
+    <dimen name="divider_height">1dp</dimen>
+    <dimen name="divider_indent">16dp</dimen>
+    
+    <!-- 阴影偏移 -->
+    <dimen name="shadow_offset_x">0dp</dimen>
+    <dimen name="shadow_offset_y">2dp</dimen>
+    <dimen name="shadow_radius">4dp</dimen>
+    
+    <!-- 最小触摸目标 -->
+    <dimen name="touch_target_min">48dp</dimen>
+    <dimen name="touch_target_recommended">56dp</dimen>
+    
+    <!-- 响应式断点 -->
+    <dimen name="breakpoint_compact">600dp</dimen>
+    <dimen name="breakpoint_medium">840dp</dimen>
+    <dimen name="breakpoint_expanded">1200dp</dimen>
+    
+    <!-- 动画持续时间 -->
+    <integer name="animation_duration_short">150</integer>
+    <integer name="animation_duration_medium">300</integer>
+    <integer name="animation_duration_long">500</integer>
+    
+    <!-- 文本行高 -->
+    <dimen name="line_height_body">20sp</dimen>
+    <dimen name="line_height_caption">16sp</dimen>
+    <dimen name="line_height_headline">36sp</dimen>
+</resources>

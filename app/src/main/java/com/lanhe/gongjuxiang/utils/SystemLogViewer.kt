@@ -17,7 +17,8 @@ import java.util.*
  */
 class SystemLogViewer(private val context: Context) {
 
-    private val shizukuManager = ShizukuManager(context)
+    // ShizukuManager 是单例对象，无需创建实例
+    // private val shizukuManager = ShizukuManager(context)
 
     /**
      * 日志条目数据类
@@ -74,13 +75,13 @@ class SystemLogViewer(private val context: Context) {
         val logs = mutableListOf<LogEntry>()
 
         try {
-            if (!shizukuManager.isShizukuAvailable()) {
+            if (!ShizukuManager.isShizukuAvailable()) {
                 return@withContext logs
             }
 
             // 使用logcat命令获取日志
             val command = buildLogcatCommand(filter)
-            val result = shizukuManager.executeCommand(command)
+            val result = ShizukuManager.executeCommand(command)
 
             if (result.isSuccess && result.output != null) {
                 val lines = result.output.lines()
@@ -89,7 +90,7 @@ class SystemLogViewer(private val context: Context) {
                         parseLogLine(line)?.let { entry ->
                             if (matchesFilter(entry, filter)) {
                                 logs.add(entry)
-                                if (logs.size >= filter.maxLines) break
+                                if (logs.size >= filter.maxLines) return@withContext logs
                             }
                         }
                     }
@@ -111,13 +112,13 @@ class SystemLogViewer(private val context: Context) {
         onNewLog: (LogEntry) -> Unit
     ) = withContext(Dispatchers.IO) {
         try {
-            if (!shizukuManager.isShizukuAvailable()) {
+            if (!ShizukuManager.isShizukuAvailable()) {
                 return@withContext
             }
 
             // 使用logcat -v time -T 1 进行实时监控
             val command = "logcat -v time -T 1"
-            val result = shizukuManager.executeCommand(command)
+            val result = ShizukuManager.executeCommand(command)
 
             if (result.isSuccess && result.output != null) {
                 val lines = result.output.lines()
@@ -142,11 +143,11 @@ class SystemLogViewer(private val context: Context) {
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun clearSystemLogs(): Boolean = withContext(Dispatchers.IO) {
         try {
-            if (!shizukuManager.isShizukuAvailable()) {
+            if (!ShizukuManager.isShizukuAvailable()) {
                 return@withContext false
             }
 
-            val result = shizukuManager.executeCommand("logcat -c")
+            val result = ShizukuManager.executeCommand("logcat -c")
             result.isSuccess
         } catch (e: Exception) {
             false

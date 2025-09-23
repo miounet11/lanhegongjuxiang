@@ -100,7 +100,7 @@ class BrowserSettingsActivity : AppCompatActivity() {
         supportActionBar?.title = getString(R.string.browser_settings_title)
 
         // 设置RecyclerView
-        settingsRecyclerView = binding.settingsRecyclerView
+        settingsRecyclerView = binding.recyclerView
         settingsRecyclerView.layoutManager = LinearLayoutManager(this)
 
         // 设置点击监听器

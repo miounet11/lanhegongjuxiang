@@ -25,8 +25,8 @@ class SystemMonitorViewModel : ViewModel() {
     val systemInfo: LiveData<SystemInfo> = _systemInfo
 
     // 网络统计
-    private val _networkStats = MutableLiveData<NetworkStats>()
-    val networkStats: LiveData<NetworkStats> = _networkStats
+    private val _networkStats = MutableLiveData<com.lanhe.gongjuxiang.models.NetworkStats>()
+    val networkStats: LiveData<com.lanhe.gongjuxiang.models.NetworkStats> = _networkStats
 
     /**
      * 系统统计数据类
@@ -45,8 +45,8 @@ class SystemMonitorViewModel : ViewModel() {
      */
     fun updateSystemStats(
         cpuUsage: Float,
-        memoryInfo: MemoryInfo,
-        networkStats: NetworkStats
+        memoryInfo: com.lanhe.gongjuxiang.models.MemoryInfo,
+        networkStats: com.lanhe.gongjuxiang.models.NetworkStats
     ) {
         val stats = SystemStats(
             cpuUsage = cpuUsage,

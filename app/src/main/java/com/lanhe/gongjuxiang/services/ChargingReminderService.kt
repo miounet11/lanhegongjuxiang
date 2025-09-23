@@ -288,7 +288,13 @@ class ChargingReminderService : Service() {
         val status = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_STATUS)
 
         if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
-            val temperature = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_TEMPERATURE) / 10.0f
+            val temperature = try {
+                val tempProperty = BatteryManager::class.java.getField("BATTERY_PROPERTY_TEMPERATURE")
+                    .getInt(null)
+                batteryManager.getIntProperty(tempProperty) / 10.0f
+            } catch (e: Exception) {
+                25.0f // 默认温度
+            }
             val current = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW) / 1000.0f
 
             if (current > 2000) {

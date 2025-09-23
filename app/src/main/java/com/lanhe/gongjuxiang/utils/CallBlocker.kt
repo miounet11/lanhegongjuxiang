@@ -397,7 +397,7 @@ class CallBlocker(private val context: Context) : CallScreeningService() {
                 val count = sharedPrefs.getInt("${keyPrefix}_count", 0)
 
                 val blockType = try {
-                    BlockType.valueOf(typeStr)
+                    BlockType.valueOf(typeStr ?: BlockType.EXACT_MATCH.name)
                 } catch (e: Exception) {
                     BlockType.EXACT_MATCH
                 }
@@ -448,10 +448,10 @@ class CallBlocker(private val context: Context) : CallScreeningService() {
 
                 records.add(BlockRecord(
                     id = keyPrefix.substringAfter("block_record_").toLongOrNull() ?: 0L,
-                    number = number,
-                    name = name,
+                    number = number ?: "",
+                    name = name ?: "",
                     blockTime = time,
-                    blockReason = reason
+                    blockReason = reason ?: ""
                 ))
             } catch (e: Exception) {
                 // 忽略解析错误的记录

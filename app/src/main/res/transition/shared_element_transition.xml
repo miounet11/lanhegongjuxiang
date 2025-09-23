@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<transitionSet xmlns:android="http://schemas.android.com/apk/res/android">
+    <changeBounds
+        android:duration="@integer/animation_duration_medium"
+        android:interpolator="@android:anim/decelerate_interpolator" />
+    <changeTransform
+        android:duration="@integer/animation_duration_medium"
+        android:interpolator="@android:anim/decelerate_interpolator" />
+    <changeClipBounds
+        android:duration="@integer/animation_duration_medium"
+        android:interpolator="@android:anim/decelerate_interpolator" />
+    <changeImageTransform
+        android:duration="@integer/animation_duration_medium"
+        android:interpolator="@android:anim/decelerate_interpolator" />
+</transitionSet>

@@ -155,7 +155,19 @@ class NetworkDiagnosticActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 val networkInfo = networkInfoHelper.getCurrentNetworkInfo()
-                viewModel.updateNetworkInfo(networkInfo)
+                // 转换类型为ViewModel期望的格式
+                val vmNetworkInfo = com.lanhe.gongjuxiang.viewmodels.NetworkDiagnosticViewModel.NetworkInfo(
+                    type = networkInfo.type,
+                    ssid = networkInfo.ssid,
+                    bssid = networkInfo.bssid,
+                    signalStrength = networkInfo.signalStrength,
+                    rssi = networkInfo.rssi,
+                    estimatedDistance = networkInfo.estimatedDistance,
+                    linkSpeed = networkInfo.linkSpeed,
+                    frequency = networkInfo.frequency,
+                    isConnected = networkInfo.isConnected
+                )
+                viewModel.updateNetworkInfo(vmNetworkInfo)
             } catch (e: Exception) {
                 Toast.makeText(this@NetworkDiagnosticActivity, "获取网络信息失败", Toast.LENGTH_SHORT).show()
             }
@@ -167,7 +179,15 @@ class NetworkDiagnosticActivity : AppCompatActivity() {
             try {
                 uiController.setTestingStatus(true)
                 val result = latencyTester.performLatencyTest()
-                viewModel.updateLatencyResult(result)
+                // 转换类型为ViewModel期望的格式
+                val vmLatencyResult = com.lanhe.gongjuxiang.viewmodels.NetworkDiagnosticViewModel.LatencyResult(
+                    averageLatency = result.averageLatency,
+                    minLatency = result.minLatency,
+                    maxLatency = result.maxLatency,
+                    packetLoss = result.packetLoss,
+                    quality = result.quality
+                )
+                viewModel.updateLatencyResult(vmLatencyResult)
 
                 uiController.setTestingStatus(false)
                 Toast.makeText(
@@ -188,7 +208,13 @@ class NetworkDiagnosticActivity : AppCompatActivity() {
             try {
                 uiController.setScanningStatus(true)
                 val result = positionScanner.performPositionScan()
-                viewModel.updatePositionScanResult(result)
+                // 转换类型为ViewModel期望的格式
+                val vmPositionResult = com.lanhe.gongjuxiang.viewmodels.NetworkDiagnosticViewModel.PositionScanResult(
+                    bestPosition = result.bestPosition,
+                    recommendedAction = result.recommendedAction,
+                    positions = emptyList() // 暂时使用空列表
+                )
+                viewModel.updatePositionScanResult(vmPositionResult)
 
                 uiController.setScanningStatus(false)
                 Toast.makeText(

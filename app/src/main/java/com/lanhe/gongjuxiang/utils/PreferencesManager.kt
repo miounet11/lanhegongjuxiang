@@ -2,6 +2,7 @@ package com.lanhe.gongjuxiang.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.appcompat.app.AppCompatDelegate
 import java.util.*
 
 class PreferencesManager(context: Context) {
@@ -36,6 +37,14 @@ class PreferencesManager(context: Context) {
         private const val NETWORK_VIDEO_BOOST_ACTIVE = "network_video_boost_active"
         private const val NETWORK_VIDEO_BOOST_START_TIME = "network_video_boost_start_time"
         private const val NETWORK_VIDEO_BOOST_LAST_RESET = "network_video_boost_last_reset"
+
+        // UI & Theme preferences
+        private const val KEY_DARK_MODE = "dark_mode"
+        private const val KEY_ANIMATIONS_ENABLED = "animations_enabled"
+        private const val KEY_AUTO_OPTIMIZATION = "auto_optimization"
+        private const val KEY_NOTIFICATION_ENABLED = "notification_enabled"
+        private const val KEY_FIRST_LAUNCH = "first_launch"
+        private const val KEY_PAGE_TRANSFORMER = "page_transformer_type"
     }
 
     // FPS提升相关方法
@@ -257,5 +266,91 @@ class PreferencesManager(context: Context) {
         if (isDownloadBoostActive()) count++
         if (isNetworkVideoBoostActive()) count++
         return count
+    }
+
+    // UI & Theme related methods
+
+    /**
+     * 深色模式设置
+     */
+    fun isDarkModeEnabled(): Boolean {
+        return prefs.getBoolean(KEY_DARK_MODE, false)
+    }
+
+    fun setDarkModeEnabled(enabled: Boolean) {
+        editor.putBoolean(KEY_DARK_MODE, enabled)
+        editor.apply()
+    }
+
+    /**
+     * 动画效果设置
+     */
+    fun isAnimationsEnabled(): Boolean {
+        return prefs.getBoolean(KEY_ANIMATIONS_ENABLED, true)
+    }
+
+    fun setAnimationsEnabled(enabled: Boolean) {
+        editor.putBoolean(KEY_ANIMATIONS_ENABLED, enabled)
+        editor.apply()
+    }
+
+    /**
+     * 自动优化设置
+     */
+    fun isAutoOptimizationEnabled(): Boolean {
+        return prefs.getBoolean(KEY_AUTO_OPTIMIZATION, false)
+    }
+
+    fun setAutoOptimizationEnabled(enabled: Boolean) {
+        editor.putBoolean(KEY_AUTO_OPTIMIZATION, enabled)
+        editor.apply()
+    }
+
+    /**
+     * 通知设置
+     */
+    fun isNotificationEnabled(): Boolean {
+        return prefs.getBoolean(KEY_NOTIFICATION_ENABLED, true)
+    }
+
+    fun setNotificationEnabled(enabled: Boolean) {
+        editor.putBoolean(KEY_NOTIFICATION_ENABLED, enabled)
+        editor.apply()
+    }
+
+    /**
+     * 首次启动标识
+     */
+    fun isFirstLaunch(): Boolean {
+        return prefs.getBoolean(KEY_FIRST_LAUNCH, true)
+    }
+
+    fun setFirstLaunchCompleted() {
+        editor.putBoolean(KEY_FIRST_LAUNCH, false)
+        editor.apply()
+    }
+
+    /**
+     * 应用主题
+     */
+    fun applyTheme() {
+        val mode = if (isDarkModeEnabled()) {
+            AppCompatDelegate.MODE_NIGHT_YES
+        } else {
+            AppCompatDelegate.MODE_NIGHT_NO
+        }
+        AppCompatDelegate.setDefaultNightMode(mode)
+    }
+
+    /**
+     * 页面转换效果类型
+     */
+    fun getPageTransformerType(): String {
+        return prefs.getString(KEY_PAGE_TRANSFORMER, "zoom_out") ?: "zoom_out"
+    }
+
+    fun setPageTransformerType(type: String) {
+        editor.putString(KEY_PAGE_TRANSFORMER, type)
+        editor.apply()
     }
 }

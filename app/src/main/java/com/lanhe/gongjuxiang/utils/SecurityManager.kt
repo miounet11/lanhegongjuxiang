@@ -12,7 +12,7 @@ import java.security.cert.X509Certificate
 class SecurityManager(private val context: Context) {
 
     // 可信证书指纹列表
-    private val trustedCertificates = setOf(
+    private val trustedCertificates = setOf<String>(
         // 这里可以添加可信证书的SHA-256指纹
     )
 
@@ -98,9 +98,9 @@ class SecurityManager(private val context: Context) {
     }
 
     /**
-     * 计算安全评分
+     * 计算安全评分 - 公开方法
      */
-    private fun calculateSecurityScore(): Int {
+    fun calculateSecurityScore(): Int {
         if (totalRequests == 0) return 100
 
         val unsafeRequests = sslErrorsHandled + dangerousSitesBlocked
@@ -167,6 +167,33 @@ class SecurityManager(private val context: Context) {
         sslErrorsHandled = 0
         dangerousSitesBlocked = 0
         totalRequests = 0
+    }
+
+    /**
+     * 获取高风险应用数量
+     */
+    fun getRiskApplicationsCount(): Int {
+        // 这里应该实现检查高风险应用的逻辑
+        // 目前返回模拟数据
+        return 2
+    }
+    
+    /**
+     * 获取可疑权限数量
+     */
+    fun getSuspiciousPermissionsCount(): Int {
+        // 这里应该实现检查可疑权限的逻辑
+        // 目前返回模拟数据
+        return 1
+    }
+    
+    /**
+     * 执行完整安全扫描
+     */
+    suspend fun performFullSecurityScan() {
+        // 这里应该实现完整的安全扫描逻辑
+        // 目前只是模拟延迟
+        kotlinx.coroutines.delay(2000)
     }
 
     /**

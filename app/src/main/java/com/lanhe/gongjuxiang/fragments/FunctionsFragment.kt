@@ -499,39 +499,39 @@ class FunctionsFragment : Fragment() {
                 "核心性能优化",
                 "FPS boost • Latency reduction • Download acceleration • Video stabilization",
                 android.R.drawable.ic_menu_manage,
-                android.R.color.holo_blue_light
+                "性能"
             ),
             CoreFeature(
                 "packet_capture",
                 "网络抓包分析",
                 "Network monitoring • Protocol analysis • Packet capture",
                 android.R.drawable.ic_menu_search,
-                android.R.color.holo_green_light
+                "网络"
             ),
             CoreFeature(
                 "app_management",
                 "应用管理",
                 "App management • Install/uninstall • Permissions • Storage cleanup",
                 android.R.drawable.ic_menu_view,
-                android.R.color.holo_purple
+                "应用"
             ),
             CoreFeature(
                 "system_monitor",
                 "系统监控",
                 "Real-time monitoring • System resources • Process management",
                 android.R.drawable.ic_menu_info_details,
-                android.R.color.holo_orange_light
+                "监控"
             ),
             CoreFeature(
                 "smart_browser",
                 "智能浏览器",
                 "Web browsing • Bookmarks • Downloads • Ad blocking • Image optimization",
                 android.R.drawable.ic_menu_view,
-                android.R.color.holo_blue_bright
+                "工具"
             )
         )
 
-        val coreFeatureAdapter = CoreFeatureAdapter(coreFeatures) { feature ->
+        val coreFeatureAdapter = CoreFeatureAdapter { feature ->
             when (feature.id) {
                 "core_optimization" -> openCoreOptimization()
                 "packet_capture" -> openPacketCapture()
@@ -545,6 +545,8 @@ class FunctionsFragment : Fragment() {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = coreFeatureAdapter
         }
+        
+        coreFeatureAdapter.submitList(coreFeatures)
     }
 
     override fun onResume() {

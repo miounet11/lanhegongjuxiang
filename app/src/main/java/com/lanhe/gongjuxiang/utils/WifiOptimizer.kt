@@ -297,4 +297,30 @@ class WifiOptimizer(private val context: Context) {
     fun getWifiState(): Int {
         return wifiManager.wifiState
     }
+
+    /**
+     * 优化网络连接
+     */
+    suspend fun optimizeNetwork(): Boolean = withContext(Dispatchers.IO) {
+        try {
+            // 检查WiFi是否启用
+            if (!wifiManager.isWifiEnabled) {
+                return@withContext false
+            }
+
+            // 获取当前连接信息
+            val currentNetwork = connectivityManager.activeNetwork
+            val capabilities = connectivityManager.getNetworkCapabilities(currentNetwork)
+
+            if (capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true) {
+                // 这里可以实现实际的网络优化逻辑
+                // 例如：调整WiFi频段、重新连接等
+                return@withContext true
+            }
+
+            return@withContext false
+        } catch (e: Exception) {
+            return@withContext false
+        }
+    }
 }

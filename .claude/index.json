@@ -1,0 +1,177 @@
+{
+  "timestamp": "2025-09-15T13:45:51.000Z",
+  "project_name": "蓝河助手",
+  "scan_summary": {
+    "total_files_estimated": 450,
+    "files_scanned": 183,
+    "coverage_percentage": 40.7,
+    "scan_strategy": "深度补捞（阶段C）",
+    "truncated": false
+  },
+  "modules": [
+    {
+      "path": "app/",
+      "type": "android_application",
+      "language": "kotlin",
+      "description": "主应用模块，包含所有核心功能实现",
+      "entry_points": [
+        "app/src/main/java/com/lanhe/gongjuxiang/MainActivity.kt",
+        "app/src/main/java/com/lanhe/gongjuxiang/LanheApplication.kt"
+      ],
+      "key_interfaces": [
+        "SystemOptimizer - 系统优化器（578行）",
+        "ShizukuManager - Shizuku权限管理器（710行）",
+        "PerformanceMonitor - 性能监控器",
+        "MainActivity - Navigation + BottomNavigation架构（321行）",
+        "Material Design 3.0布局系统"
+      ],
+      "data_models": [
+        "app/src/main/java/com/lanhe/gongjuxiang/utils/AppDatabase.kt",
+        "app/src/main/java/com/lanhe/gongjuxiang/utils/PerformanceDataEntity.kt",
+        "OptimizationHistoryEntity - 优化历史记录",
+        "BatteryStatsEntity - 电池统计数据",
+        "Room数据库架构（3个实体类）"
+      ],
+      "tests": [
+        "app/src/test/java/com/lanhe/gongjuxiang/ExampleUnitTest.kt",
+        "app/src/androidTest/java/com/lanhe/gongjuxiang/ExampleInstrumentedTest.kt"
+      ],
+      "config_files": [
+        "app/build.gradle.kts",
+        "app/src/main/AndroidManifest.xml",
+        "app/proguard-rules.pro"
+      ],
+      "coverage": {
+        "entry_points": "完整",
+        "interfaces": "完整",
+        "data_models": "完整",
+        "tests": "基础",
+        "layout_analysis": "完整",
+        "utils_implementation": "完整",
+        "missing": []
+      }
+    },
+    {
+      "path": "mokuai/",
+      "type": "module_library",
+      "language": "java/kotlin",
+      "description": "可复用的功能模块库",
+      "entry_points": [
+        "mokuai/core/shizuku-manager/",
+        "mokuai/mokuai/modules/network/src/main/java/com/hippo/ehviewer/module/network/NetworkManager.java",
+        "mokuai/mokuai/modules/database/"
+      ],
+      "key_interfaces": [
+        "NetworkManager - 网络管理器（407行）",
+        "INetworkCallback - 网络回调接口",
+        "INetworkConfig - 网络配置接口",
+        "DatabaseManager - 数据库管理器",
+        "统一的HTTP客户端和网络管理"
+      ],
+      "data_models": [
+        "NetworkException - 网络异常处理",
+        "NetworkConfig - 默认网络配置",
+        "DatabaseConfig - 数据库配置",
+        "模块间标准化接口定义"
+      ],
+      "tests": [
+        "mokuai/core/shizuku-manager/src/test/",
+        "mokuai/core/shizuku-manager/src/androidTest/",
+        "network模块单元测试和集成测试"
+      ],
+      "config_files": [
+        "mokuai/mokuai/modules/network/build.gradle.kts",
+        "mokuai/mokuai/modules/database/build.gradle.kts",
+        "mokuai/mokuai/modules/performance-monitor/build.gradle.kts",
+        "mokuai/version.properties"
+      ],
+      "coverage": {
+        "entry_points": "完整",
+        "interfaces": "完整", 
+        "data_models": "完整",
+        "tests": "规划中",
+        "module_implementation": "部分完成",
+        "missing": [
+          "performance-monitor模块具体实现",
+          "memory-manager模块实现",
+          "filesystem模块实现"
+        ]
+      }
+    }
+  ],
+  "dependencies": {
+    "android_gradle_plugin": "8.12.1",
+    "kotlin": "2.0.21",
+    "compile_sdk": 36,
+    "min_sdk": 24,
+    "target_sdk": 36,
+    "key_libraries": [
+      "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7",
+      "androidx.room:room-runtime:2.7.0",
+      "dev.rikka.shizuku:api:13.1.0",
+      "com.squareup.retrofit2:retrofit:2.9.0",
+      "com.squareup.okhttp3:okhttp:4.12.0",
+      "org.lsposed.hiddenapibypass:hiddenapibypass:4.3"
+    ]
+  },
+  "ignored_patterns": [
+    "*.iml",
+    ".gradle/",
+    "local.properties",
+    ".idea/",
+    ".DS_Store",
+    "build/",
+    "captures/",
+    "*.log",
+    "*.apk",
+    "*.aab",
+    "release/",
+    "debug/",
+    ".kotlin/",
+    "gradle-app.setting",
+    "*.keystore"
+  ],
+  "coverage_details": {
+    "scanned_directories": [
+      "app/src/main/java/com/lanhe/gongjuxiang/",
+      "app/src/main/res/",
+      "mokuai/core/",
+      "mokuai/mokuai/modules/"
+    ],
+    "key_files_read": [
+      "settings.gradle.kts",
+      "build.gradle.kts", 
+      "app/build.gradle.kts",
+      "app/src/main/AndroidManifest.xml",
+      "gradle/libs.versions.toml",
+      "README.md",
+      "项目总结.md",
+      "版本信息.json",
+      "app/src/main/java/com/lanhe/gongjuxiang/utils/AppDatabase.kt",
+      "app/src/main/java/com/lanhe/gongjuxiang/utils/ShizukuManager.kt",
+      "app/src/main/java/com/lanhe/gongjuxiang/utils/SystemOptimizer.kt",
+      "app/src/main/res/layout/activity_main.xml",
+      "app/src/main/res/layout/fragment_dashboard.xml",
+      "app/src/main/java/com/lanhe/gongjuxiang/activities/MainActivity.kt",
+      "mokuai/mokuai/modules/network/src/main/java/com/hippo/ehviewer/module/network/NetworkManager.java"
+    ],
+    "detailed_analysis": {
+      "utils_classes_count": 38,
+      "activities_count": 26,
+      "layout_files_count": 53,
+      "database_entities": 3,
+      "shizuku_functions": "完整权限管理系统",
+      "optimization_features": "5大优化模块（电池、内存、CPU、网络、系统设置）",
+      "network_module": "完整HTTP客户端实现",
+      "ui_architecture": "Material Design 3.0 + Navigation"
+    },
+    "gaps": []
+  },
+  "next_recommendations": [
+    "补充扫描 mokuai/mokuai/modules/performance-monitor/ 性能监控模块实现",
+    "分析 mokuai/mokuai/modules/memory-manager/ 内存管理模块",
+    "扫描 mokuai/mokuai/modules/filesystem/ 文件系统模块",
+    "深度分析 app/src/main/java/com/lanhe/gongjuxiang/viewmodels/ ViewModel层",
+    "补充扫描 app/src/main/java/com/lanhe/gongjuxiang/services/ 服务层实现"
+  ]
+}

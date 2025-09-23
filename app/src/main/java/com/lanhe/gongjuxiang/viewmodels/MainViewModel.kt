@@ -38,14 +38,26 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _optimizationResult = MutableLiveData<OptimizationResult>()
     val optimizationResult: LiveData<OptimizationResult> = _optimizationResult
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
     // 监控任务
     private var monitoringJob: Job? = null
     private var isMonitoring = false
 
     init {
+        // 设置初始加载状态
+        _isLoading.value = true
+
         // 初始化数据
         refreshData()
         startMonitoring()
+
+        // 模拟初始化完成延迟
+        viewModelScope.launch {
+            delay(1500) // 1.5秒延迟以显示启动画面
+            _isLoading.value = false
+        }
     }
 
     /**
@@ -322,6 +334,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             storageCleaned = 256 * 1024 * 1024L, // 256MB
             performanceBoost = 12.5f
         )
+    }
+
+    /**
+     * 获取优化建议数量（用于徽章显示）
+     */
+    fun getOptimizationSuggestionsCount(): Int {
+        return getOptimizationSuggestions().size
+    }
+
+    /**
+     * 获取安全警告数量（用于徽章显示）
+     */
+    fun getSecurityWarningsCount(): Int {
+        return getSecurityWarnings().size
     }
 
     override fun onCleared() {

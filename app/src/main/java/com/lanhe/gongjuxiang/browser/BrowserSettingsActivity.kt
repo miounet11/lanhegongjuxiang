@@ -57,7 +57,7 @@ class BrowserSettingsActivity : AppCompatActivity() {
             id = "ad_block",
             title = "广告拦截",
             description = "屏蔽网页广告，提升浏览体验",
-            icon = R.drawable.ic_block,
+            icon = android.R.drawable.ic_delete,
             type = SettingType.SWITCH,
             defaultValue = true
         ))
@@ -67,7 +67,7 @@ class BrowserSettingsActivity : AppCompatActivity() {
             id = "image_optimize",
             title = "图片优化",
             description = "压缩图片，提升加载速度",
-            icon = R.drawable.ic_image,
+            icon = android.R.drawable.ic_menu_manage,
             type = SettingType.SWITCH,
             defaultValue = true
         ))
@@ -77,7 +77,7 @@ class BrowserSettingsActivity : AppCompatActivity() {
             id = "javascript",
             title = "JavaScript",
             description = "启用JavaScript以获得更好的网页体验",
-            icon = R.drawable.ic_code,
+            icon = android.R.drawable.ic_popup_sync,
             type = SettingType.SWITCH,
             defaultValue = true
         ))
@@ -87,7 +87,7 @@ class BrowserSettingsActivity : AppCompatActivity() {
             id = "cookies",
             title = "Cookie管理",
             description = "管理网站Cookie存储",
-            icon = R.drawable.ic_cookie,
+            icon = android.R.drawable.ic_menu_manage,
             type = SettingType.SWITCH,
             defaultValue = true
         ))
@@ -97,7 +97,7 @@ class BrowserSettingsActivity : AppCompatActivity() {
             id = "cache",
             title = "缓存设置",
             description = "管理浏览器缓存",
-            icon = R.drawable.ic_storage,
+            icon = android.R.drawable.checkbox_on_background,
             type = SettingType.BUTTON,
             action = "clear_cache"
         ))
@@ -107,7 +107,7 @@ class BrowserSettingsActivity : AppCompatActivity() {
             id = "privacy",
             title = "隐私与安全",
             description = "隐私保护和安全设置",
-            icon = R.drawable.ic_security,
+            icon = android.R.drawable.ic_lock_idle_lock,
             type = SettingType.CATEGORY
         ))
 
@@ -116,7 +116,7 @@ class BrowserSettingsActivity : AppCompatActivity() {
             id = "ssl_verify",
             title = "SSL证书验证",
             description = "验证网站SSL证书安全性",
-            icon = R.drawable.ic_ssl,
+            icon = android.R.drawable.ic_lock_idle_lock,
             type = SettingType.SWITCH,
             defaultValue = true
         ))
@@ -126,7 +126,7 @@ class BrowserSettingsActivity : AppCompatActivity() {
             id = "vendor_compat",
             title = "厂商兼容性",
             description = "针对不同厂商ROM的优化设置",
-            icon = R.drawable.ic_android,
+            icon = android.R.drawable.ic_menu_manage,
             type = SettingType.CATEGORY
         ))
 
@@ -135,7 +135,7 @@ class BrowserSettingsActivity : AppCompatActivity() {
             id = "huawei_settings",
             title = "华为设备设置",
             description = "华为EMUI系统优化设置",
-            icon = R.drawable.ic_huawei,
+            icon = android.R.drawable.ic_menu_manage,
             type = SettingType.BUTTON,
             action = "huawei_settings"
         ))
@@ -145,7 +145,7 @@ class BrowserSettingsActivity : AppCompatActivity() {
             id = "xiaomi_settings",
             title = "小米设备设置",
             description = "小米MIUI系统优化设置",
-            icon = R.drawable.ic_xiaomi,
+            icon = android.R.drawable.ic_menu_manage,
             type = SettingType.BUTTON,
             action = "xiaomi_settings"
         ))
@@ -155,7 +155,7 @@ class BrowserSettingsActivity : AppCompatActivity() {
             id = "oppo_settings",
             title = "OPPO设备设置",
             description = "OPPO ColorOS系统优化设置",
-            icon = R.drawable.ic_oppo,
+            icon = android.R.drawable.ic_menu_manage,
             type = SettingType.BUTTON,
             action = "oppo_settings"
         ))
@@ -165,7 +165,7 @@ class BrowserSettingsActivity : AppCompatActivity() {
             id = "vivo_settings",
             title = "vivo设备设置",
             description = "vivo OriginOS系统优化设置",
-            icon = R.drawable.ic_vivo,
+            icon = android.R.drawable.ic_menu_manage,
             type = SettingType.BUTTON,
             action = "vivo_settings"
         ))
@@ -175,7 +175,7 @@ class BrowserSettingsActivity : AppCompatActivity() {
             id = "samsung_settings",
             title = "三星设备设置",
             description = "三星OneUI系统优化设置",
-            icon = R.drawable.ic_samsung,
+            icon = android.R.drawable.ic_menu_manage,
             type = SettingType.BUTTON,
             action = "samsung_settings"
         ))
@@ -185,7 +185,7 @@ class BrowserSettingsActivity : AppCompatActivity() {
             id = "other_vendor_settings",
             title = "其他厂商设置",
             description = "通用厂商ROM优化设置",
-            icon = R.drawable.ic_settings,
+            icon = android.R.drawable.ic_menu_preferences,
             type = SettingType.BUTTON,
             action = "other_vendor_settings"
         ))
@@ -195,7 +195,7 @@ class BrowserSettingsActivity : AppCompatActivity() {
             id = "battery_optimization",
             title = "电池优化",
             description = "浏览器电池使用优化",
-            icon = R.drawable.ic_battery,
+            icon = android.R.drawable.ic_lock_idle_lock,
             type = SettingType.BUTTON,
             action = "battery_optimization"
         ))
@@ -205,7 +205,7 @@ class BrowserSettingsActivity : AppCompatActivity() {
             id = "network_settings",
             title = "网络设置",
             description = "网络连接和代理设置",
-            icon = R.drawable.ic_network,
+            icon = android.R.drawable.ic_menu_manage,
             type = SettingType.BUTTON,
             action = "network_settings"
         ))
@@ -215,7 +215,7 @@ class BrowserSettingsActivity : AppCompatActivity() {
             id = "about",
             title = "关于浏览器",
             description = "版本信息和帮助",
-            icon = R.drawable.ic_info,
+            icon = android.R.drawable.ic_menu_info_details,
             type = SettingType.BUTTON,
             action = "about"
         ))

@@ -23,7 +23,7 @@ class SystemOptimizer(private val context: Context) {
     private val dataManager = DataManager(context)
 
     // 优化状态
-    private val _optimizationState = MutableStateFlow<OptimizationState>(OptimizationState.Idle)
+    private val _optimizationState = MutableStateFlow<OptimizationState>(OptimizationState.IDLE)
     val optimizationState: StateFlow<OptimizationState> = _optimizationState.asStateFlow()
 
     // 优化结果
@@ -37,7 +37,7 @@ class SystemOptimizer(private val context: Context) {
      */
     fun performFullOptimization() {
         scope.launch {
-            _optimizationState.value = OptimizationState.Running
+            _optimizationState.value = OptimizationState.RUNNING
             val startTime = System.currentTimeMillis()
 
             try {
@@ -109,7 +109,7 @@ class SystemOptimizer(private val context: Context) {
                     message = errorMessage
                 )
             } finally {
-                _optimizationState.value = OptimizationState.Idle
+                _optimizationState.value = OptimizationState.IDLE
             }
         }
     }
@@ -614,9 +614,10 @@ class SystemOptimizer(private val context: Context) {
  * 优化状态枚举
  */
 enum class OptimizationState {
-    Idle,     // 空闲
-    Running,  // 运行中
-    Completed // 完成
+    IDLE,
+    RUNNING,
+    COMPLETED,
+    ERROR
 }
 
 /**
@@ -625,6 +626,10 @@ enum class OptimizationState {
 data class OptimizationResult(
     val success: Boolean = false,
     val message: String = "",
+    val improvements: List<String> = emptyList(),
+    val performanceBoost: Float = 0f,
+    val batterySaved: Int = 0,
+    val storageCleaned: Long = 0L,
     val batteryOptimization: OptimizationItem = OptimizationItem(),
     val memoryCleanup: OptimizationItem = OptimizationItem(),
     val cpuOptimization: OptimizationItem = OptimizationItem(),
