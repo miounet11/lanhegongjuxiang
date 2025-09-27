@@ -706,4 +706,22 @@ object ShizukuManager {
             CommandResult(false, null, e.message)
         }
     }
+
+    /**
+     * 执行Shell命令（简化版本，返回输出字符串）
+     */
+    fun executeShellCommand(command: String): String {
+        return try {
+            if (!isShizukuAvailable()) {
+                Log.w("ShizukuManager", "Shizuku not available for command: $command")
+                return ""
+            }
+
+            val result = executeCommand(command)
+            result.output ?: ""
+        } catch (e: Exception) {
+            Log.e("ShizukuManager", "Failed to execute shell command: $command", e)
+            ""
+        }
+    }
 }
