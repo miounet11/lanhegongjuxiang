@@ -322,9 +322,10 @@ class ThemeManager(private val context: Context) {
             "accentColor" to getAccentColor(),
             "backgroundColor" to getBackgroundColor()
         )
-        return android.util.JsonWriter(android.util.JsonWriter(null)).apply {
-            // 这里可以添加JSON序列化逻辑
-        }.toString()
+        // Convert map to JSON string
+        return config.entries.joinToString(prefix = "{", postfix = "}") { (key, value) ->
+            "\"$key\":\"$value\""
+        }
     }
 
     /**

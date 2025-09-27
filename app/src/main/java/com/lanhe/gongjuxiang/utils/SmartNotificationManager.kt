@@ -270,7 +270,7 @@ class SmartNotificationManager(private val context: Context) {
         withContext(Dispatchers.Main) {
             try {
                 val builder = NotificationCompat.Builder(context, CHANNEL_ID_SYSTEM)
-                    .setSmallIcon(android.R.drawable.ic_menu_lightbulb)
+                    .setSmallIcon(android.R.drawable.ic_dialog_info)
                     .setContentTitle("💡 智能建议")
                     .setContentText(suggestion)
                     .setStyle(NotificationCompat.BigTextStyle().bigText(suggestion))
@@ -374,9 +374,9 @@ class SmartNotificationManager(private val context: Context) {
             val notificationInfos = mutableListOf<AppNotificationInfo>()
 
             packages.forEach { packageInfo ->
-                val appInfo = packageInfo.applicationInfo
+                val appInfo = packageInfo.applicationInfo ?: return@forEach
                 val appName = packageManager.getApplicationLabel(appInfo).toString()
-                
+
                 // 这里需要检查每个应用的通知权限
                 // 由于权限检查需要特殊权限，这里返回模拟数据
                 notificationInfos.add(

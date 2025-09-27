@@ -18,6 +18,7 @@ import java.io.RandomAccessFile
 class SystemDiagnostic(private val context: Context) {
 
     private val performanceMonitor = PerformanceMonitor(context)
+    private val batteryMonitor = BatteryMonitor(context)
     private val appFreezeManager = AppFreezeManager(context)
 
     /**
@@ -177,7 +178,7 @@ class SystemDiagnostic(private val context: Context) {
     private suspend fun checkBatteryHealth(): DiagnosticIssue? {
         return withContext(Dispatchers.IO) {
             try {
-                val batteryInfo = performanceMonitor.getBatteryInfo()
+                val batteryInfo = batteryMonitor.getCurrentBatteryStats()
                 
                 when {
                     batteryInfo.temperature > 45f -> {
@@ -213,7 +214,9 @@ class SystemDiagnostic(private val context: Context) {
     private suspend fun checkCpuTemperature(): DiagnosticIssue? {
         return withContext(Dispatchers.IO) {
             try {
-                val temperature = performanceMonitor.getDeviceTemperature()
+                // Use battery temperature as proxy for device temperature
+                val batteryStats = batteryMonitor.getCurrentBatteryStats()
+                val temperature = batteryStats.temperature
                 
                 when {
                     temperature > 70f -> {
@@ -278,8 +281,8 @@ class SystemDiagnostic(private val context: Context) {
                 
                 // 检查是否有异常应用
                 val suspiciousApps = packages.filter { packageInfo ->
-                    val appInfo = packageInfo.applicationInfo
-                    !isSystemApp(appInfo) && 
+                    val appInfo = packageInfo.applicationInfo ?: return@filter false
+                    !isSystemApp(appInfo) &&
                     (appInfo.flags and android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE) != 0
                 }
                 
@@ -378,7 +381,8 @@ class SystemDiagnostic(private val context: Context) {
             }
             
             // 温度影响
-            val temperature = performanceMonitor.getDeviceTemperature()
+            val batteryStats = batteryMonitor.getCurrentBatteryStats()
+            val temperature = batteryStats.temperature
             when {
                 temperature > 70f -> score -= 20
                 temperature > 60f -> score -= 15

@@ -556,7 +556,7 @@ object AnimationUtils {
     fun rainbowEffect(view: View, duration: Long = DEFAULT_DURATION) {
         val colors = intArrayOf(
             android.graphics.Color.RED,
-            android.graphics.Color.ORANGE,
+            android.graphics.Color.parseColor("#FFA500"), // Orange
             android.graphics.Color.YELLOW,
             android.graphics.Color.GREEN,
             android.graphics.Color.BLUE,

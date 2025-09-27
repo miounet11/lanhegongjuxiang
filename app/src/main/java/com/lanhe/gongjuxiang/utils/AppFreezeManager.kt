@@ -15,7 +15,7 @@ import kotlinx.coroutines.withContext
 class AppFreezeManager(private val context: Context) {
 
     private val packageManager = context.packageManager
-    private val shizukuManager = ShizukuManager(context)
+    private val shizukuManager = ShizukuManager
 
     /**
      * 冻结应用
@@ -84,16 +84,16 @@ class AppFreezeManager(private val context: Context) {
             val freezableApps = mutableListOf<AppInfo>()
             
             packages.forEach { packageInfo ->
-                val appInfo = packageInfo.applicationInfo
-                
+                val appInfo = packageInfo.applicationInfo ?: return@forEach
+
                 // 跳过系统应用和当前应用
                 if (isSystemApp(appInfo) || appInfo.packageName == context.packageName) {
                     return@forEach
                 }
-                
+
                 // 检查应用是否已冻结
                 val isFrozen = isAppFrozen(appInfo.packageName)
-                
+
                 freezableApps.add(
                     AppInfo(
                         packageName = appInfo.packageName,
@@ -203,12 +203,12 @@ class AppFreezeManager(private val context: Context) {
             val usageStats = mutableListOf<AppUsageInfo>()
             
             packages.forEach { packageInfo ->
-                val appInfo = packageInfo.applicationInfo
-                
+                val appInfo = packageInfo.applicationInfo ?: return@forEach
+
                 if (isSystemApp(appInfo) || appInfo.packageName == context.packageName) {
                     return@forEach
                 }
-                
+
                 usageStats.add(
                     AppUsageInfo(
                         packageName = appInfo.packageName,
