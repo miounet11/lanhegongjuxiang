@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Material Design 3.0 Spacing System -->
-    
+
+    <!-- Missing dimensions for compatibility -->
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="spacing_small">8dp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+
     <!-- 基础间距单位 -->
     <dimen name="spacing_unit">8dp</dimen>
     

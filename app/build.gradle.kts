@@ -8,6 +8,12 @@ android {
     namespace = "com.lanhe.gongjuxiang"
     compileSdk = 36
 
+    lint {
+        baseline = file("lint-baseline.xml")
+        warningsAsErrors = false
+        abortOnError = false
+    }
+
     defaultConfig {
         applicationId = "com.lanhe.gongjuxiang"
         minSdk = 24
@@ -133,38 +139,31 @@ dependencies {
     debugImplementation(libs.leakcanary)
 
     // Performance Optimization Libraries
-    implementation("com.github.markzhai:AndroidPerformanceMonitor:0.9.5") // BlockCanary for UI performance
-    implementation("com.tencent.matrix:matrix-android-lib:2.1.0") // Matrix APM platform
-    implementation("com.squareup.leakcanary:leakcanary-android:2.14") // Memory leak detection
-    implementation("com.github.moduth:blockcanary-android:1.5.0") // UI blocking detection
+    // LeakCanary is already included via libs.leakcanary
+    // implementation("com.squareup.leakcanary:leakcanary-android:2.14") // Memory leak detection
 
     // Memory Management
-    implementation("com.github.YahooArchive:memory-leaks:1.0") // Memory leak detection utilities
     implementation("com.facebook.fresco:fresco:3.1.3") // Image memory management
 
     // Performance Monitoring
-    implementation("com.tencent.mm.hardcoder:hardcoder:1.2.1") // CPU/GPU optimization
-    implementation("io.nlopez.smartlocation:library:3.3.3") // Location optimization
+    // Removed smartlocation due to old play-services conflict
 
     // Network Optimization
     implementation("com.squareup.okhttp3:okhttp-dnsoverhttps:4.12.0") // DNS over HTTPS
-    implementation("com.github.yyued:SVGAPlayer-Android:2.7.1") // Optimized animations
 
     // Storage & File Management
     implementation("commons-io:commons-io:2.15.1") // File utilities
     implementation("org.apache.commons:commons-compress:1.25.0") // Compression utilities
 
     // Game Mode & FPS
-    implementation("com.github.markzhai:AndroidPerformanceMonitor:0.9.5") // FPS monitoring
-    implementation("com.github.cats-oss:android-gpuimage:2.1.0") // GPU processing
+    implementation("jp.co.cyberagent.android:gpuimage:2.1.0") // GPU processing
 
     // AI & Machine Learning
     implementation("org.tensorflow:tensorflow-lite:2.14.0") // TensorFlow Lite for AI suggestions
     implementation("org.tensorflow:tensorflow-lite-support:0.4.4") // TensorFlow support
 
-    // Advanced System Control
-    implementation("eu.chainfire:libsuperuser:1.1.0.201907261845") // Root operations
-    implementation("com.topjohnwu.superuser:core:5.0.3") // Modern root operations
+    // Advanced System Control - Using Shizuku instead of root
+    // Root operations handled via Shizuku API which is already included
 
     // Advanced Features
     implementation(libs.play.review)

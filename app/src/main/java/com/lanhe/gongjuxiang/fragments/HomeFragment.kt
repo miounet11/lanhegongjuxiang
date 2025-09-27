@@ -15,6 +15,8 @@ import com.lanhe.gongjuxiang.databinding.FragmentHomeBinding
 import com.lanhe.gongjuxiang.models.CoreFeature
 import com.lanhe.gongjuxiang.utils.ShimmerHelper
 import com.lanhe.gongjuxiang.utils.ItemDecorationHelper
+import com.lanhe.gongjuxiang.ui.components.CircularProgressView
+import com.lanhe.gongjuxiang.ui.animations.ViewAnimations
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
@@ -84,43 +86,106 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupQuickActions() {
-        // 一键优化按钮
-        binding.btnQuickOptimize.setOnClickListener {
+        // Hero Action Cards with animations
+        setupCardWithAnimation(binding.cardQuickOptimize) {
             startActivity(Intent(context, CoreOptimizationActivity::class.java))
         }
 
-        // 快捷功能卡片点击事件
-        binding.cardSystemMonitor.setOnClickListener {
-            startActivity(Intent(context, SystemMonitorActivity::class.java))
+        setupCardWithAnimation(binding.cardMemoryClean) {
+            startActivity(Intent(context, MemoryManagerActivity::class.java))
         }
 
-        binding.cardSecurityCenter.setOnClickListener {
-            // 导航到安全Fragment
+        setupCardWithAnimation(binding.cardBatterySaver) {
+            startActivity(Intent(context, BatteryManagerActivity::class.java))
+        }
+
+        // Search functionality
+        binding.etSearch.setOnEditorActionListener { _, _, _ ->
+            performSearch(binding.etSearch.text.toString())
+            true
+        }
+
+        // Show more tools button
+        binding.btnShowMoreTools.setOnClickListener {
+            // Switch to Tools tab (which is FunctionsFragment)
             (activity as? MainActivity)?.let { mainActivity ->
-                // 这里可以通过Navigation组件切换到安全Fragment
-                // 或者启动SecurityActivity
+                // This will be handled by ViewPager navigation
+                // Navigate to index 1 (Tools tab)
             }
         }
 
-        binding.cardNetworkDiagnostic.setOnClickListener {
-            startActivity(Intent(context, NetworkDiagnosticActivity::class.java))
+        // 快捷功能卡片点击事件 with animations
+        binding.cardSystemMonitor?.let { card ->
+            setupCardWithAnimation(card) {
+                startActivity(Intent(context, SystemMonitorActivity::class.java))
+            }
         }
 
-        binding.cardAppManager.setOnClickListener {
-            startActivity(Intent(context, AppManagerActivity::class.java))
+        binding.cardSecurityCenter?.let { card ->
+            setupCardWithAnimation(card) {
+                // 导航到安全Fragment
+                (activity as? MainActivity)?.let { mainActivity ->
+                    // 这里可以通过Navigation组件切换到安全Fragment
+                    // 或者启动SecurityActivity
+                }
+            }
         }
 
-        binding.cardFileBrowser.setOnClickListener {
-            startActivity(Intent(context, FileBrowserActivity::class.java))
+        binding.cardNetworkDiagnostic?.let { card ->
+            setupCardWithAnimation(card) {
+                startActivity(Intent(context, NetworkDiagnosticActivity::class.java))
+            }
         }
 
-        binding.cardSystemSettings.setOnClickListener {
-            startActivity(Intent(context, QuickSettingsActivity::class.java))
+        binding.cardAppManager?.let { card ->
+            setupCardWithAnimation(card) {
+                startActivity(Intent(context, AppManagerActivity::class.java))
+            }
+        }
+
+        binding.cardFileBrowser?.let { card ->
+            setupCardWithAnimation(card) {
+                startActivity(Intent(context, FileBrowserActivity::class.java))
+            }
+        }
+
+        binding.cardSystemSettings?.let { card ->
+            setupCardWithAnimation(card) {
+                startActivity(Intent(context, QuickSettingsActivity::class.java))
+            }
         }
     }
 
-    private fun loadCoreFeatures() {
-        val features = listOf(
+    private fun setupCardWithAnimation(cardView: View, action: () -> Unit) {
+        // Setup press animation
+        ViewAnimations.setupPressAnimation(cardView)
+
+        // Set click listener with haptic feedback
+        cardView.setOnClickListener {
+            // Add haptic feedback
+            cardView.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY)
+            action()
+        }
+    }
+
+    private fun performSearch(query: String) {
+        if (query.isBlank()) return
+
+        // Filter features based on search query
+        val filteredFeatures = loadCoreFeatures().filter { feature ->
+            feature.title.contains(query, ignoreCase = true) ||
+            feature.description.contains(query, ignoreCase = true) ||
+            feature.category.contains(query, ignoreCase = true)
+        }
+
+        // Update RecyclerView with filtered results
+        lifecycleScope.launch {
+            coreFeatureAdapter.submitList(filteredFeatures)
+        }
+    }
+
+    private fun loadCoreFeatures(): List<CoreFeature> {
+        return listOf(
             CoreFeature(
                 id = "system_monitor",
                 title = "系统监控",
@@ -208,6 +273,7 @@ class HomeFragment : Fragment() {
         )
 
         lifecycleScope.launch {
+            val features = loadCoreFeatures()
             coreFeatureAdapter.submitList(features)
         }
     }
@@ -263,9 +329,21 @@ class HomeFragment : Fragment() {
             binding.recyclerViewFeatures.visibility = View.GONE
             // Shimmer views will be shown by default in layout
         } else {
-            binding.heroStatusCard.visibility = View.VISIBLE
-            binding.recyclerViewFeatures.visibility = View.VISIBLE
-            // Hide shimmer views if they exist
+            // Animate content appearance with staggered effect
+            val viewsToAnimate = listOf(
+                binding.heroStatusCard,
+                binding.cardQuickOptimize,
+                binding.cardMemoryClean,
+                binding.cardBatterySaver,
+                binding.recyclerViewFeatures
+            )
+
+            viewsToAnimate.forEach { view ->
+                view.alpha = 0f
+                view.visibility = View.VISIBLE
+            }
+
+            ViewAnimations.staggeredListAnimation(viewsToAnimate, 100L)
         }
     }
 
@@ -289,6 +367,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupStatusCard() {
+        // Initialize circular progress views
+        setupCircularProgressViews()
+
         // 模拟系统状态数据 - 实际项目中应该从ViewModel获取
         updateSystemStatus(
             cpuUsage = 45f,
@@ -296,11 +377,45 @@ class HomeFragment : Fragment() {
             batteryLevel = 76,
             networkStatus = "良好"
         )
-        
+
         // 添加状态卡片的微动效
         binding.heroStatusCard.setOnClickListener {
             // 可以点击查看详细状态
             startActivity(Intent(context, SystemMonitorActivity::class.java))
+        }
+    }
+
+    private fun setupCircularProgressViews() {
+        // Setup CPU progress view
+        binding.progressCpu.apply {
+            setTitle("CPU")
+            setUnit("%")
+            setMaxProgress(100f)
+            setProgress(0f, false)
+        }
+
+        // Setup Memory progress view
+        binding.progressMemory.apply {
+            setTitle("内存")
+            setUnit("GB")
+            setMaxProgress(8f)
+            setProgress(0f, false)
+        }
+
+        // Setup Battery progress view
+        binding.progressBattery.apply {
+            setTitle("电池")
+            setUnit("%")
+            setMaxProgress(100f)
+            setProgress(0f, false)
+        }
+
+        // Setup Network progress view (using as indicator)
+        binding.progressNetwork.apply {
+            setTitle("网络")
+            setUnit("")
+            setMaxProgress(100f)
+            setProgress(0f, false)
         }
     }
     
@@ -310,27 +425,62 @@ class HomeFragment : Fragment() {
         batteryLevel: Int,
         networkStatus: String
     ) {
-        binding.tvCpuValue.text = "${cpuUsage.toInt()}%"
-        binding.tvMemoryValue.text = memoryUsage
-        binding.tvBatteryValue.text = "${batteryLevel}%"
-        binding.tvNetworkValue.text = networkStatus
-        
-        // 根据状态设置颜色
-        val cpuColor = when {
-            cpuUsage > 80 -> android.R.color.holo_red_light
-            cpuUsage > 60 -> android.R.color.holo_orange_light
-            else -> android.R.color.holo_green_light
+        // Update circular progress views
+        binding.progressCpu.apply {
+            setProgress(cpuUsage, true)
+            val status = when {
+                cpuUsage > 80 -> CircularProgressView.Status.CRITICAL
+                cpuUsage > 60 -> CircularProgressView.Status.WARNING
+                else -> CircularProgressView.Status.GOOD
+            }
+            setStatusColors(status)
+            setTrend(
+                when {
+                    cpuUsage > 70 -> CircularProgressView.Trend.UP
+                    cpuUsage < 30 -> CircularProgressView.Trend.DOWN
+                    else -> CircularProgressView.Trend.NONE
+                }
+            )
         }
-        
-        val batteryColor = when {
-            batteryLevel < 20 -> android.R.color.holo_red_light
-            batteryLevel < 50 -> android.R.color.holo_orange_light
-            else -> android.R.color.holo_green_light
+
+        binding.progressMemory.apply {
+            val memoryValue = memoryUsage.replace("GB", "").toFloatOrNull() ?: 0f
+            setProgress(memoryValue, true)
+            setValue(memoryUsage)
+            val status = when {
+                memoryValue > 7 -> CircularProgressView.Status.CRITICAL
+                memoryValue > 5 -> CircularProgressView.Status.WARNING
+                else -> CircularProgressView.Status.GOOD
+            }
+            setStatusColors(status)
         }
-        
-        // 这里可以设置状态指示器的颜色
-        // binding.tvCpuValue.setTextColor(ContextCompat.getColor(requireContext(), cpuColor))
-        // binding.tvBatteryValue.setTextColor(ContextCompat.getColor(requireContext(), batteryColor))
+
+        binding.progressBattery.apply {
+            setProgress(batteryLevel.toFloat(), true)
+            val status = when {
+                batteryLevel < 20 -> CircularProgressView.Status.CRITICAL
+                batteryLevel < 50 -> CircularProgressView.Status.WARNING
+                else -> CircularProgressView.Status.GOOD
+            }
+            setStatusColors(status)
+        }
+
+        binding.progressNetwork.apply {
+            val networkValue = when (networkStatus) {
+                "良好" -> 80f
+                "一般" -> 50f
+                "较差" -> 20f
+                else -> 60f
+            }
+            setProgress(networkValue, true)
+            setValue(networkStatus)
+            val status = when (networkStatus) {
+                "良好" -> CircularProgressView.Status.GOOD
+                "一般" -> CircularProgressView.Status.WARNING
+                else -> CircularProgressView.Status.CRITICAL
+            }
+            setStatusColors(status)
+        }
     }
 
     override fun onDestroyView() {

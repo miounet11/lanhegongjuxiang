@@ -13,9 +13,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.dnsoverhttps.DnsOverHttps
 import java.net.InetAddress
 import java.util.concurrent.TimeUnit
+
+// Import data classes from SystemOptimizer
+import com.lanhe.gongjuxiang.utils.OptimizationItem
 
 /**
  * 高级网络优化器
@@ -659,7 +663,7 @@ class AdvancedNetworkOptimizer(private val context: Context) {
 
     // 扩展函数
     private fun String.toHttpUrl(): okhttp3.HttpUrl {
-        return okhttp3.HttpUrl.parse(this) ?: throw IllegalArgumentException("Invalid URL: $this")
+        return this.toHttpUrlOrNull() ?: throw IllegalArgumentException("Invalid URL: $this")
     }
 }
 

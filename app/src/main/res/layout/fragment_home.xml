@@ -70,7 +70,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_welcome" />
 
-                <!-- 系统状态指示器 -->
+                <!-- 系统状态指示器 - 使用圆形进度条 -->
                 <LinearLayout
                     android:id="@+id/status_indicators_layout"
                     android:layout_width="0dp"
@@ -81,101 +81,29 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_subtitle">
 
-                    <LinearLayout
+                    <com.lanhe.gongjuxiang.ui.components.CircularProgressView
+                        android:id="@+id/progress_cpu"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        android:layout_height="60dp"
+                        android:layout_weight="1" />
 
-                        <TextView
-                            android:id="@+id/tv_cpu_value"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="45%"
-                            android:textAppearance="@style/TextAppearance.App.StatusValue"
-                            android:textColor="?attr/colorOnPrimaryContainer"
-                            tools:text="45%" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="CPU"
-                            android:textAppearance="@style/TextAppearance.App.Caption"
-                            android:textColor="?attr/colorOnPrimaryContainer" />
-                    </LinearLayout>
-
-                    <LinearLayout
+                    <com.lanhe.gongjuxiang.ui.components.CircularProgressView
+                        android:id="@+id/progress_memory"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        android:layout_height="60dp"
+                        android:layout_weight="1" />
 
-                        <TextView
-                            android:id="@+id/tv_memory_value"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="6.2GB"
-                            android:textAppearance="@style/TextAppearance.App.StatusValue"
-                            android:textColor="?attr/colorOnPrimaryContainer"
-                            tools:text="6.2GB" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="内存"
-                            android:textAppearance="@style/TextAppearance.App.Caption"
-                            android:textColor="?attr/colorOnPrimaryContainer" />
-                    </LinearLayout>
-
-                    <LinearLayout
+                    <com.lanhe.gongjuxiang.ui.components.CircularProgressView
+                        android:id="@+id/progress_battery"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        android:layout_height="60dp"
+                        android:layout_weight="1" />
 
-                        <TextView
-                            android:id="@+id/tv_battery_value"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="76%"
-                            android:textAppearance="@style/TextAppearance.App.StatusValue"
-                            android:textColor="?attr/colorOnPrimaryContainer"
-                            tools:text="76%" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="电池"
-                            android:textAppearance="@style/TextAppearance.App.Caption"
-                            android:textColor="?attr/colorOnPrimaryContainer" />
-                    </LinearLayout>
-
-                    <LinearLayout
+                    <com.lanhe.gongjuxiang.ui.components.CircularProgressView
+                        android:id="@+id/progress_network"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tv_network_value"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="良好"
-                            android:textAppearance="@style/TextAppearance.App.StatusValue"
-                            android:textColor="?attr/colorOnPrimaryContainer"
-                            tools:text="良好" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="网络"
-                            android:textAppearance="@style/TextAppearance.App.Caption"
-                            android:textColor="?attr/colorOnPrimaryContainer" />
-                    </LinearLayout>
+                        android:layout_height="60dp"
+                        android:layout_weight="1" />
                 </LinearLayout>
 
                 <!-- 一键优化按钮 -->
@@ -198,7 +126,34 @@
             </com.google.android.material.card.MaterialCardView>
         </FrameLayout>
 
-        <!-- 快捷功能区域 -->
+        <!-- 搜索栏 -->
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.App.Card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_lg">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/spacing_small"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="1dp"
+                app:startIconDrawable="@android:drawable/ic_menu_search">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="搜索功能..."
+                    android:inputType="text"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 3个Hero Action Cards -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -209,9 +164,172 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_md"
-                android:text="快捷功能"
+                android:text="快速操作"
                 android:textAppearance="@style/TextAppearance.App.TitleLarge"
                 android:textColor="?attr/colorOnBackground" />
+
+            <!-- Hero Action Cards Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+
+                <!-- Quick Optimize Hero Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_quick_optimize"
+                    style="@style/Widget.App.Card.Hero"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/hero_card_height"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="@dimen/spacing_xs">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="@dimen/spacing_md">
+
+                        <ImageView
+                            style="@style/Widget.App.Icon.CircleBackground.Success"
+                            android:layout_marginBottom="@dimen/spacing_small"
+                            android:src="@drawable/ic_optimize"
+                            app:tint="@color/status_success" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="一键优化"
+                            android:textAppearance="@style/TextAppearance.App.LabelLarge"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/spacing_xs"
+                            android:text="快速提升性能"
+                            android:textAppearance="@style/TextAppearance.App.BodySmall"
+                            android:textColor="?attr/colorOnSurfaceVariant" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Memory Clean Hero Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_memory_clean"
+                    style="@style/Widget.App.Card.Hero"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/hero_card_height"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/spacing_xs"
+                    android:layout_marginEnd="@dimen/spacing_xs">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="@dimen/spacing_md">
+
+                        <ImageView
+                            style="@style/Widget.App.Icon.CircleBackground"
+                            android:layout_marginBottom="@dimen/spacing_small"
+                            android:src="@drawable/ic_optimize"
+                            app:tint="?attr/colorPrimary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="内存清理"
+                            android:textAppearance="@style/TextAppearance.App.LabelLarge"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/spacing_xs"
+                            android:text="释放内存空间"
+                            android:textAppearance="@style/TextAppearance.App.BodySmall"
+                            android:textColor="?attr/colorOnSurfaceVariant" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Battery Saver Hero Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_battery_saver"
+                    style="@style/Widget.App.Card.Hero"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/hero_card_height"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/spacing_xs">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="@dimen/spacing_md">
+
+                        <ImageView
+                            style="@style/Widget.App.Icon.CircleBackground.Warning"
+                            android:layout_marginBottom="@dimen/spacing_small"
+                            android:src="@drawable/ic_battery_full"
+                            app:tint="@color/status_warning" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="省电模式"
+                            android:textAppearance="@style/TextAppearance.App.LabelLarge"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/spacing_xs"
+                            android:text="延长续航时间"
+                            android:textAppearance="@style/TextAppearance.App.BodySmall"
+                            android:textColor="?attr/colorOnSurfaceVariant" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 工具类别区域 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_lg"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_md"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="工具分类"
+                    android:textAppearance="@style/TextAppearance.App.TitleLarge"
+                    android:textColor="?attr/colorOnBackground" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_show_more_tools"
+                    style="@style/Widget.App.Button.Tertiary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="查看更多"
+                    android:textSize="12sp"
+                    app:icon="@android:drawable/ic_menu_more"
+                    app:iconSize="16dp" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -11,17 +11,11 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.GravityCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -51,7 +45,6 @@ import com.lanhe.gongjuxiang.viewmodels.MainViewModel
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var appBarConfiguration: AppBarConfiguration
     private val viewModel: MainViewModel by viewModels()
     private lateinit var viewPager: ViewPager2
     private lateinit var preferencesManager: PreferencesManager
@@ -59,12 +52,11 @@ class MainActivity : AppCompatActivity() {
     private var isTablet = false
     private var isLandscape = false
 
-    // Fragment cache for ViewPager2
+    // Fragment cache for ViewPager2 - Simplified to 4 tabs
     private val fragments = listOf(
         HomeFragment(),
-        FunctionsFragment(), // Performance fragment placeholder
-        BrowserFragment(),
-        SecurityFragment(),
+        FunctionsFragment(), // Tools fragment
+        SecurityFragment(), // Monitor fragment
         SettingsFragment()
     )
 
@@ -109,7 +101,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         setupFab()
-        setupDrawer()
         setupTransitions()
 
         // 启动充电提醒服务
@@ -156,10 +147,9 @@ class MainActivity : AppCompatActivity() {
         bottomNavView.setOnItemSelectedListener { item ->
             val position = when (item.itemId) {
                 R.id.nav_home -> 0
-                R.id.nav_performance -> 1
-                R.id.nav_browser -> 2
-                R.id.nav_security -> 3
-                R.id.nav_settings -> 4
+                R.id.nav_tools -> 1
+                R.id.nav_monitor -> 2
+                R.id.nav_settings -> 3
                 else -> 0
             }
 
@@ -178,10 +168,9 @@ class MainActivity : AppCompatActivity() {
                 super.onPageSelected(position)
                 val itemId = when (position) {
                     0 -> R.id.nav_home
-                    1 -> R.id.nav_performance
-                    2 -> R.id.nav_browser
-                    3 -> R.id.nav_security
-                    4 -> R.id.nav_settings
+                    1 -> R.id.nav_tools
+                    2 -> R.id.nav_monitor
+                    3 -> R.id.nav_settings
                     else -> R.id.nav_home
                 }
                 bottomNavView.selectedItemId = itemId
@@ -199,30 +188,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupDrawer() {
-        val navView = findViewById<com.google.android.material.navigation.NavigationView>(R.id.nav_view)
-        navView?.setNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.nav_drawer_browser -> {
-                    openBrowser()
-                    true
-                }
-                R.id.nav_drawer_battery -> {
-                    openBatteryOptimization()
-                    true
-                }
-                R.id.nav_drawer_browser_settings -> {
-                    openBrowserSettings()
-                    true
-                }
-                R.id.nav_drawer_about -> {
-                    showAbout()
-                    true
-                }
-                else -> false
-            }
-        }
-    }
 
     private fun observeViewModel() {
         // 观察性能数据
@@ -302,17 +267,17 @@ class MainActivity : AppCompatActivity() {
     private fun setupBottomNavigationBadges() {
         val bottomNavView = binding.bottomNavView
 
-        // Setup performance badge with custom drawable
+        // Setup tools badge with custom drawable
         if (hasOptimizationSuggestions()) {
-            val badge = bottomNavView.getOrCreateBadge(R.id.nav_performance)
+            val badge = bottomNavView.getOrCreateBadge(R.id.nav_tools)
             badge.number = getOptimizationSuggestionsCount()
             badge.backgroundColor = getColor(R.color.status_warning)
             animateBadgeEntry(badge)
         }
 
-        // Setup security badge with custom drawable
+        // Setup monitor badge with custom drawable
         if (hasSecurityWarnings()) {
-            val badge = bottomNavView.getOrCreateBadge(R.id.nav_security)
+            val badge = bottomNavView.getOrCreateBadge(R.id.nav_monitor)
             badge.number = getSecurityWarningsCount()
             badge.backgroundColor = getColor(R.color.status_danger)
             animateBadgeEntry(badge)
@@ -330,28 +295,20 @@ class MainActivity : AppCompatActivity() {
 
     private fun openBrowser() {
         YcWebViewBrowser.start(this)
-        val drawerLayout = findViewById<androidx.drawerlayout.widget.DrawerLayout>(R.id.drawer_layout)
-        drawerLayout?.closeDrawer(androidx.core.view.GravityCompat.START)
     }
 
     private fun openBatteryOptimization() {
         BatteryOptimizationActivity.start(this)
-        val drawerLayout = findViewById<androidx.drawerlayout.widget.DrawerLayout>(R.id.drawer_layout)
-        drawerLayout?.closeDrawer(androidx.core.view.GravityCompat.START)
     }
 
     private fun openBrowserSettings() {
         BrowserSettingsActivity.start(this)
-        val drawerLayout = findViewById<androidx.drawerlayout.widget.DrawerLayout>(R.id.drawer_layout)
-        drawerLayout?.closeDrawer(androidx.core.view.GravityCompat.START)
     }
 
     private fun showAbout() {
         // 显示关于页面
         val intent = Intent(this, AboutActivity::class.java)
         startActivity(intent)
-        val drawerLayout = findViewById<androidx.drawerlayout.widget.DrawerLayout>(R.id.drawer_layout)
-        drawerLayout?.closeDrawer(androidx.core.view.GravityCompat.START)
     }
 
     private fun hasOptimizationSuggestions(): Boolean {
@@ -410,16 +367,6 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment_content_main) as? NavHostFragment
-        return if (navHostFragment != null) {
-            val navController = navHostFragment.navController
-            navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-        } else {
-            super.onSupportNavigateUp()
-        }
-    }
 
     override fun onResume() {
         super.onResume()
@@ -545,76 +492,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavigationRail() {
-        val navigationRail = findViewById<NavigationRailView>(R.id.navigation_rail)
-        navigationRail?.let { rail ->
-            // Setup navigation rail for tablets
-            rail.setOnItemSelectedListener { item ->
-                val position = when (item.itemId) {
-                    R.id.nav_home -> 0
-                    R.id.nav_performance -> 1
-                    R.id.nav_browser -> 2
-                    R.id.nav_security -> 3
-                    R.id.nav_settings -> 4
-                    else -> 0
-                }
-
-                viewPager.setCurrentItem(position, true)
-                hapticFeedbackManager.lightClick()
-                true
-            }
-
-            // Sync ViewPager2 with NavigationRail
-            viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    super.onPageSelected(position)
-                    val itemId = when (position) {
-                        0 -> R.id.nav_home
-                        1 -> R.id.nav_performance
-                        2 -> R.id.nav_browser
-                        3 -> R.id.nav_security
-                        4 -> R.id.nav_settings
-                        else -> R.id.nav_home
-                    }
-                    rail.selectedItemId = itemId
-                }
-            })
-        }
+        // Navigation rail is optional - only exists in tablet layouts
+        // TODO: Implement when navigation_rail layout is available
+        // Currently no navigation_rail resource exists in layouts
     }
 
     private fun setupLandscapeNavigation() {
-        val tabLayout = findViewById<TabLayout>(R.id.tab_layout_landscape)
-        tabLayout?.let { tabs ->
-            TabLayoutMediator(tabs, viewPager) { tab, position ->
-                tab.text = when (position) {
-                    0 -> getString(R.string.nav_home)
-                    1 -> getString(R.string.nav_performance)
-                    2 -> getString(R.string.nav_browser)
-                    3 -> getString(R.string.nav_security)
-                    4 -> getString(R.string.nav_settings)
-                    else -> ""
-                }
-
-                tab.setIcon(when (position) {
-                    0 -> R.drawable.ic_home_24
-                    1 -> R.drawable.ic_performance_24
-                    2 -> R.drawable.ic_browser_24
-                    3 -> R.drawable.ic_security_24
-                    4 -> R.drawable.ic_settings_24
-                    else -> R.drawable.ic_home_24
-                })
-            }.attach()
-
-            // Add haptic feedback to tabs
-            tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                override fun onTabSelected(tab: TabLayout.Tab?) {
-                    hapticFeedbackManager.lightClick()
-                }
-                override fun onTabUnselected(tab: TabLayout.Tab?) {}
-                override fun onTabReselected(tab: TabLayout.Tab?) {
-                    hapticFeedbackManager.mediumClick()
-                }
-            })
-        }
+        // Tab layout is optional - only exists in landscape layouts
+        // TODO: Implement when tab_layout_landscape layout is available
+        // Currently no tab_layout_landscape resource exists in layouts
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {

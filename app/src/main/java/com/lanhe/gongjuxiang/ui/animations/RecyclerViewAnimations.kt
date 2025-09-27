@@ -9,7 +9,6 @@ import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
 import androidx.core.animation.doOnEnd
 import androidx.recyclerview.widget.RecyclerView
-import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlin.math.max
 
 /**
@@ -298,34 +297,34 @@ object RecyclerViewAnimations {
     /**
      * Custom RecyclerView ItemAnimator for advanced animations
      */
-    class AdvancedItemAnimator : RecyclerView.ItemAnimator() {
+    class AdvancedItemAnimator : androidx.recyclerview.widget.DefaultItemAnimator() {
         private val pendingRemovals = mutableListOf<RecyclerView.ViewHolder>()
         private val pendingAdditions = mutableListOf<RecyclerView.ViewHolder>()
         private val runningAnimations = mutableListOf<RecyclerView.ViewHolder>()
 
         override fun animateRemove(holder: RecyclerView.ViewHolder): Boolean {
             pendingRemovals.add(holder)
-            return true
+            return super.animateRemove(holder)
         }
 
         override fun animateAdd(holder: RecyclerView.ViewHolder): Boolean {
             holder.itemView.alpha = 0f
             holder.itemView.translationY = holder.itemView.height.toFloat()
             pendingAdditions.add(holder)
-            return true
+            return super.animateAdd(holder)
         }
 
         override fun animateMove(
             holder: RecyclerView.ViewHolder,
             fromX: Int, fromY: Int, toX: Int, toY: Int
-        ): Boolean = false
+        ): Boolean = super.animateMove(holder, fromX, fromY, toX, toY)
 
         override fun animateChange(
             oldHolder: RecyclerView.ViewHolder,
             newHolder: RecyclerView.ViewHolder?,
             fromLeft: Int, fromTop: Int,
             toLeft: Int, toTop: Int
-        ): Boolean = false
+        ): Boolean = super.animateChange(oldHolder, newHolder, fromLeft, fromTop, toLeft, toTop)
 
         override fun runPendingAnimations() {
             val removes = pendingRemovals.toList()
@@ -389,6 +388,7 @@ object RecyclerViewAnimations {
         }
 
         override fun endAnimation(item: RecyclerView.ViewHolder) {
+            super.endAnimation(item)
             item.itemView.animate().cancel()
             if (runningAnimations.remove(item)) {
                 dispatchAnimationFinished(item)
@@ -396,6 +396,7 @@ object RecyclerViewAnimations {
         }
 
         override fun endAnimations() {
+            super.endAnimations()
             val items = runningAnimations.toList()
             runningAnimations.clear()
             items.forEach { item ->
@@ -404,6 +405,6 @@ object RecyclerViewAnimations {
             }
         }
 
-        override fun isRunning(): Boolean = runningAnimations.isNotEmpty()
+        override fun isRunning(): Boolean = super.isRunning() || runningAnimations.isNotEmpty()
     }
 }

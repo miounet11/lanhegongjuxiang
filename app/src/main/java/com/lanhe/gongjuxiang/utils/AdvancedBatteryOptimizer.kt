@@ -25,6 +25,10 @@ import java.io.RandomAccessFile
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
 
+// Import data classes from SystemOptimizer
+import com.lanhe.gongjuxiang.utils.OptimizationItem
+import com.lanhe.gongjuxiang.utils.BatteryOptimizationResult
+
 /**
  * 高级电池优化器
  * 基于GitHub成熟解决方案实现的电池优化功能
@@ -448,6 +452,7 @@ class AdvancedBatteryOptimizer(private val context: Context) {
                 // 使用Shizuku移除应用从电池优化白名单
                 ShizukuManager.executeShellCommand("dumpsys deviceidle whitelist -$packageName")
                 true
+                true
             } else {
                 false
             }
@@ -518,6 +523,7 @@ class AdvancedBatteryOptimizer(private val context: Context) {
             if (ShizukuManager.isShizukuAvailable()) {
                 // 设置应用后台限制
                 ShizukuManager.executeShellCommand("cmd appops set ${app.packageName} RUN_IN_BACKGROUND ignore")
+                true
                 true
             } else {
                 false
@@ -732,12 +738,6 @@ enum class BatteryOptimizationState {
     IDLE, RUNNING, COMPLETED, ERROR
 }
 
-data class BatteryOptimizationResult(
-    val success: Boolean = false,
-    val improvements: List<String> = emptyList(),
-    val estimatedSavings: Int = 0,
-    val message: String = ""
-)
 
 data class BatteryAnalysisResult(
     val drainRate: Float = 0f,
@@ -780,10 +780,3 @@ data class BatteryInfo(
     val isCharging: Boolean
 )
 
-data class OptimizationItem(
-    val name: String = "",
-    val success: Boolean = false,
-    val improvements: List<String> = emptyList(),
-    val estimatedSavings: Int = 0,
-    val error: String = ""
-)

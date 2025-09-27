@@ -663,5 +663,18 @@ data class OptimizationItem(
     val success: Boolean = false,
     val improvements: List<String> = emptyList(),
     val expectedSavings: String = "",
+    val estimatedSavings: Int = 0,
     val error: String = ""
+)
+
+/**
+ * 电池优化结果类
+ */
+data class BatteryOptimizationResult(
+    val success: Boolean = false,
+    val improvements: List<String> = emptyList(),
+    val estimatedSavings: Int = 0,
+    val batteryLifeIncrease: String = "",
+    val performanceImpact: String = "",
+    val message: String = ""
 )

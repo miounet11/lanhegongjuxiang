@@ -2,11 +2,6 @@ package com.lanhe.gongjuxiang
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.lanhe.gongjuxiang.databinding.ActivityMainBinding
 import com.lanhe.gongjuxiang.utils.ShizukuManager
 import rikka.shizuku.Shizuku
@@ -14,7 +9,6 @@ import rikka.shizuku.Shizuku
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,47 +20,45 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavigation() {
-        // 获取NavHostFragment
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
-        val navController = navHostFragment.navController
-
-        // 设置Toolbar与Navigation的集成
+        // 设置Toolbar
         setSupportActionBar(binding.toolbar)
-        appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.nav_home,
-                R.id.nav_performance,
-                R.id.nav_browser,
-                R.id.nav_security,
-                R.id.nav_settings
-            ),
-            binding.drawerLayout
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-
-        // 设置侧边栏导航
-        binding.navView.setupWithNavController(navController)
+        supportActionBar?.title = "蓝河助手"
     }
 
     private fun setupBottomNavigation() {
-        // 获取NavHostFragment
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
-        val navController = navHostFragment.navController
-
-        // 使用ViewBinding设置底部导航与Navigation Controller的绑定
-        binding.bottomNavView.setupWithNavController(navController)
+        // 设置底部导航点击监听
+        binding.bottomNavView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    // 切换到首页
+                    true
+                }
+                R.id.nav_performance -> {
+                    // 切换到性能页
+                    true
+                }
+                R.id.nav_browser -> {
+                    // 切换到浏览器页
+                    true
+                }
+                R.id.nav_security -> {
+                    // 切换到安全页
+                    true
+                }
+                R.id.nav_settings -> {
+                    // 切换到设置页
+                    true
+                }
+                else -> false
+            }
+        }
 
         // 设置初始选中状态
         binding.bottomNavView.selectedItemId = R.id.nav_home
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
-        val navController = navHostFragment.navController
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+        return super.onSupportNavigateUp()
     }
 
     // 处理Shizuku权限请求结果

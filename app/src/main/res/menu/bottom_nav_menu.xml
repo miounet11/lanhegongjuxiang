@@ -5,17 +5,13 @@
         android:icon="@drawable/ic_home_24"
         android:title="首页" />
     <item
-        android:id="@+id/nav_performance"
+        android:id="@+id/nav_tools"
         android:icon="@drawable/ic_performance_24"
-        android:title="性能" />
+        android:title="工具" />
     <item
-        android:id="@+id/nav_browser"
-        android:icon="@drawable/ic_browser_24"
-        android:title="浏览器" />
-    <item
-        android:id="@+id/nav_security"
+        android:id="@+id/nav_monitor"
         android:icon="@drawable/ic_security_24"
-        android:title="安全" />
+        android:title="监控" />
     <item
         android:id="@+id/nav_settings"
         android:icon="@drawable/ic_settings_24"

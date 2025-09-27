@@ -81,15 +81,6 @@ data class PerformanceBoostResult(
     val message: String = ""
 )
 
-/**
- * 电池优化结果类
- */
-data class BatteryOptimizationResult(
-    val success: Boolean,
-    val batteryLifeIncrease: String = "",
-    val performanceImpact: String = "",
-    val message: String = ""
-)
 
 /**
  * Shizuku状态枚举
