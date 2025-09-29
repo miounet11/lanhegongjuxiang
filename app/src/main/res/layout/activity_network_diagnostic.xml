@@ -62,26 +62,32 @@
 
     <!-- 主内容区域 -->
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:scrollbars="vertical"
-        app:layout_constraintTop_toBottomOf="@id/titleBar"
-        app:layout_constraintBottom_toBottomOf="parent">
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:scrollbars="vertical"
+    app:layout_constraintTop_toBottomOf="@id/titleBar"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
 
             <!-- 当前网络状态卡片 -->
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                android:background="@color/card_background">
+            android:id="@+id/network_status_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            android:background="@color/card_background"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/latency_test_card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -264,12 +270,17 @@
 
             <!-- 延迟测试卡片 -->
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                android:background="@color/card_background">
+            android:id="@+id/latency_test_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            android:background="@color/card_background"
+            app:layout_constraintTop_toBottomOf="@id/network_status_card"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/position_scan_card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -387,12 +398,17 @@
 
             <!-- 位置扫描卡片 -->
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                android:background="@color/card_background">
+            android:id="@+id/position_scan_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            android:background="@color/card_background"
+            app:layout_constraintTop_toBottomOf="@id/latency_test_card"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/wifi_signals_card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -498,12 +514,17 @@
 
             <!-- WiFi信号列表卡片 -->
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                android:background="@color/card_background">
+            android:id="@+id/wifi_signals_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            android:background="@color/card_background"
+            app:layout_constraintTop_toBottomOf="@id/position_scan_card"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/network_usage_card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -544,12 +565,17 @@
 
             <!-- 网络占用应用卡片 -->
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                android:background="@color/card_background">
+            android:id="@+id/network_usage_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            android:background="@color/card_background"
+            app:layout_constraintTop_toBottomOf="@id/wifi_signals_card"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/battery_consuming_card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -604,12 +630,17 @@
 
             <!-- 电池消耗应用卡片 -->
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                android:background="@color/card_background">
+            android:id="@+id/battery_consuming_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            android:background="@color/card_background"
+            app:layout_constraintTop_toBottomOf="@id/network_usage_card"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/actions_card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -664,12 +695,17 @@
 
             <!-- 操作按钮区域 -->
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                android:background="@color/card_background">
+            android:id="@+id/actions_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            android:background="@color/card_background"
+            app:layout_constraintTop_toBottomOf="@id/battery_consuming_card"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -763,7 +799,7 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
 

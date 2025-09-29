@@ -26,20 +26,24 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
 
             <!-- CPU状态卡片 -->
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                android:background="@color/card_background">
+            android:id="@+id/cpu_status_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            android:background="@color/card_background"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/quick_actions_grid">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -166,11 +170,16 @@
 
             <!-- 快速操作按钮 -->
             <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:columnCount="2"
-                android:rowCount="2">
+            android:id="@+id/quick_actions_grid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:columnCount="2"
+            android:rowCount="2"
+            app:layout_constraintTop_toBottomOf="@id/cpu_status_card"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tvOptimizationStatus">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnCpuFrequencyOptimize"
@@ -228,24 +237,32 @@
 
             <!-- 优化状态显示 -->
             <TextView
-                android:id="@+id/tvOptimizationStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="系统就绪"
-                android:textColor="@color/primary"
-                android:textSize="14sp"
-                android:fontFamily="monospace"
-                android:visibility="gone" />
+            android:id="@+id/tvOptimizationStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="系统就绪"
+            android:textColor="@color/primary"
+            android:textSize="14sp"
+            android:fontFamily="monospace"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/quick_actions_grid"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/progressOptimization" />
 
             <ProgressBar
-                android:id="@+id/progressOptimization"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="match_parent"
-                android:layout_height="4dp"
-                android:layout_marginBottom="16dp"
-                android:indeterminateTint="@color/primary"
-                android:visibility="gone" />
+            android:id="@+id/progressOptimization"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_marginBottom="16dp"
+            android:indeterminateTint="@color/primary"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/tvOptimizationStatus"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/functions_title" />
 
             <!-- CPU功能列表 -->
             <TextView
@@ -259,22 +276,31 @@
                 android:fontFamily="monospace" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:text="深度管理系统CPU各项功能参数"
-                android:textColor="@color/text_secondary"
-                android:textSize="12sp"
-                android:fontFamily="monospace" />
+            android:id="@+id/functions_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:text="深度管理系统CPU各项功能参数"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            android:fontFamily="monospace"
+            app:layout_constraintTop_toBottomOf="@id/progressOptimization"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/recyclerViewCpuFunctions" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewCpuFunctions"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                tools:listitem="@layout/item_cpu_function" />
+            android:id="@+id/recyclerViewCpuFunctions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            tools:listitem="@layout/item_cpu_function"
+            app:layout_constraintTop_toBottomOf="@id/functions_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
 

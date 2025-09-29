@@ -37,23 +37,26 @@
         </LinearLayout>
 
         <!-- Main content -->
-        <LinearLayout
-            android:id="@+id/main_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingStart="@dimen/spacing_md"
-            android:paddingEnd="@dimen/spacing_md"
-            android:paddingTop="@dimen/spacing_sm"
-            android:paddingBottom="@dimen/spacing_md">
+        <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/spacing_md"
+        android:paddingEnd="@dimen/spacing_md"
+        android:paddingTop="@dimen/spacing_sm"
+        android:paddingBottom="@dimen/spacing_md">
 
         <!-- 安全概览Hero卡片 -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/hero_security_card"
-            style="@style/Widget.App.Card.Hero"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/spacing_lg">
+        android:id="@+id/hero_security_card"
+        style="@style/Widget.App.Card.Hero"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_lg"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/security_functions_title">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -200,10 +203,15 @@
             android:textStyle="bold" />
 
         <com.google.android.material.card.MaterialCardView
-            style="@style/Widget.App.Card.List"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/spacing_lg">
+        android:id="@+id/system_status_card"
+        style="@style/Widget.App.Card.List"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_lg"
+        app:layout_constraintTop_toBottomOf="@id/hero_security_card"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/security_functions_title">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -302,11 +310,16 @@
 
         <!-- 安全功能区域 -->
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/spacing_md"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+        android:id="@+id/security_functions_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_md"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/system_status_card"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/functions_grid1">
 
             <TextView
                 android:layout_width="0dp"
@@ -327,10 +340,15 @@
 
         <!-- 功能卡片网格 -->
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/spacing_sm"
-            android:orientation="horizontal">
+        android:id="@+id/functions_grid1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_sm"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/security_functions_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/functions_grid2">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_app_manager"
@@ -408,9 +426,14 @@
 
         <!-- 第二行功能卡片 -->
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        android:id="@+id/functions_grid2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/functions_grid1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_electromagnetic_manager"
@@ -469,7 +492,7 @@
                 android:layout_marginStart="@dimen/spacing_xs" />
         </LinearLayout>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 
 </androidx.core.widget.NestedScrollView>

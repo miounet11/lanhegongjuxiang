@@ -101,7 +101,7 @@
         <activity
             android:name=".activities.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.蓝河工具箱"
+            android:theme="@style/Theme.蓝河工具箱.NoActionBar"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

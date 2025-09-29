@@ -7,11 +7,10 @@
     android:background="@color/background"
     android:fillViewport="true">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+    <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
 
         <!-- 标题栏 -->
         <com.google.android.material.appbar.MaterialToolbar
@@ -24,12 +23,17 @@
 
         <!-- 头部说明 -->
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="2dp"
-            android:background="@color/card_background">
+        android:id="@+id/intro_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="2dp"
+        android:background="@color/card_background"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/cardFpsBoost">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -69,13 +73,17 @@
 
         <!-- FPS提升 -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardFpsBoost"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="2dp"
-            android:background="@color/card_background">
+        android:id="@+id/cardFpsBoost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="2dp"
+        android:background="@color/card_background"
+        app:layout_constraintTop_toBottomOf="@id/intro_card"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/cardLatencyOptimization">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -159,13 +167,17 @@
 
         <!-- 延迟优化 -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardLatencyOptimization"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="2dp"
-            android:background="@color/card_background">
+        android:id="@+id/cardLatencyOptimization"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="2dp"
+        android:background="@color/card_background"
+        app:layout_constraintTop_toBottomOf="@id/cardFpsBoost"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/cardDownloadBoost">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -249,13 +261,17 @@
 
         <!-- 下载提速 -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardDownloadBoost"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="2dp"
-            android:background="@color/card_background">
+        android:id="@+id/cardDownloadBoost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="2dp"
+        android:background="@color/card_background"
+        app:layout_constraintTop_toBottomOf="@id/cardLatencyOptimization"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/cardNetworkVideoBoost">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -339,13 +355,17 @@
 
         <!-- 弱网络视频优化 -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardNetworkVideoBoost"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="2dp"
-            android:background="@color/card_background">
+        android:id="@+id/cardNetworkVideoBoost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="2dp"
+        android:background="@color/card_background"
+        app:layout_constraintTop_toBottomOf="@id/cardDownloadBoost"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btnRefreshStatus">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -429,24 +449,33 @@
 
         <!-- 刷新按钮 -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnRefreshStatus"
-            style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="24dp"
-            android:text="🔄 刷新状态"
-            android:textColor="@color/primary"
-            app:strokeColor="@color/primary"
-            app:cornerRadius="24dp" />
+        android:id="@+id/btnRefreshStatus"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="24dp"
+        android:text="🔄 刷新状态"
+        android:textColor="@color/primary"
+        app:strokeColor="@color/primary"
+        app:cornerRadius="24dp"
+        app:layout_constraintTop_toBottomOf="@id/cardNetworkVideoBoost"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/instructions_card" />
 
         <!-- 使用说明 -->
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="1dp"
-            android:background="@color/surface">
+        android:id="@+id/instructions_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="1dp"
+        android:background="@color/surface"
+        app:layout_constraintTop_toBottomOf="@id/btnRefreshStatus"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -475,6 +504,6 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

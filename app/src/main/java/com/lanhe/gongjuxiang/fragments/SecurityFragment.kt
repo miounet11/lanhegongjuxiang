@@ -109,14 +109,6 @@ class SecurityFragment : Fragment() {
             "Shizuku未连接"
         }
         
-        binding.ivShizukuStatus.setImageResource(
-            if (isShizukuAvailable) {
-                R.drawable.ic_optimized
-            } else {
-                R.drawable.ic_error
-            }
-        )
-        
         binding.tvShizukuStatus.setTextColor(
             if (isShizukuAvailable) {
                 resources.getColor(android.R.color.holo_green_dark, null)
