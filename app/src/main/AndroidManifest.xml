@@ -380,6 +380,14 @@
             android:exported="false"
             android:foregroundServiceType="mediaProjection" />
 
+        <!-- AI智能优化Activity -->
+        <activity
+            android:name=".activities.AIOptimizationActivity"
+            android:exported="false"
+            android:label="AI智能优化"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.蓝河工具箱.NoActionBar" />
+
         <!-- 小部件提供器 - 暂时移除，等待资源文件准备完成 -->
         <!-- <receiver android:name=".utils.LanheWidgetProvider" ... /> -->
 

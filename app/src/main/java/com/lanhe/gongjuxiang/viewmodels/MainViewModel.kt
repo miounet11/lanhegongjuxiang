@@ -41,6 +41,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
+    // Shizuku权限状态
+    private val _shizukuPermissionGranted = MutableLiveData<Boolean>()
+    val shizukuPermissionGranted: LiveData<Boolean> = _shizukuPermissionGranted
+
     // 监控任务
     private var monitoringJob: Job? = null
     private var isMonitoring = false
@@ -226,6 +230,47 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
         return battery.temperature > 40f ||
                battery.level < 20
+    }
+
+    /**
+     * 处理Shizuku权限授予
+     */
+    fun onShizukuPermissionGranted() {
+        _shizukuPermissionGranted.value = true
+        // 可以启用高级功能
+        viewModelScope.launch {
+            // 使用Shizuku功能进行高级优化
+            performAdvancedOptimization()
+        }
+    }
+
+    /**
+     * 处理Shizuku权限拒绝
+     */
+    fun onShizukuPermissionDenied() {
+        _shizukuPermissionGranted.value = false
+        // 使用基础功能
+    }
+
+    /**
+     * 执行高级优化（需要Shizuku权限）
+     */
+    private suspend fun performAdvancedOptimization() {
+        withContext(Dispatchers.IO) {
+            if (ShizukuManager.isShizukuAvailable()) {
+                // 使用Shizuku进行系统级优化
+                val processes = ShizukuManager.getRunningProcesses()
+                // 清理不必要的进程
+                processes.filter { it.memoryUsage > 100 * 1024 * 1024 && !isSystemProcess(it.packageName) }
+                    .forEach { ShizukuManager.killProcess(it.pid) }
+            }
+        }
+    }
+
+    private fun isSystemProcess(packageName: String): Boolean {
+        return packageName.startsWith("com.android.") ||
+               packageName.startsWith("android.") ||
+               packageName == "com.lanhe.gongjuxiang"
     }
 
     /**

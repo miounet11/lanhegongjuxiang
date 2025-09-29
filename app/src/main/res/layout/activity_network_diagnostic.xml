@@ -550,6 +550,20 @@
                         android:textColor="@color/text_secondary"
                         android:textSize="12sp" />
 
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnRefreshWifiSignals"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="🔄 刷新WiFi"
+                        android:textColor="@color/primary"
+                        app:cornerRadius="8dp"
+                        app:icon="@drawable/ic_refresh"
+                        app:iconSize="16dp"
+                        app:iconPadding="8dp"
+                        app:layout_constraintStart_toStartOf="parent" />
+
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rvWifiSignals"
                         android:layout_width="match_parent"

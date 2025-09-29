@@ -11,6 +11,7 @@ import com.lanhe.gongjuxiang.adapters.BatteryFunctionAdapter
 import com.lanhe.gongjuxiang.databinding.ActivityBatteryManagerBinding
 import com.lanhe.gongjuxiang.models.BatteryFunction
 import com.lanhe.gongjuxiang.utils.AnimationUtils
+import com.lanhe.gongjuxiang.utils.BatteryHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -19,12 +20,14 @@ class BatteryManagerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBatteryManagerBinding
     private lateinit var batteryFunctionAdapter: BatteryFunctionAdapter
     private var batteryFunctions = mutableListOf<BatteryFunction>()
+    private lateinit var batteryHelper: BatteryHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBatteryManagerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        batteryHelper = BatteryHelper(this)
         setupToolbar()
         setupRecyclerView()
         loadBatteryFunctions()
@@ -190,19 +193,49 @@ class BatteryManagerActivity : AppCompatActivity() {
     }
 
     private fun updateBatteryStats() {
-        // 模拟更新电池统计信息
-        val batteryLevel = kotlin.random.Random.nextInt(70, 96)
-        val temperature = kotlin.random.Random.nextInt(25, 41)
-        val voltage = 3.7 + kotlin.random.Random.nextDouble(0.5)
-        val current = kotlin.random.Random.nextInt(-500, 801)
+        lifecycleScope.launch {
+            try {
+                // Get real battery information
+                val batteryInfo = batteryHelper.getBatteryInfo()
 
-        binding.tvBatteryLevel.text = "$batteryLevel%"
-        binding.tvBatteryTemp.text = "${temperature}°C"
-        binding.tvBatteryVoltage.text = "${String.format("%.2f", voltage)}V"
-        binding.tvBatteryCurrent.text = "${current}mA"
+                binding.tvBatteryLevel.text = "${batteryInfo.level}%"
+                binding.tvBatteryTemp.text = "${batteryInfo.temperature}°C"
+                binding.tvBatteryVoltage.text = "${String.format("%.2f", batteryInfo.voltage)}V"
+                binding.tvBatteryCurrent.text = "${batteryInfo.current}mA"
 
-        // 更新电池电量进度条
-        binding.progressBatteryLevel.progress = batteryLevel
+                // Update battery level progress bar
+                binding.progressBatteryLevel.progress = batteryInfo.level
+
+                // Update battery functions with real data
+                updateBatteryFunctionValues(batteryInfo)
+            } catch (e: Exception) {
+                // Fallback to default values if error
+                binding.tvBatteryLevel.text = "--"
+                binding.tvBatteryTemp.text = "--"
+                binding.tvBatteryVoltage.text = "--"
+                binding.tvBatteryCurrent.text = "--"
+            }
+        }
+    }
+
+    private fun updateBatteryFunctionValues(batteryInfo: BatteryHelper.BatteryInfo) {
+        batteryFunctions.find { it.id == "battery_info" }?.let {
+            it.currentValue = "${batteryInfo.level}% • ${batteryInfo.health}"
+        }
+
+        batteryFunctions.find { it.id == "charging_management" }?.let {
+            it.currentValue = if (batteryInfo.isCharging) batteryInfo.plugged else "未充电"
+        }
+
+        batteryFunctions.find { it.id == "temperature_control" }?.let {
+            it.currentValue = "${batteryInfo.temperature}°C"
+        }
+
+        batteryFunctions.find { it.id == "battery_health" }?.let {
+            it.currentValue = batteryInfo.health
+        }
+
+        batteryFunctionAdapter.notifyDataSetChanged()
     }
 
     private fun optimizeBattery() {
@@ -279,20 +312,66 @@ class BatteryManagerActivity : AppCompatActivity() {
             delay(1000)
             hideOptimizationProgress()
 
+            // Get real battery health information
+            val healthPercentage = batteryHelper.getBatteryHealthPercentage()
+            val cycleCount = batteryHelper.getBatteryCycleCount()
+            val batteryInfo = batteryHelper.getBatteryInfo()
+
+            val healthStatus = when {
+                healthPercentage >= 90 -> "优秀"
+                healthPercentage >= 80 -> "良好"
+                healthPercentage >= 70 -> "正常"
+                healthPercentage >= 60 -> "一般"
+                else -> "需要关注"
+            }
+
+            val needReplacement = when {
+                healthPercentage < 60 -> "建议更换"
+                healthPercentage < 70 -> "可考虑更换"
+                else -> "无需更换"
+            }
+
+            val chargingSpeed = when {
+                batteryInfo.isCharging && batteryInfo.current > 2000 -> "快速充电"
+                batteryInfo.isCharging && batteryInfo.current > 1000 -> "正常充电"
+                batteryInfo.isCharging -> "慢速充电"
+                else -> "未充电"
+            }
+
+            val tempControl = when {
+                batteryInfo.temperature < 20 -> "偏低"
+                batteryInfo.temperature <= 35 -> "优秀"
+                batteryInfo.temperature <= 40 -> "正常"
+                else -> "偏高"
+            }
+
+            val overallScore = when {
+                healthPercentage >= 90 && batteryInfo.temperature <= 35 -> 9.5
+                healthPercentage >= 80 && batteryInfo.temperature <= 40 -> 8.5
+                healthPercentage >= 70 -> 7.5
+                else -> 6.0
+            }
+
             val healthReport = """
                 🔋 电池健康检测报告
 
                 📊 检测结果：
-                • 电池容量：${(85..100).random()}%
-                • 健康状态：优秀
-                • 循环次数：${(100..500).random()}次
-                • 建议更换：无需更换
+                • 电池容量：$healthPercentage%
+                • 健康状态：$healthStatus
+                • 循环次数：${cycleCount}次
+                • 建议更换：$needReplacement
 
                 ⚡ 性能评估：
-                • 充电速度：正常
-                • 放电效率：良好
-                • 温度控制：优秀
-                • 整体评分：9.2/10
+                • 充电速度：$chargingSpeed
+                • 放电效率：${if (batteryInfo.current < -1500) "高耗电" else "良好"}
+                • 温度控制：$tempControl
+                • 整体评分：$overallScore/10
+
+                📱 当前状态：
+                • 电量：${batteryInfo.level}%
+                • 温度：${batteryInfo.temperature}°C
+                • 电压：${batteryInfo.voltage}V
+                • 状态：${batteryInfo.status}
             """.trimIndent()
 
             androidx.appcompat.app.AlertDialog.Builder(this@BatteryManagerActivity)
@@ -306,23 +385,33 @@ class BatteryManagerActivity : AppCompatActivity() {
     }
 
     private fun showBatteryInfo() {
-        val info = """
-            🔋 电池详细信息：
-            • 电池型号：锂离子聚合物电池
-            • 额定容量：4000mAh
-            • 当前电量：${binding.tvBatteryLevel.text}
-            • 电池温度：${binding.tvBatteryTemp.text}
-            • 电池电压：${binding.tvBatteryVoltage.text}
-            • 充电电流：${binding.tvBatteryCurrent.text}
-            • 电池健康：95%
-            • 循环次数：245次
-        """.trimIndent()
+        lifecycleScope.launch {
+            val batteryInfo = batteryHelper.getBatteryInfo()
+            val healthPercentage = batteryHelper.getBatteryHealthPercentage()
+            val cycleCount = batteryHelper.getBatteryCycleCount()
+            val powerProfile = batteryHelper.getPowerProfile()
+            val designCapacity = powerProfile["battery.capacity"]?.toInt() ?: 4000
 
-        androidx.appcompat.app.AlertDialog.Builder(this)
-            .setTitle("📊 电池信息")
-            .setMessage(info)
-            .setPositiveButton("确定", null)
-            .show()
+            val info = """
+                🔋 电池详细信息：
+                • 电池型号：${batteryInfo.technology}
+                • 额定容量：${designCapacity}mAh
+                • 当前电量：${batteryInfo.level}%
+                • 电池温度：${batteryInfo.temperature}°C
+                • 电池电压：${batteryInfo.voltage}V
+                • 充电电流：${batteryInfo.current}mA
+                • 电池健康：$healthPercentage%
+                • 循环次数：${cycleCount}次
+                • 充电状态：${batteryInfo.status}
+                • 充电类型：${batteryInfo.plugged}
+            """.trimIndent()
+
+            androidx.appcompat.app.AlertDialog.Builder(this@BatteryManagerActivity)
+                .setTitle("📊 电池信息")
+                .setMessage(info)
+                .setPositiveButton("确定", null)
+                .show()
+        }
     }
 
     private fun showChargingSettings() {

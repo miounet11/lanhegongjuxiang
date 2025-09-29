@@ -9,9 +9,9 @@
         <item name="colorOnPrimaryContainer">@color/text_primary</item>
 
         <!-- Secondary Colors -->
-        <item name="colorSecondary">@color/neural_cyan</item>
+        <item name="colorSecondary">@color/primary</item>
         <item name="colorOnSecondary">@color/white</item>
-        <item name="colorSecondaryContainer">@color/neural_cyan</item>
+        <item name="colorSecondaryContainer">@color/primary_light</item>
         <item name="colorOnSecondaryContainer">@color/text_primary</item>
 
         <!-- Surface Colors -->
@@ -27,8 +27,8 @@
         <item name="colorOnError">@color/white</item>
 
         <!-- Status Bar & Navigation Bar -->
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">?attr/colorSurface</item>
+        <item name="android:statusBarColor">@color/background</item>
+        <item name="android:navigationBarColor">@color/surface</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowLightNavigationBar">true</item>
 

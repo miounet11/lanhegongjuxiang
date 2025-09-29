@@ -16,7 +16,7 @@
         <!-- 功能图标 with Circle Background -->
         <ImageView
             android:id="@+id/iv_icon"
-            style="@style/Widget.App.Icon.CircleBackground"
+            style="@style/Widget.App.Icon"
             android:src="@drawable/ic_optimize"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

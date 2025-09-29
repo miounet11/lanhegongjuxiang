@@ -61,13 +61,8 @@ class NetworkDiagnosticViewModel : ViewModel() {
             quality = "优秀"
         )
 
-        // 初始化WiFi信号列表
-        _wifiSignals.value = listOf(
-            WifiSignal("MyWiFi", "00:11:22:33:44:55", -45, 4, true),
-            WifiSignal("NeighborWiFi", "00:11:22:33:44:56", -60, 3, false),
-            WifiSignal("PublicWiFi", "00:11:22:33:44:57", -75, 2, false),
-            WifiSignal("GuestWiFi", "00:11:22:33:44:58", -85, 1, false)
-        )
+        // 初始WiFi信号列表为空，等待实际扫描结果
+        _wifiSignals.value = emptyList()
 
         // 初始化网络占用应用
         _networkUsageApps.value = listOf(
@@ -193,7 +188,8 @@ class NetworkDiagnosticViewModel : ViewModel() {
      * 更新WiFi信号列表
      */
     fun updateWifiSignals(signals: List<WifiSignal>) {
-        _wifiSignals.value = signals.sortedByDescending { it.rssi }
+        _wifiSignals.value = signals
+            .sortedWith(compareByDescending<WifiSignal> { it.isConnected }.thenByDescending { it.rssi })
     }
 
     /**

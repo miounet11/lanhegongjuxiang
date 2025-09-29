@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardSuggestion"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    app:strokeWidth="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- 标题和优先级 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:id="@+id/tvSuggestionTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="优化建议标题"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:maxLines="2"
+                android:ellipsize="end" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipPriority"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="高优先级"
+                android:textSize="10sp"
+                android:layout_marginStart="8dp"
+                app:chipMinHeight="24dp"
+                app:chipCornerRadius="12dp" />
+
+        </LinearLayout>
+
+        <!-- 描述 -->
+        <TextView
+            android:id="@+id/tvSuggestionDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="这是优化建议的详细描述"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp"
+            android:maxLines="3"
+            android:ellipsize="end" />
+
+        <!-- 影响和改善 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:id="@+id/tvImpact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="影响: 提升系统响应速度"
+                android:textSize="12sp"
+                android:layout_marginBottom="4dp"
+                android:drawableStart="@drawable/ic_info"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical" />
+
+            <TextView
+                android:id="@+id/tvEstimatedImprovement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="预期改善: CPU使用率降低20%"
+                android:textSize="12sp"
+                android:drawableStart="@drawable/ic_check"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical" />
+
+        </LinearLayout>
+
+        <!-- 操作步骤 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="建议操作:"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:id="@+id/tvActions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1. 清理缓存\n2. 关闭后台应用"
+            android:textSize="12sp"
+            android:layout_marginBottom="12dp"
+            android:paddingStart="8dp"
+            android:lineSpacingMultiplier="1.2" />
+
+        <!-- 执行按钮 -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnExecute"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="立即执行"
+            android:textSize="14sp"
+            app:cornerRadius="20dp" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

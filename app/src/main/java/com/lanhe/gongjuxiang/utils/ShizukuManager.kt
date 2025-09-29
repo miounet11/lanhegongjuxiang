@@ -8,6 +8,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import android.util.Log
+import com.lanhe.gongjuxiang.shizuku.ShizukuManagerImpl
+import com.lanhe.gongjuxiang.shizuku.ShizukuState as ShizukuStateImpl
+import kotlinx.coroutines.runBlocking
 
 /**
  * Shizuku权限管理器 - 核心管理器
@@ -22,6 +25,9 @@ object ShizukuManager {
     // 系统服务管理器
     private var systemServicesAvailable = false
 
+    // 真实的Shizuku实现
+    private var shizukuImpl: ShizukuManagerImpl? = null
+
     init {
         // 初始化Shizuku监听器
         Shizuku.addBinderReceivedListenerSticky {
@@ -34,6 +40,26 @@ object ShizukuManager {
         }
         updateShizukuState()
         initializeSystemServices()
+    }
+
+    /**
+     * 初始化真实的Shizuku实现
+     */
+    fun initWithContext(context: Context) {
+        if (shizukuImpl == null) {
+            shizukuImpl = ShizukuManagerImpl(context)
+
+            // 同步状态
+            shizukuImpl?.shizukuState?.value?.let { implState ->
+                _shizukuState.value = when (implState) {
+                    ShizukuStateImpl.NotInstalled,
+                    ShizukuStateImpl.Unavailable -> ShizukuState.Unavailable
+                    ShizukuStateImpl.Denied -> ShizukuState.Denied
+                    ShizukuStateImpl.Granted -> ShizukuState.Granted
+                    else -> ShizukuState.Unavailable
+                }
+            }
+        }
     }
 
     /**
@@ -78,10 +104,16 @@ object ShizukuManager {
      * 请求Shizuku权限
      */
     fun requestPermission(context: Context) {
-        if (Shizuku.shouldShowRequestPermissionRationale()) {
-            Toast.makeText(context, "需要Shizuku权限来执行强大的系统级操作", Toast.LENGTH_LONG).show()
+        // 确保初始化
+        initWithContext(context)
+
+        // 使用真实实现请求权限
+        shizukuImpl?.requestPermission() ?: run {
+            if (Shizuku.shouldShowRequestPermissionRationale()) {
+                Toast.makeText(context, "需要Shizuku权限来执行强大的系统级操作", Toast.LENGTH_LONG).show()
+            }
+            Shizuku.requestPermission(SHIZUKU_PERMISSION_REQUEST_CODE)
         }
-        Shizuku.requestPermission(SHIZUKU_PERMISSION_REQUEST_CODE)
     }
 
     /**
@@ -122,20 +154,17 @@ object ShizukuManager {
      * 获取系统进程列表
      */
     fun getRunningProcesses(): List<ProcessInfo> {
-        if (!systemServicesAvailable) return emptyList()
-
-        return try {
-            // 使用反射获取进程信息（模拟数据）
-            listOf(
-                ProcessInfo(1, "system_server", "android", 1000, 150 * 1024 * 1024),
-                ProcessInfo(1234, "com.android.systemui", "com.android.systemui", 1001, 80 * 1024 * 1024),
-                ProcessInfo(2345, "com.lanhe.gongjuxiang", "com.lanhe.gongjuxiang", 10001, 45 * 1024 * 1024),
-                ProcessInfo(3456, "com.android.launcher3", "com.android.launcher3", 10002, 65 * 1024 * 1024),
-                ProcessInfo(4567, "com.google.android.gms", "com.google.android.gms", 10003, 120 * 1024 * 1024)
-            )
-        } catch (e: Exception) {
-            Log.e("ShizukuManager", "获取进程列表失败", e)
-            emptyList()
+        // 使用真实实现
+        return runBlocking {
+            shizukuImpl?.getRunningProcesses()?.map {
+                ProcessInfo(
+                    pid = it.pid,
+                    processName = it.name,
+                    packageName = it.packageName,
+                    uid = it.uid,
+                    memoryUsage = it.memoryUsage
+                )
+            } ?: emptyList()
         }
     }
 
@@ -143,15 +172,9 @@ object ShizukuManager {
      * 杀死进程
      */
     fun killProcess(pid: Int): Boolean {
-        if (!systemServicesAvailable) return false
-
-        return try {
-            // 使用标准API杀死进程
-            android.os.Process.killProcess(pid)
-            true
-        } catch (e: Exception) {
-            Log.e("ShizukuManager", "杀死进程失败", e)
-            false
+        // 使用真实实现
+        return runBlocking {
+            shizukuImpl?.killProcess(pid) ?: false
         }
     }
 
@@ -350,15 +373,9 @@ object ShizukuManager {
      * 强制停止应用
      */
     fun forceStopPackage(packageName: String): Boolean {
-        if (!systemServicesAvailable) return false
-
-        return try {
-            // 使用标准ActivityManager强制停止应用（需要系统权限）
-            Toast.makeText(null, "⚡ 强制停止功能需要系统权限", Toast.LENGTH_LONG).show()
-            false
-        } catch (e: Exception) {
-            Log.e("ShizukuManager", "强制停止应用失败", e)
-            false
+        // 使用真实实现
+        return runBlocking {
+            shizukuImpl?.forceStopPackage(packageName) ?: false
         }
     }
 

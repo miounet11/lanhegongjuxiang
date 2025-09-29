@@ -6,6 +6,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.lanhe.gongjuxiang.databinding.ActivityNetworkDiagnosticBinding
 import com.lanhe.gongjuxiang.viewmodels.NetworkDiagnosticViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * 网络诊断UI控制器
@@ -15,6 +19,9 @@ class NetworkDiagnosticUIController(
     private val binding: ActivityNetworkDiagnosticBinding,
     private val activity: Activity
 ) {
+
+    private val networkHelper = NetworkDiagnosticHelper(activity)
+    private val scope = CoroutineScope(Dispatchers.Main)
 
     fun setupViews() {
         binding.tvTitle.text = "🌐 网络诊断中心"
@@ -81,8 +88,16 @@ class NetworkDiagnosticUIController(
 
         val summary = buildString {
             append("📶 WiFi信号汇总:\n")
-            append("已连接: ${connectedSignal?.ssid ?: "无"} (${connectedSignal?.rssi ?: 0}dBm)\n")
-            append("最强信号: ${strongestSignal?.ssid ?: "无"} (${strongestSignal?.rssi ?: 0}dBm)\n")
+            append(
+                "已连接: " +
+                    (connectedSignal?.ssid ?: "无") +
+                    " (${connectedSignal?.rssi?.let { "${it}dBm" } ?: "--"})\n"
+            )
+            append(
+                "最强信号: " +
+                    (strongestSignal?.ssid ?: "无") +
+                    " (${strongestSignal?.rssi?.let { "${it}dBm" } ?: "--"})\n"
+            )
             append("可用WiFi: ${wifiSignals.size} 个")
         }
 

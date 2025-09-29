@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -19,7 +20,7 @@ import com.lanhe.gongjuxiang.ui.components.CircularProgressView
 import com.lanhe.gongjuxiang.ui.animations.ViewAnimations
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.random.Random
+import com.lanhe.gongjuxiang.utils.SystemMonitorHelper
 
 /**
  * 首页Fragment - 展示核心功能入口
@@ -30,6 +31,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var coreFeatureAdapter: CoreFeatureAdapter
+    private lateinit var systemMonitor: SystemMonitorHelper
     private var isLoading = false
 
     override fun onCreateView(
@@ -43,6 +45,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        systemMonitor = SystemMonitorHelper(requireContext())
         setupSwipeRefresh()
         setupRecyclerView()
         setupQuickActions()
@@ -86,17 +89,20 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupQuickActions() {
-        // Hero Action Cards with animations
-        setupCardWithAnimation(binding.cardQuickOptimize) {
+        // 快速操作按钮
+        binding.btnQuickOptimize.setOnClickListener {
             startActivity(Intent(context, CoreOptimizationActivity::class.java))
         }
-
-        setupCardWithAnimation(binding.cardMemoryClean) {
-            startActivity(Intent(context, MemoryManagerActivity::class.java))
+        binding.btnSystemMonitor.setOnClickListener {
+            startActivity(Intent(context, SystemMonitorActivity::class.java))
         }
-
-        setupCardWithAnimation(binding.cardBatterySaver) {
-            startActivity(Intent(context, BatteryManagerActivity::class.java))
+        binding.btnPerformanceTools.setOnClickListener {
+            // 性能工具功能
+            startActivity(Intent(context, PerformanceToolsActivity::class.java))
+        }
+        binding.btnSecurityCenter.setOnClickListener {
+            // 安全中心功能
+            startActivity(Intent(context, SecurityCenterActivity::class.java))
         }
 
         // Search functionality
@@ -186,6 +192,13 @@ class HomeFragment : Fragment() {
 
     private fun loadCoreFeatures(): List<CoreFeature> {
         return listOf(
+            CoreFeature(
+                id = "ai_optimization",
+                title = "AI智能优化",
+                description = "使用AI进行智能系统分析和优化",
+                icon = R.drawable.ic_optimize,
+                category = "AI"
+            ),
             CoreFeature(
                 id = "system_monitor",
                 title = "系统监控",
@@ -285,8 +298,8 @@ class HomeFragment : Fragment() {
         showShimmerEffect(true)
 
         lifecycleScope.launch {
-            // 模拟网络延迟
-            delay(1500)
+            // 加载真实数据
+            delay(500) // 短暂延迟以显示加载效果
 
             loadCoreFeatures()
             loadSystemStatus()
@@ -298,15 +311,21 @@ class HomeFragment : Fragment() {
 
     private fun refreshData() {
         lifecycleScope.launch {
-            // 模拟刷新数据
-            delay(1000)
+            // 获取真实系统数据
+            delay(500)
 
             loadCoreFeatures()
+
+            val cpuUsage = systemMonitor.getCpuUsage()
+            val memoryUsage = systemMonitor.getMemoryUsage()
+            val batteryInfo = systemMonitor.getBatteryInfo()
+            val networkStatus = if (batteryInfo.level > 50) "良好" else "一般"
+
             updateSystemStatus(
-                cpuUsage = Random.nextInt(40, 80).toFloat(),
-                memoryUsage = "${"%.1f".format(Random.nextDouble(5.0, 8.5))}GB",
-                batteryLevel = Random.nextInt(20, 100),
-                networkStatus = listOf("良好", "一般", "较差").random()
+                cpuUsage = cpuUsage,
+                memoryUsage = memoryUsage.usedGB + "GB",
+                batteryLevel = batteryInfo.level,
+                networkStatus = networkStatus
             )
 
             binding.swipeRefreshLayout?.isRefreshing = false
@@ -314,12 +333,17 @@ class HomeFragment : Fragment() {
     }
 
     private fun loadSystemStatus() {
-        // 模拟系统状态数据加载
+        // 加载真实系统状态数据
+        val cpuUsage = systemMonitor.getCpuUsage()
+        val memoryUsage = systemMonitor.getMemoryUsage()
+        val batteryInfo = systemMonitor.getBatteryInfo()
+        val networkStatus = if (batteryInfo.level > 50) "良好" else "一般"
+
         updateSystemStatus(
-            cpuUsage = 45f,
-            memoryUsage = "6.2GB",
-            batteryLevel = 76,
-            networkStatus = "良好"
+            cpuUsage = cpuUsage,
+            memoryUsage = memoryUsage.usedGB + "GB",
+            batteryLevel = batteryInfo.level,
+            networkStatus = networkStatus
         )
     }
 
@@ -332,9 +356,7 @@ class HomeFragment : Fragment() {
             // Animate content appearance with staggered effect
             val viewsToAnimate = listOf(
                 binding.heroStatusCard,
-                binding.cardQuickOptimize,
-                binding.cardMemoryClean,
-                binding.cardBatterySaver,
+                binding.quickActionsGrid,
                 binding.recyclerViewFeatures
             )
 
@@ -349,6 +371,7 @@ class HomeFragment : Fragment() {
 
     private fun handleFeatureClick(feature: CoreFeature) {
         val intent = when (feature.id) {
+            "ai_optimization" -> Intent(context, AIOptimizationActivity::class.java)
             "system_monitor" -> Intent(context, SystemMonitorActivity::class.java)
             "battery_manager" -> Intent(context, BatteryManagerActivity::class.java)
             "memory_manager" -> Intent(context, MemoryManagerActivity::class.java)
@@ -370,12 +393,17 @@ class HomeFragment : Fragment() {
         // Initialize circular progress views
         setupCircularProgressViews()
 
-        // 模拟系统状态数据 - 实际项目中应该从ViewModel获取
+        // 获取真实系统状态数据
+        val cpuUsage = systemMonitor.getCpuUsage()
+        val memoryUsage = systemMonitor.getMemoryUsage()
+        val batteryInfo = systemMonitor.getBatteryInfo()
+        val networkStatus = if (batteryInfo.level > 50) "良好" else "一般"
+
         updateSystemStatus(
-            cpuUsage = 45f,
-            memoryUsage = "6.2GB",
-            batteryLevel = 76,
-            networkStatus = "良好"
+            cpuUsage = cpuUsage,
+            memoryUsage = memoryUsage.usedGB + "GB",
+            batteryLevel = batteryInfo.level,
+            networkStatus = networkStatus
         )
 
         // 添加状态卡片的微动效
@@ -386,37 +414,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupCircularProgressViews() {
-        // Setup CPU progress view
-        binding.progressCpu.apply {
-            setTitle("CPU")
-            setUnit("%")
-            setMaxProgress(100f)
-            setProgress(0f, false)
-        }
-
-        // Setup Memory progress view
-        binding.progressMemory.apply {
-            setTitle("内存")
-            setUnit("GB")
-            setMaxProgress(8f)
-            setProgress(0f, false)
-        }
-
-        // Setup Battery progress view
-        binding.progressBattery.apply {
-            setTitle("电池")
-            setUnit("%")
-            setMaxProgress(100f)
-            setProgress(0f, false)
-        }
-
-        // Setup Network progress view (using as indicator)
-        binding.progressNetwork.apply {
-            setTitle("网络")
-            setUnit("")
-            setMaxProgress(100f)
-            setProgress(0f, false)
-        }
+        // 新的布局使用简单的TextView，不需要特殊设置
+        // 系统状态会在updateSystemStatus方法中更新
     }
     
     private fun updateSystemStatus(

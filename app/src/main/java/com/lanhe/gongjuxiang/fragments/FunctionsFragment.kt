@@ -9,22 +9,37 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.lanhe.gongjuxiang.R
-import com.lanhe.gongjuxiang.activities.*
+import androidx.recyclerview.widget.GridLayoutManager
+import com.lanhe.gongjuxiang.activities.AppManagerActivity
+import com.lanhe.gongjuxiang.activities.BatteryManagerActivity
+import com.lanhe.gongjuxiang.activities.BrowserActivity
+import com.lanhe.gongjuxiang.activities.CoreOptimizationActivity
+import com.lanhe.gongjuxiang.activities.CpuManagerActivity
+import com.lanhe.gongjuxiang.activities.FileBrowserActivity
+import com.lanhe.gongjuxiang.activities.GameAccelerationActivity
+import com.lanhe.gongjuxiang.activities.MemoryManagerActivity
+import com.lanhe.gongjuxiang.activities.NetworkDiagnosticActivity
+import com.lanhe.gongjuxiang.activities.PacketCaptureActivity
+import com.lanhe.gongjuxiang.activities.PerformanceToolsActivity
+import com.lanhe.gongjuxiang.activities.QuickSettingsActivity
+import com.lanhe.gongjuxiang.activities.SecurityCenterActivity
+import com.lanhe.gongjuxiang.activities.SettingsActivity
+import com.lanhe.gongjuxiang.activities.ShizukuAuthActivity
+import com.lanhe.gongjuxiang.activities.StorageManagerActivity
+import com.lanhe.gongjuxiang.activities.SystemMonitorActivity
 import com.lanhe.gongjuxiang.adapters.CoreFeatureAdapter
 import com.lanhe.gongjuxiang.databinding.FragmentFunctionsBinding
+import com.lanhe.gongjuxiang.models.BatteryInfo
 import com.lanhe.gongjuxiang.models.CoreFeature
+import com.lanhe.gongjuxiang.models.PerformanceData
 import com.lanhe.gongjuxiang.utils.AnimationUtils
-import com.lanhe.gongjuxiang.utils.PreferencesManager
 import com.lanhe.gongjuxiang.utils.DataManager
+import com.lanhe.gongjuxiang.utils.OptimizationResult
+import com.lanhe.gongjuxiang.utils.OptimizationState
 import com.lanhe.gongjuxiang.utils.PerformanceMonitor
 import com.lanhe.gongjuxiang.utils.PerformanceMonitorManager
+import com.lanhe.gongjuxiang.utils.PreferencesManager
 import com.lanhe.gongjuxiang.utils.SystemOptimizer
-import com.lanhe.gongjuxiang.models.PerformanceData
-import com.lanhe.gongjuxiang.models.BatteryInfo
-import androidx.recyclerview.widget.GridLayoutManager
-import com.lanhe.gongjuxiang.utils.OptimizationState
-import com.lanhe.gongjuxiang.utils.OptimizationResult
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -38,12 +53,10 @@ class FunctionsFragment : Fragment() {
     private lateinit var performanceManager: PerformanceMonitorManager
     private lateinit var systemOptimizer: SystemOptimizer
 
-    // 性能数据
     private var beforeOptimizationData: PerformanceData? = null
     private var cpuUsage = 0f
     private var memoryUsage = 0f
 
-    // 统计数据
     private var dailyMemorySaved = 0.0
     private var dailyBatterySaved = 0
     private var dailyStorageSaved = 0.0
@@ -61,7 +74,6 @@ class FunctionsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 初始化管理器
         preferencesManager = PreferencesManager(requireContext())
         dataManager = DataManager(requireContext())
         performanceMonitor = PerformanceMonitor(requireContext())
@@ -73,7 +85,6 @@ class FunctionsFragment : Fragment() {
         startPerformanceMonitoring()
         updateCoreOptimizationStatus()
 
-        // 延迟执行动画
         view.postDelayed({
             if (_binding != null) {
                 animateViewsIn()
@@ -82,91 +93,29 @@ class FunctionsFragment : Fragment() {
     }
 
     private fun setupClickListeners() {
-        // 一键深度优化
-        binding.btnDeepOptimization.setOnClickListener {
-            performDeepOptimization()
-        }
+        // 快速操作按钮
+        binding.btnQuickOptimize.setOnClickListener { performDeepOptimization() }
+        binding.btnSystemMonitor.setOnClickListener { openSystemMonitor() }
+        binding.btnPerformanceTools.setOnClickListener { openPerformanceTools() }
+        binding.btnSecurityCenter.setOnClickListener { openSecurityCenter() }
 
-        // 核心功能现在通过RecyclerView处理
+        binding.btnGameModeQuick.setOnClickListener { optimizeGameMode() }
+        binding.btnEyeProtectionQuick.setOnClickListener { enableEyeProtection() }
+        binding.btnPowerSave.setOnClickListener { enablePowerSave() }
+        binding.btnCleanupQuick.setOnClickListener { performQuickCleanup() }
+        binding.btnNetworkQuick.setOnClickListener { optimizeNetwork() }
+        binding.btnMoreSettings.setOnClickListener { openQuickSettings() }
 
-        // 快捷设置
-        binding.btnGameModeQuick.setOnClickListener {
-            optimizeGameMode()
-        }
+        binding.cardCpuManager.setOnClickListener { openCpuManager() }
+        binding.cardMemoryManager.setOnClickListener { openMemoryManager() }
+        binding.cardStorageManager.setOnClickListener { openStorageManager() }
+        binding.cardBatteryManager.setOnClickListener { openBatteryManager() }
+        binding.cardNetworkDiagnostic.setOnClickListener { openNetworkDiagnostic() }
+        binding.cardGameAcceleration.setOnClickListener { openGameAcceleration() }
 
-        binding.btnEyeProtectionQuick.setOnClickListener {
-            enableEyeProtection()
-        }
+        binding.llShizukuAuthorization.setOnClickListener { openShizukuAuth() }
 
-        binding.btnPowerSave.setOnClickListener {
-            enablePowerSave()
-        }
-
-        binding.btnCleanupQuick.setOnClickListener {
-            performQuickCleanup()
-        }
-
-        binding.btnNetworkQuick.setOnClickListener {
-            optimizeNetwork()
-        }
-
-        binding.btnMoreSettings.setOnClickListener {
-            openQuickSettings()
-        }
-
-        binding.btnThemeSettings.setOnClickListener {
-            openThemeSettings()
-        }
-
-        // 系统工具管理器
-        binding.cardCpuManager.setOnClickListener {
-            openCpuManager()
-        }
-
-        binding.cardMemoryManager.setOnClickListener {
-            openMemoryManager()
-        }
-
-        binding.cardStorageManager.setOnClickListener {
-            openStorageManager()
-        }
-
-        binding.cardBatteryManager.setOnClickListener {
-            openBatteryManager()
-        }
-
-        binding.cardNetworkDiagnostic.setOnClickListener {
-            openNetworkDiagnostic()
-        }
-
-        binding.cardGameAcceleration.setOnClickListener {
-            openGameAcceleration()
-        }
-
-        // 系统状态指标点击
-        binding.llCpuStatus.setOnClickListener {
-            openCpuManager()
-        }
-
-        binding.llMemoryStatus.setOnClickListener {
-            openMemoryManager()
-        }
-
-        binding.llBatteryStatus.setOnClickListener {
-            openBatteryManager()
-        }
-
-        binding.llStorageStatus.setOnClickListener {
-            openStorageManager()
-        }
-
-        // 高级控制中心
-        binding.llShizukuAuthorization.setOnClickListener {
-            openShizukuAuth()
-        }
-
-        // 长按一键优化
-        binding.btnDeepOptimization.setOnLongClickListener {
+        binding.btnQuickOptimize.setOnLongClickListener {
             showOptimizationSettings()
             true
         }
@@ -181,9 +130,8 @@ class FunctionsFragment : Fragment() {
         lifecycleScope.launch {
             while (true) {
                 try {
-                    // 模拟系统状态更新
                     updateSimulatedData()
-                    delay(2000) // 每2秒更新一次
+                    delay(2000)
                 } catch (e: Exception) {
                     Log.e("FunctionsFragment", "更新系统状态失败", e)
                     break
@@ -194,38 +142,29 @@ class FunctionsFragment : Fragment() {
 
     private fun updateSimulatedData() {
         _binding?.let { binding ->
-            // 模拟CPU使用率更新
             cpuUsage = (15 + Math.random() * 25).toFloat()
             binding.tvCpuUsage.text = String.format("%.1f%%", cpuUsage)
 
-            // 模拟内存使用率更新
             memoryUsage = (30 + Math.random() * 40).toFloat()
             binding.tvMemoryUsage.text = String.format("%.1f%%", memoryUsage)
 
-            // 模拟电池信息更新
             val batteryLevel = (20 + Math.random() * 60).toFloat()
             binding.tvBatteryLevel.text = String.format("%.1f%%", batteryLevel)
         }
     }
 
-    private fun updateBatteryIcon(level: Int) {
-        // 电池图标更新已移除，因为新布局中没有对应的View
-    }
+    private fun updateBatteryIcon(level: Int) { }
 
     private fun performDeepOptimization() {
         lifecycleScope.launch {
             try {
-                // 显示优化进度对话框
                 val dialog = OptimizationProgressDialogFragment()
                 dialog.show(childFragmentManager, "optimization_progress")
 
-                // 模拟优化过程
                 delay(3000)
 
-                // 关闭对话框并显示结果
                 dialog.dismiss()
                 showOptimizationResult(true, "深度优化完成，系统性能提升15%")
-
             } catch (e: Exception) {
                 Toast.makeText(context, "优化失败: ${e.message}", Toast.LENGTH_SHORT).show()
             }
@@ -234,11 +173,8 @@ class FunctionsFragment : Fragment() {
 
     private fun showOptimizationResult(success: Boolean, message: String) {
         if (success) {
-            // 成功动画
             animateOptimizationSuccess()
             Toast.makeText(context, message, Toast.LENGTH_LONG).show()
-
-            // 更新优化统计数据
             updateOptimizationStats()
         } else {
             animateOptimizationError()
@@ -246,24 +182,18 @@ class FunctionsFragment : Fragment() {
         }
     }
 
-
-
     private fun updateOptimizationStats() {
         dailyOptimizations++
-        dailyMemorySaved += 0.5 // 模拟节省0.5GB内存
-        dailyStorageSaved += 0.2 // 模拟清理0.2GB存储
-        dailyBatterySaved += 30 // 模拟节省30分钟电池
-
-        // 保存统计数据（简化实现）
-        Log.d("FunctionsFragment", "优化统计已更新")
+        dailyMemorySaved += 0.5
+        dailyStorageSaved += 0.2
+        dailyBatterySaved += 30
     }
 
     private fun animateViewsIn() {
         _binding?.let { binding ->
-            // 为各个功能卡片添加进入动画
             val views = listOf(
                 binding.cardTopStatus,
-                binding.btnDeepOptimization,
+                binding.quickActionsGrid,
                 binding.cardQuickSettings,
                 binding.cardCpuManager,
                 binding.cardMemoryManager,
@@ -282,64 +212,43 @@ class FunctionsFragment : Fragment() {
                     .start()
             }
 
-            // 延迟显示RecyclerView内容
             binding.rvCoreFeatures.postDelayed({
                 if (_binding != null) {
-                    _binding?.rvCoreFeatures?.alpha = 0f
-                    _binding?.rvCoreFeatures?.animate()
-                        ?.alpha(1f)
-                        ?.setDuration(400)
-                        ?.setStartDelay(views.size * 50L + 100)
-                        ?.start()
+                    binding.rvCoreFeatures.alpha = 0f
+                    binding.rvCoreFeatures.animate()
+                        .alpha(1f)
+                        .setDuration(400)
+                        .setStartDelay(views.size * 50L + 100)
+                        .start()
                 }
             }, 200)
         }
     }
 
     private fun animateOptimizationStart() {
-        // 优化开始时的动画效果
         _binding?.let { binding ->
-            AnimationUtils.buttonPressFeedback(binding.btnDeepOptimization)
+            AnimationUtils.buttonPressFeedback(binding.btnQuickOptimize)
             AnimationUtils.pulse(binding.cardTopStatus)
         }
     }
 
     private fun animateOptimizationSuccess() {
-        // 优化成功时的动画效果
         _binding?.let { binding ->
-            AnimationUtils.successAnimation(binding.btnDeepOptimization)
+            AnimationUtils.successAnimation(binding.btnQuickOptimize)
             AnimationUtils.highlightAnimation(binding.cardTopStatus)
         }
     }
 
     private fun animateOptimizationError() {
-        // 优化失败时的动画效果
         _binding?.let { binding ->
-            AnimationUtils.errorAnimation(binding.btnDeepOptimization)
+            AnimationUtils.errorAnimation(binding.btnQuickOptimize)
         }
     }
 
     private fun updateCoreOptimizationStatus() {
-        // 新的布局中已移除核心优化状态显示
         Log.d("FunctionsFragment", "核心优化状态更新")
     }
 
-    private fun updateDailyAchievementsDisplay() {
-        // 新的布局中已移除这些统计显示
-        // 如需显示统计信息，可以添加到核心优化卡片的状态中
-    }
-
-    private fun calculatePerformanceBoost(): Int {
-        // 模拟性能提升计算
-        return (15 + (dailyOptimizations * 2)).coerceAtMost(50)
-    }
-
-    private fun calculateNetworkBoost(): Int {
-        // 模拟网络提升计算
-        return (20 + (dailyOptimizations * 3)).coerceAtMost(70)
-    }
-
-    // 快捷功能实现
     private fun optimizeGameMode() {
         AnimationUtils.buttonPressFeedback(binding.btnGameModeQuick)
         Toast.makeText(context, "游戏模式已开启", Toast.LENGTH_SHORT).show()
@@ -367,8 +276,7 @@ class FunctionsFragment : Fragment() {
 
     private fun openQuickSettings() {
         try {
-            val intent = Intent(requireContext(), QuickSettingsActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(requireContext(), QuickSettingsActivity::class.java))
             AnimationUtils.buttonPressFeedback(binding.btnMoreSettings)
         } catch (e: Exception) {
             Toast.makeText(context, "无法打开更多设置", Toast.LENGTH_SHORT).show()
@@ -377,8 +285,7 @@ class FunctionsFragment : Fragment() {
 
     private fun openCoreOptimization() {
         try {
-            val intent = Intent(requireContext(), CoreOptimizationActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(requireContext(), CoreOptimizationActivity::class.java))
         } catch (e: Exception) {
             Toast.makeText(context, "无法打开核心优化: ${e.message}", Toast.LENGTH_SHORT).show()
         }
@@ -386,8 +293,7 @@ class FunctionsFragment : Fragment() {
 
     private fun openPacketCapture() {
         try {
-            val intent = Intent(requireContext(), PacketCaptureActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(requireContext(), PacketCaptureActivity::class.java))
         } catch (e: Exception) {
             Toast.makeText(context, "无法打开网络抓包: ${e.message}", Toast.LENGTH_SHORT).show()
         }
@@ -395,8 +301,7 @@ class FunctionsFragment : Fragment() {
 
     private fun openAppManagement() {
         try {
-            val intent = Intent(requireContext(), AppManagerActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(requireContext(), AppManagerActivity::class.java))
         } catch (e: Exception) {
             Toast.makeText(context, "无法打开应用管理: ${e.message}", Toast.LENGTH_SHORT).show()
         }
@@ -404,8 +309,7 @@ class FunctionsFragment : Fragment() {
 
     private fun openSystemMonitoring() {
         try {
-            val intent = Intent(requireContext(), SystemMonitorActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(requireContext(), SystemMonitorActivity::class.java))
         } catch (e: Exception) {
             Toast.makeText(context, "无法打开系统监控: ${e.message}", Toast.LENGTH_SHORT).show()
         }
@@ -413,8 +317,7 @@ class FunctionsFragment : Fragment() {
 
     private fun openSmartBrowser() {
         try {
-            val intent = Intent(requireContext(), BrowserActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(requireContext(), BrowserActivity::class.java))
         } catch (e: Exception) {
             Toast.makeText(context, "无法打开智能浏览器: ${e.message}", Toast.LENGTH_SHORT).show()
         }
@@ -422,8 +325,7 @@ class FunctionsFragment : Fragment() {
 
     private fun openCpuManager() {
         try {
-            val intent = Intent(requireContext(), CpuManagerActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(requireContext(), CpuManagerActivity::class.java))
             AnimationUtils.buttonPressFeedback(binding.cardCpuManager)
         } catch (e: Exception) {
             Toast.makeText(context, "无法打开CPU管理: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -432,8 +334,7 @@ class FunctionsFragment : Fragment() {
 
     private fun openMemoryManager() {
         try {
-            val intent = Intent(requireContext(), MemoryManagerActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(requireContext(), MemoryManagerActivity::class.java))
             AnimationUtils.buttonPressFeedback(binding.cardMemoryManager)
         } catch (e: Exception) {
             Toast.makeText(context, "无法打开内存管理: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -442,8 +343,7 @@ class FunctionsFragment : Fragment() {
 
     private fun openStorageManager() {
         try {
-            val intent = Intent(requireContext(), StorageManagerActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(requireContext(), StorageManagerActivity::class.java))
             AnimationUtils.buttonPressFeedback(binding.cardStorageManager)
         } catch (e: Exception) {
             Toast.makeText(context, "无法打开存储管理: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -452,8 +352,7 @@ class FunctionsFragment : Fragment() {
 
     private fun openBatteryManager() {
         try {
-            val intent = Intent(requireContext(), BatteryManagerActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(requireContext(), BatteryManagerActivity::class.java))
             AnimationUtils.buttonPressFeedback(binding.cardBatteryManager)
         } catch (e: Exception) {
             Toast.makeText(context, "无法打开电池管理: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -462,8 +361,7 @@ class FunctionsFragment : Fragment() {
 
     private fun openNetworkDiagnostic() {
         try {
-            val intent = Intent(requireContext(), NetworkDiagnosticActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(requireContext(), NetworkDiagnosticActivity::class.java))
             AnimationUtils.buttonPressFeedback(binding.cardNetworkDiagnostic)
         } catch (e: Exception) {
             Toast.makeText(context, "无法打开网络诊断: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -472,8 +370,7 @@ class FunctionsFragment : Fragment() {
 
     private fun openGameAcceleration() {
         try {
-            val intent = Intent(requireContext(), GameAccelerationActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(requireContext(), GameAccelerationActivity::class.java))
             AnimationUtils.buttonPressFeedback(binding.cardGameAcceleration)
         } catch (e: Exception) {
             Toast.makeText(context, "无法打开游戏加速: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -482,8 +379,7 @@ class FunctionsFragment : Fragment() {
 
     private fun openShizukuAuth() {
         try {
-            val intent = Intent(requireContext(), ShizukuAuthActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(requireContext(), ShizukuAuthActivity::class.java))
             AnimationUtils.buttonPressFeedback(binding.llShizukuAuthorization)
         } catch (e: Exception) {
             Toast.makeText(context, "无法打开Shizuku授权: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -491,19 +387,8 @@ class FunctionsFragment : Fragment() {
     }
 
     private fun showOptimizationSettings(): Boolean {
-        // 显示优化设置对话框
         Toast.makeText(context, "长按功能开发中...", Toast.LENGTH_SHORT).show()
         return true
-    }
-
-    private fun openThemeSettings() {
-        try {
-            val intent = Intent(requireContext(), ThemeSettingsActivity::class.java)
-            startActivity(intent)
-            AnimationUtils.buttonPressFeedback(binding.btnThemeSettings)
-        } catch (e: Exception) {
-            Toast.makeText(context, "无法打开主题设置: ${e.message}", Toast.LENGTH_SHORT).show()
-        }
     }
 
     private fun setupCoreFeaturesRecyclerView() {
@@ -576,6 +461,35 @@ class FunctionsFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         performanceManager.stopMonitoring()
+    }
+
+    private fun openSystemMonitor() {
+        try {
+            startActivity(Intent(requireContext(), SystemMonitorActivity::class.java))
+            AnimationUtils.buttonPressFeedback(binding.btnSystemMonitor)
+        } catch (e: Exception) {
+            Toast.makeText(context, "无法打开系统监控: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun openPerformanceTools() {
+        try {
+            // 跳转到性能工具页面
+            startActivity(Intent(context, PerformanceToolsActivity::class.java))
+            AnimationUtils.buttonPressFeedback(binding.btnPerformanceTools)
+        } catch (e: Exception) {
+            Toast.makeText(context, "无法打开性能工具: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun openSecurityCenter() {
+        try {
+            // 跳转到安全中心页面
+            startActivity(Intent(context, SecurityCenterActivity::class.java))
+            AnimationUtils.buttonPressFeedback(binding.btnSecurityCenter)
+        } catch (e: Exception) {
+            Toast.makeText(context, "无法打开安全中心: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onDestroyView() {

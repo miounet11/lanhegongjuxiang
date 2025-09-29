@@ -1,6 +1,9 @@
 package com.lanhe.gongjuxiang.utils
 
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.os.BatteryManager
 import android.os.Handler
 import android.os.Looper
 import com.lanhe.gongjuxiang.models.BatteryInfo
@@ -162,19 +165,55 @@ class PerformanceMonitorManager(private val context: Context) {
      * 获取电池信息
      */
     fun getBatteryInfo(): BatteryInfo {
+        val batteryStatus = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+
+        val level = batteryStatus?.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) ?: 0
+        val scale = batteryStatus?.getIntExtra(BatteryManager.EXTRA_SCALE, -1) ?: 100
+        val batteryPct = (level * 100 / scale.toFloat()).toInt()
+
+        val temperature = (batteryStatus?.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0) ?: 0) / 10.0f
+        val voltage = (batteryStatus?.getIntExtra(BatteryManager.EXTRA_VOLTAGE, 0) ?: 0) / 1000.0f
+
+        val status = batteryStatus?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: 0
+        val health = batteryStatus?.getIntExtra(BatteryManager.EXTRA_HEALTH, -1) ?: 0
+        val technology = batteryStatus?.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY) ?: "Li-ion"
+
+        val isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
+                        status == BatteryManager.BATTERY_STATUS_FULL
+
+        val plugged = batteryStatus?.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) ?: 0
+        val chargeType = when (plugged) {
+            BatteryManager.BATTERY_PLUGGED_AC -> "AC"
+            BatteryManager.BATTERY_PLUGGED_USB -> "USB"
+            BatteryManager.BATTERY_PLUGGED_WIRELESS -> "Wireless"
+            else -> "None"
+        }
+
+        // 获取电池容量（如果可用）
+        val capacity = try {
+            val batteryManager = context.getSystemService(Context.BATTERY_SERVICE) as? BatteryManager
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                batteryManager?.getLongProperty(BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER)?.div(1000) ?: 4000L
+            } else {
+                4000L // 默认值
+            }
+        } catch (e: Exception) {
+            4000L // 默认值
+        }
+
         return BatteryInfo(
-            level = 50,
-            temperature = 25.0f,
-            voltage = 4.2f,
-            current = 0.0f,
-            status = 0,
-            health = 0,
-            technology = "Li-ion",
-            capacity = 4000L,
-            isCharging = false,
-            chargeType = "None",
-            timeToFull = 0L,
-            timeToEmpty = 0L
+            level = batteryPct,
+            temperature = temperature,
+            voltage = voltage,
+            current = 0.0f, // 这里可以扩展为获取真实电流
+            status = status,
+            health = health,
+            technology = technology,
+            capacity = capacity,
+            isCharging = isCharging,
+            chargeType = chargeType,
+            timeToFull = 0L, // 这里可以扩展为计算时间
+            timeToEmpty = 0L // 这里可以扩展为计算时间
         )
     }
 

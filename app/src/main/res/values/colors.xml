@@ -4,74 +4,79 @@
     <color name="white">#FFFFFFFF</color>
 
     <!-- 浅色模式主题颜色 -->
-    <color name="primary">#00B8D4</color>        <!-- 深青色 -->
-    <color name="primary_dark">#0088AA</color>   <!-- 更深青色 -->
-    <color name="primary_light">#00E5FF</color>  <!-- 浅青色 -->
-    <color name="accent">#D32F2F</color>         <!-- 深红色 -->
+    <color name="primary">#1F2933</color>        <!-- 深灰蓝，作为主色强调 -->
+    <color name="primary_dark">#162027</color>   <!-- 更深灰蓝 -->
+    <color name="primary_light">#E6EBF0</color>  <!-- 浅灰蓝，用于容器背景 -->
+    <color name="accent">#1F2933</color>         <!-- 与主色保持一致，弱化装饰色 -->
 
     <!-- 浅色模式文本颜色 -->
-    <color name="text_primary">#1F2937</color>     <!-- 深黑 -->
+    <color name="text_primary">#111827</color>     <!-- 深灰黑 -->
     <color name="text_secondary">#6B7280</color>   <!-- 中灰 -->
     <color name="text_hint">#9CA3AF</color>        <!-- 浅灰 -->
-    <color name="text_disabled">#D1D5DB</color>    <!-- 更浅灰 -->
+    <color name="text_disabled">#CBD5E1</color>    <!-- 更浅灰 -->
 
     <!-- 浅色模式背景 -->
-    <color name="background">#FFFFFF</color>      <!-- 纯白 -->
-    <color name="surface">#F9FAFB</color>        <!-- 浅灰白 -->
+    <color name="background">#F8FAFC</color>      <!-- 微暖浅灰 -->
+    <color name="surface">#FFFFFF</color>        <!-- 纯白，用于卡片和面板 -->
     <color name="card_background">#FFFFFF</color> <!-- 卡片白色 -->
 
     <!-- 分割线颜色 -->
-    <color name="divider">#E5E7EB</color>
-    <color name="divider_light">#F3F4F6</color>
+    <color name="divider">#E2E8F0</color>
+    <color name="divider_light">#F1F5F9</color>
 
     <!-- 状态颜色 -->
-    <color name="success">#059669</color>
-    <color name="warning">#D97706</color>
-    <color name="error">#DC2626</color>
-    <color name="info">#2563EB</color>
+    <color name="success">#3F7A64</color>        <!-- 柔和绿色 -->
+    <color name="warning">#B7791F</color>        <!-- 柔和橙色 -->
+    <color name="error">#B83232</color>          <!-- 柔和红色 -->
+    <color name="info">#3A6EDC</color>          <!-- 柔和蓝色 -->
 
     <!-- 导航栏颜色 -->
-    <color name="nav_selected">#00B8D4</color>
+    <color name="nav_selected">#1F2933</color>
     <color name="nav_unselected">#9CA3AF</color>
 
     <!-- 开关颜色 -->
-    <color name="switch_track">#E5E7EB</color>
+    <color name="switch_track">#E2E8F0</color>
     <color name="switch_thumb">#FFFFFF</color>
-    <color name="switch_thumb_checked">#00B8D4</color>
+    <color name="switch_thumb_checked">#1F2933</color>
 
     <!-- 特色颜色 -->
-    <color name="neural_cyan">#00B8D4</color>
-    <color name="neural_purple">#7C3AED</color>
-    <color name="neural_green">#059669</color>
-    <color name="neural_orange">#EA580C</color>
-    <color name="neural_red">#DC2626</color>
+    <color name="neural_cyan">#1F2933</color>
+    <color name="neural_purple">#1F2933</color>
+    <color name="neural_green">#3F7A64</color>
+    <color name="neural_orange">#B7791F</color>
+    <color name="neural_red">#B83232</color>
 
     <!-- 性能状态指示色 -->
-    <color name="performance_excellent">#00B8D4</color>
-    <color name="performance_good">#059669</color>
-    <color name="performance_warning">#EA580C</color>
-    <color name="performance_critical">#DC2626</color>
+    <color name="performance_excellent">#1F2933</color>
+    <color name="performance_good">#3F7A64</color>
+    <color name="performance_warning">#B7791F</color>
+    <color name="performance_critical">#B83232</color>
 
     <!-- 渐变背景色 -->
-    <color name="gradient_start">#FFFFFF</color>
-    <color name="gradient_end">#F9FAFB</color>
+    <color name="gradient_start">#F8FAFC</color>
+    <color name="gradient_end">#FFFFFF</color>
 
     <!-- 网络诊断专用颜色 -->
-    <color name="signal_excellent">#00B8D4</color>
-    <color name="signal_good">#059669</color>
-    <color name="signal_fair">#EA580C</color>
-    <color name="signal_poor">#DC2626</color>
+    <color name="signal_excellent">#1F2933</color>
+    <color name="signal_good">#3F7A64</color>
+    <color name="signal_fair">#B7791F</color>
+    <color name="signal_poor">#B83232</color>
     <color name="signal_weak">#6B7280</color>
-    <color name="signal_none">#D1D5DB</color>
+    <color name="signal_none">#CBD5E1</color>
 
-    <color name="network_blue">#2563EB</color>
-    <color name="warning_red">#DC2626</color>
-    <color name="warning_orange">#D97706</color>
-    <color name="danger_red">#B91C1C</color>
+    <color name="network_blue">#1F2933</color>
+    <color name="warning_red">#B83232</color>
+    <color name="warning_orange">#B7791F</color>
+    <color name="danger_red">#8F1F1F</color>
 
     <!-- 背景颜色 -->
-    <color name="background_normal">#FFFFFF</color>
-    <color name="background_light">#F9FAFB</color>
-    <color name="background_warning">#FEF3C7</color>
-    <color name="gray_light">#E5E7EB</color>
+    <color name="background_normal">#F8FAFC</color>
+    <color name="background_light">#FFFFFF</color>
+    <color name="background_warning">#FDF6EC</color>
+    <color name="gray_light">#E2E8F0</color>
+
+    <!-- AI优化颜色 -->
+    <color name="red">#B83232</color>
+    <color name="yellow">#B7791F</color>
+    <color name="green">#3F7A64</color>
 </resources>

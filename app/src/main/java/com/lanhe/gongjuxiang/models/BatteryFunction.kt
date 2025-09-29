@@ -6,5 +6,5 @@ data class BatteryFunction(
     val description: String,
     val category: String,
     val isEnabled: Boolean,
-    val currentValue: String
+    var currentValue: String
 )

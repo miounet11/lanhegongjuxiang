@@ -1,316 +1,260 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/colorBackground">
+    android:background="@color/background"
+    tools:context=".fragments.HomeFragment">
 
-<androidx.core.widget.NestedScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:background="@color/background">
 
     <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingStart="@dimen/spacing_md"
-    android:paddingEnd="@dimen/spacing_md"
-    android:paddingTop="@dimen/spacing_sm"
-    android:paddingBottom="@dimen/spacing_md">
+    android:padding="16dp">
 
-        <!-- 系统状态Hero卡片 -->
-        <FrameLayout
-        android:id="@+id/hero_frame"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/spacing_lg"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/search_card">
-
-            <!-- Shimmer placeholder for status card -->
-            <include
-                android:id="@+id/shimmer_status_card"
-                layout="@layout/shimmer_status_card"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/hero_status_card"
-                style="@style/Widget.App.Card.Hero"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="@dimen/card_padding_large">
-
-                <!-- 欢迎标题 -->
-                <TextView
-                    android:id="@+id/tv_welcome"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="蓝河助手"
-                    android:textAppearance="@style/TextAppearance.App.Hero"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_subtitle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_xs"
-                    android:text="专业的Android系统优化工具"
-                    android:textAppearance="@style/TextAppearance.App.BodyMedium"
-                    android:textColor="?attr/colorOnPrimaryContainer"
-                    android:alpha="0.8"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_welcome" />
-
-                <!-- 系统状态指示器 - 使用圆形进度条 -->
-                <LinearLayout
-                    android:id="@+id/status_indicators_layout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_md"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_subtitle">
-
-                    <com.lanhe.gongjuxiang.ui.components.CircularProgressView
-                        android:id="@+id/progress_cpu"
-                        android:layout_width="0dp"
-                        android:layout_height="60dp"
-                        android:layout_weight="1" />
-
-                    <com.lanhe.gongjuxiang.ui.components.CircularProgressView
-                        android:id="@+id/progress_memory"
-                        android:layout_width="0dp"
-                        android:layout_height="60dp"
-                        android:layout_weight="1" />
-
-                    <com.lanhe.gongjuxiang.ui.components.CircularProgressView
-                        android:id="@+id/progress_battery"
-                        android:layout_width="0dp"
-                        android:layout_height="60dp"
-                        android:layout_weight="1" />
-
-                    <com.lanhe.gongjuxiang.ui.components.CircularProgressView
-                        android:id="@+id/progress_network"
-                        android:layout_width="0dp"
-                        android:layout_height="60dp"
-                        android:layout_weight="1" />
-                </LinearLayout>
-
-                <!-- 一键优化按钮 -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_quick_optimize"
-                    style="@style/Widget.App.Button.Large"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_md"
-                    android:text="一键优化"
-                    android:textColor="?attr/colorOnPrimary"
-                    app:backgroundTint="?attr/colorPrimary"
-                    app:icon="@drawable/ic_optimize"
-                    app:iconGravity="textStart"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/status_indicators_layout" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
-        </FrameLayout>
-
-        <!-- 搜索栏 -->
+        <!-- 系统状态卡片 -->
         <com.google.android.material.card.MaterialCardView
-        android:id="@+id/search_card"
-        style="@style/Widget.App.Card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/spacing_lg"
-        app:layout_constraintTop_toBottomOf="@id/hero_frame"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/quick_actions">
+            android:id="@+id/hero_status_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            android:background="@color/card_background"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/quick_actions_grid">
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/spacing_small"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="1dp"
-                app:startIconDrawable="@android:drawable/ic_menu_search">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_search"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="搜索功能..."
-                    android:inputType="text"
-                    android:maxLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- 3个Hero Action Cards -->
-        <LinearLayout
-        android:id="@+id/quick_actions"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/spacing_lg"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/search_card"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/tools_category">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_md"
-                android:text="快速操作"
-                android:textAppearance="@style/TextAppearance.App.TitleLarge"
-                android:textColor="?attr/colorOnBackground" />
-
-            <!-- Hero Action Cards Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:baselineAligned="false">
+                android:orientation="vertical"
+                android:padding="16dp">
 
-                <!-- Quick Optimize Hero Card -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/card_quick_optimize"
-                    style="@style/Widget.App.Card.Hero"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/hero_card_height"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="@dimen/spacing_xs">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🏠 系统状态"
+                    android:textColor="@color/text_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:fontFamily="monospace" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="@dimen/spacing_md">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="实时监控系统运行状态"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
+                    android:fontFamily="monospace" />
 
-                        <ImageView
-                            style="@style/Widget.App.Icon.CircleBackground.Success"
-                            android:layout_marginBottom="@dimen/spacing_small"
-                            android:src="@drawable/ic_optimize"
-                            app:tint="@color/status_success" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="一键优化"
-                            android:textAppearance="@style/TextAppearance.App.LabelLarge"
-                            android:textColor="?attr/colorOnSurface"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/spacing_xs"
-                            android:text="快速提升性能"
-                            android:textAppearance="@style/TextAppearance.App.BodySmall"
-                            android:textColor="?attr/colorOnSurfaceVariant" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Memory Clean Hero Card -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/card_memory_clean"
-                    style="@style/Widget.App.Card.Hero"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/hero_card_height"
-                    android:layout_weight="1"
-                    android:layout_marginStart="@dimen/spacing_xs"
-                    android:layout_marginEnd="@dimen/spacing_xs">
+                <!-- 系统状态统计信息 -->
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:columnCount="4"
+                    android:rowCount="1">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
                         android:orientation="vertical"
-                        android:padding="@dimen/spacing_md">
-
-                        <ImageView
-                            style="@style/Widget.App.Icon.CircleBackground"
-                            android:layout_marginBottom="@dimen/spacing_small"
-                            android:src="@drawable/ic_optimize"
-                            app:tint="?attr/colorPrimary" />
+                        android:padding="8dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="内存清理"
-                            android:textAppearance="@style/TextAppearance.App.LabelLarge"
-                            android:textColor="?attr/colorOnSurface"
-                            android:textStyle="bold" />
+                            android:text="CPU"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/spacing_xs"
-                            android:text="释放内存空间"
-                            android:textAppearance="@style/TextAppearance.App.BodySmall"
-                            android:textColor="?attr/colorOnSurfaceVariant" />
+                        <com.lanhe.gongjuxiang.ui.components.CircularProgressView
+                            android:id="@+id/progressCpu"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center" />
+
                     </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Battery Saver Hero Card -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/card_battery_saver"
-                    style="@style/Widget.App.Card.Hero"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/hero_card_height"
-                    android:layout_weight="1"
-                    android:layout_marginStart="@dimen/spacing_xs">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
                         android:orientation="vertical"
-                        android:padding="@dimen/spacing_md">
-
-                        <ImageView
-                            style="@style/Widget.App.Icon.CircleBackground.Warning"
-                            android:layout_marginBottom="@dimen/spacing_small"
-                            android:src="@drawable/ic_battery_full"
-                            app:tint="@color/status_warning" />
+                        android:padding="8dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="省电模式"
-                            android:textAppearance="@style/TextAppearance.App.LabelLarge"
-                            android:textColor="?attr/colorOnSurface"
-                            android:textStyle="bold" />
+                            android:text="内存"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/spacing_xs"
-                            android:text="延长续航时间"
-                            android:textAppearance="@style/TextAppearance.App.BodySmall"
-                            android:textColor="?attr/colorOnSurfaceVariant" />
+                        <com.lanhe.gongjuxiang.ui.components.CircularProgressView
+                            android:id="@+id/progressMemory"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center" />
+
                     </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:orientation="vertical"
+                        android:padding="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="电池"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp" />
+
+                        <com.lanhe.gongjuxiang.ui.components.CircularProgressView
+                            android:id="@+id/progressBattery"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:orientation="vertical"
+                        android:padding="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="网络"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp" />
+
+                        <com.lanhe.gongjuxiang.ui.components.CircularProgressView
+                            android:id="@+id/progressNetwork"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center" />
+
+                    </LinearLayout>
+
+                </GridLayout>
+
             </LinearLayout>
-        </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 快速操作按钮 -->
+        <GridLayout
+            android:id="@+id/quick_actions_grid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:columnCount="2"
+            android:rowCount="2"
+            app:layout_constraintTop_toBottomOf="@id/hero_status_card"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/search_container">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_quick_optimize"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                android:layout_row="0"
+                android:layout_column="0"
+                android:text="🚀 一键优化"
+                android:textColor="@color/primary"
+                app:cornerRadius="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_system_monitor"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                android:layout_row="0"
+                android:layout_column="1"
+                android:text="📊 系统监控"
+                android:textColor="@color/primary"
+                app:cornerRadius="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_performance_tools"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                android:layout_row="1"
+                android:layout_column="0"
+                android:text="⚡ 性能工具"
+                android:textColor="@color/primary"
+                app:cornerRadius="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_security_center"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                android:layout_row="1"
+                android:layout_column="1"
+                android:text="🛡️ 安全中心"
+                android:textColor="@color/primary"
+                app:cornerRadius="8dp" />
+
+        </GridLayout>
+
+        <!-- 搜索栏 -->
+        <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_container"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_md"
+        app:layout_constraintTop_toBottomOf="@id/quick_actions_grid"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tools_category"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeWidth="1dp"
+        app:boxStrokeWidthFocused="1dp"
+        app:startIconDrawable="@android:drawable/ic_menu_search">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="搜索功能"
+                android:inputType="text"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- 工具类别区域 -->
         <LinearLayout
@@ -319,7 +263,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/spacing_lg"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/quick_actions"
+        app:layout_constraintTop_toBottomOf="@id/search_container"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/all_functions">
@@ -353,115 +297,157 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_sm"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_system_monitor"
                     style="@style/Widget.App.Card.Feature"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/feature_card_height"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="@dimen/spacing_xs">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_xs">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
                         android:padding="@dimen/spacing_md">
 
                         <ImageView
-                            style="@style/Widget.App.Icon.CircleBackground"
+                            style="@style/Widget.App.Icon"
+                            android:layout_marginEnd="@dimen/spacing_md"
                             android:src="@drawable/ic_performance_with_badge"
-                            app:tint="?attr/colorPrimary" />
+                            android:tint="@color/primary" />
 
-                        <TextView
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="性能监控"
+                                android:textAppearance="@style/TextAppearance.App.BodyMedium"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/spacing_xs"
+                                android:text="实时监控"
+                                android:textAppearance="@style/TextAppearance.App.BodySmall"
+                                android:textColor="@color/text_secondary" />
+                        </LinearLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.App.Button.Tertiary"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="性能监控"
-                            android:textAppearance="@style/TextAppearance.App.FeatureTitle"
-                            android:textColor="?attr/colorOnSurface" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/spacing_xs"
-                            android:text="实时监控"
-                            android:textAppearance="@style/TextAppearance.App.FeatureDescription" />
+                            android:minWidth="0dp"
+                            android:text="进入" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_security_center"
                     style="@style/Widget.App.Card.Feature"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/feature_card_height"
-                    android:layout_weight="1"
-                    android:layout_marginStart="@dimen/spacing_xs"
-                    android:layout_marginEnd="@dimen/spacing_xs">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_xs">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
                         android:padding="@dimen/spacing_md">
 
                         <ImageView
-                            style="@style/Widget.App.Icon.CircleBackground.Secondary"
+                            style="@style/Widget.App.Icon"
+                            android:layout_marginEnd="@dimen/spacing_md"
                             android:src="@drawable/ic_security_with_badge"
-                            app:tint="?attr/colorSecondary" />
+                            android:tint="@color/primary" />
 
-                        <TextView
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="安全中心"
+                                android:textAppearance="@style/TextAppearance.App.BodyMedium"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/spacing_xs"
+                                android:text="保护隐私"
+                                android:textAppearance="@style/TextAppearance.App.BodySmall"
+                                android:textColor="@color/text_secondary" />
+                        </LinearLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.App.Button.Tertiary"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="安全中心"
-                            android:textAppearance="@style/TextAppearance.App.FeatureTitle"
-                            android:textColor="?attr/colorOnSurface" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/spacing_xs"
-                            android:text="保护隐私"
-                            android:textAppearance="@style/TextAppearance.App.FeatureDescription" />
+                            android:minWidth="0dp"
+                            android:text="查看" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_network_diagnostic"
                     style="@style/Widget.App.Card.Feature"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/feature_card_height"
-                    android:layout_weight="1"
-                    android:layout_marginStart="@dimen/spacing_xs">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
                         android:padding="@dimen/spacing_md">
 
                         <ImageView
-                            style="@style/Widget.App.Icon.CircleBackground.Warning"
+                            style="@style/Widget.App.Icon"
+                            android:layout_marginEnd="@dimen/spacing_md"
                             android:src="@drawable/ic_optimize"
-                            app:tint="@color/status_warning" />
+                            android:tint="@color/primary" />
 
-                        <TextView
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="网络诊断"
+                                android:textAppearance="@style/TextAppearance.App.BodyMedium"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/spacing_xs"
+                                android:text="网络检测"
+                                android:textAppearance="@style/TextAppearance.App.BodySmall"
+                                android:textColor="@color/text_secondary" />
+                        </LinearLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.App.Button.Tertiary"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="网络诊断"
-                            android:textAppearance="@style/TextAppearance.App.FeatureTitle"
-                            android:textColor="?attr/colorOnSurface" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/spacing_xs"
-                            android:text="网络检测"
-                            android:textAppearance="@style/TextAppearance.App.FeatureDescription" />
+                            android:minWidth="0dp"
+                            android:text="诊断" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
@@ -566,9 +552,9 @@
                         android:padding="@dimen/spacing_md">
 
                         <ImageView
-                            style="@style/Widget.App.Icon.CircleBackground.Warning"
+                            style="@style/Widget.App.Icon"
                             android:src="@drawable/ic_optimize"
-                            app:tint="@color/status_warning" />
+                            android:tint="@color/primary" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -597,7 +583,7 @@
         app:layout_constraintTop_toBottomOf="@id/tools_category"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/suggestions_card">
+        app:layout_constraintBottom_toTopOf="@+id/all_functions_title">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -665,7 +651,6 @@
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_view_features"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:nestedScrollingEnabled="false"
@@ -676,14 +661,46 @@
             </FrameLayout>
         </LinearLayout>
 
+        <!-- 全部功能列表标题 -->
+        <TextView
+            android:id="@+id/all_functions_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:text="⚙️ 全部功能"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:fontFamily="monospace"
+            app:layout_constraintTop_toBottomOf="@id/all_functions"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/recycler_view_features" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_features"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            tools:listitem="@layout/item_core_feature_modern"
+            tools:itemCount="6"
+            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:spanCount="2"
+            app:layout_constraintTop_toBottomOf="@id/all_functions_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/suggestions_card" />
+
         <!-- 最近活动与建议 -->
         <com.google.android.material.card.MaterialCardView
         android:id="@+id/suggestions_card"
-        style="@style/Widget.App.Card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_lg"
-        app:layout_constraintTop_toBottomOf="@id/all_functions"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        android:background="@color/card_background"
+        app:layout_constraintTop_toBottomOf="@id/recycler_view_features"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -710,10 +727,10 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        style="@style/Widget.App.Icon.CircleBackground.Warning"
+                        style="@style/Widget.App.Icon"
                         android:layout_marginEnd="@dimen/spacing_md"
                         android:src="@drawable/ic_optimize"
-                        app:tint="@color/status_warning" />
+                        android:tint="@color/status_info" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -753,10 +770,10 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        style="@style/Widget.App.Icon.CircleBackground"
+                        style="@style/Widget.App.Icon"
                         android:layout_marginEnd="@dimen/spacing_md"
                         android:src="@drawable/ic_optimize"
-                        app:tint="@color/status_info" />
+                        android:tint="@color/primary" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -795,10 +812,10 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        style="@style/Widget.App.Icon.CircleBackground.Success"
+                        style="@style/Widget.App.Icon"
                         android:layout_marginEnd="@dimen/spacing_md"
                         android:src="@drawable/ic_optimize"
-                        app:tint="@color/status_success" />
+                        android:tint="@color/primary" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -836,4 +853,6 @@
 
     </androidx.core.widget.NestedScrollView>
 
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

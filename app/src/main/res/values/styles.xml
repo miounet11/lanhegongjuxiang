@@ -4,35 +4,31 @@
     <style name="Widget.App" parent="" />
     
     <!-- 卡片样式 - Modern Design -->
-    <style name="Widget.App.Card" parent="Widget.Material3.CardView.Elevated">
+    <style name="Widget.App.Card" parent="Widget.Material3.CardView.Outlined">
         <item name="cardCornerRadius">@dimen/card_radius</item>
-        <item name="cardElevation">2dp</item>
-        <item name="android:layout_margin">@dimen/spacing_xs</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="strokeColor">@color/divider</item>
+        <item name="android:layout_margin">@dimen/spacing_sm</item>
         <item name="contentPadding">@dimen/card_padding</item>
         <item name="cardBackgroundColor">?attr/colorSurface</item>
-        <item name="strokeWidth">0dp</item>
     </style>
 
     <style name="Widget.App.Card.Hero" parent="Widget.App.Card">
         <item name="cardCornerRadius">@dimen/card_radius_large</item>
-        <item name="cardElevation">4dp</item>
         <item name="android:layout_margin">@dimen/spacing_md</item>
         <item name="contentPadding">@dimen/card_padding_large</item>
-        <item name="cardBackgroundColor">?attr/colorPrimaryContainer</item>
+        <item name="cardBackgroundColor">?attr/colorSurface</item>
     </style>
 
     <style name="Widget.App.Card.Feature" parent="Widget.App.Card">
-        <item name="cardCornerRadius">@dimen/card_radius</item>
-        <item name="cardElevation">1dp</item>
         <item name="android:layout_margin">@dimen/spacing_xs</item>
         <item name="contentPadding">@dimen/card_padding</item>
-        <item name="rippleColor">?attr/colorPrimary</item>
-        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="rippleColor">@color/divider</item>
+        <item name="android:foreground">?attr/selectableItemBackgroundBorderless</item>
     </style>
 
     <style name="Widget.App.Card.List" parent="Widget.App.Card">
-        <item name="cardCornerRadius">@dimen/card_radius</item>
-        <item name="cardElevation">1dp</item>
         <item name="android:layout_marginStart">@dimen/spacing_md</item>
         <item name="android:layout_marginEnd">@dimen/spacing_md</item>
         <item name="android:layout_marginTop">@dimen/spacing_xs</item>
@@ -41,22 +37,31 @@
     </style>
     
     <!-- 按钮样式 -->
-    <style name="Widget.App.Button" parent="Widget.Material3.Button" />
-    
+    <style name="Widget.App.Button" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/primary</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
     <style name="Widget.App.Button.Large" parent="Widget.App.Button">
-        <item name="android:layout_height">56dp</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:layout_height">52dp</item>
     </style>
-    
-    <style name="Widget.App.Button.Secondary" parent="Widget.Material3.Button.TonalButton">
-        <item name="android:layout_height">48dp</item>
-        <item name="android:textSize">14sp</item>
+
+    <style name="Widget.App.Button.Secondary" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="backgroundTint">@color/surface</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="strokeColor">@color/divider</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">15sp</item>
     </style>
-    
+
     <style name="Widget.App.Button.Tertiary" parent="Widget.Material3.Button.TextButton">
-        <item name="android:layout_height">40dp</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">15sp</item>
     </style>
     
     <!-- Chip样式 -->
@@ -71,35 +76,12 @@
     <style name="Widget.App.Icon" parent="">
         <item name="android:layout_width">@dimen/icon_size_medium</item>
         <item name="android:layout_height">@dimen/icon_size_medium</item>
-        <item name="android:tint">?attr/colorOnSurface</item>
+        <item name="android:tint">@color/text_primary</item>
     </style>
 
     <style name="Widget.App.Icon.Large" parent="Widget.App.Icon">
         <item name="android:layout_width">@dimen/icon_size_large</item>
         <item name="android:layout_height">@dimen/icon_size_large</item>
-    </style>
-
-    <style name="Widget.App.Icon.CircleBackground" parent="Widget.App.Icon">
-        <item name="android:layout_width">40dp</item>
-        <item name="android:layout_height">40dp</item>
-        <item name="android:background">@drawable/bg_icon_circle</item>
-        <item name="android:padding">8dp</item>
-        <item name="android:tint">?attr/colorPrimary</item>
-    </style>
-
-    <style name="Widget.App.Icon.CircleBackground.Secondary" parent="Widget.App.Icon.CircleBackground">
-        <item name="android:background">@drawable/bg_icon_circle_secondary</item>
-        <item name="android:tint">?attr/colorSecondary</item>
-    </style>
-
-    <style name="Widget.App.Icon.CircleBackground.Success" parent="Widget.App.Icon.CircleBackground">
-        <item name="android:background">@drawable/bg_icon_circle_success</item>
-        <item name="android:tint">@color/status_success</item>
-    </style>
-
-    <style name="Widget.App.Icon.CircleBackground.Warning" parent="Widget.App.Icon.CircleBackground">
-        <item name="android:background">@drawable/bg_icon_circle_warning</item>
-        <item name="android:tint">@color/status_warning</item>
     </style>
 
     <!-- List Item Styles -->
@@ -108,16 +90,17 @@
         <item name="android:layout_height">@dimen/list_item_height</item>
         <item name="android:paddingStart">@dimen/list_item_padding</item>
         <item name="android:paddingEnd">@dimen/list_item_padding</item>
-        <item name="android:background">?attr/selectableItemBackground</item>
-        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
     </style>
 
     <!-- 底部导航样式 -->
     <style name="Widget.App.BottomNavigation" parent="Widget.Material3.BottomNavigationView">
         <item name="android:background">?attr/colorSurface</item>
-        <item name="android:elevation">@dimen/bottom_nav_elevation</item>
+        <item name="android:elevation">0dp</item>
         <item name="itemIconTint">@color/bottom_nav_item_color</item>
         <item name="itemTextColor">@color/bottom_nav_text_tint</item>
-        <item name="itemRippleColor">?attr/colorPrimary</item>
+        <item name="itemRippleColor">@color/divider</item>
+        <item name="itemIconSize">24dp</item>
+        <item name="labelVisibilityMode">labeled</item>
     </style>
 </resources>

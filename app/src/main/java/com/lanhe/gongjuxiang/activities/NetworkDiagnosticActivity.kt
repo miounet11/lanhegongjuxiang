@@ -1,7 +1,10 @@
 package com.lanhe.gongjuxiang.activities
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.net.wifi.ScanResult
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -11,11 +14,13 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lanhe.gongjuxiang.R
-import com.lanhe.gongjuxiang.adapters.WifiSignalAdapter
-import com.lanhe.gongjuxiang.adapters.NetworkUsageAdapter
 import com.lanhe.gongjuxiang.adapters.BatteryConsumingAdapter
+import com.lanhe.gongjuxiang.adapters.NetworkUsageAdapter
+import com.lanhe.gongjuxiang.adapters.WifiSignalAdapter
 import com.lanhe.gongjuxiang.databinding.ActivityNetworkDiagnosticBinding
-import com.lanhe.gongjuxiang.utils.*
+import com.lanhe.gongjuxiang.utils.NetworkDiagnosticHelper
+import com.lanhe.gongjuxiang.utils.NetworkDiagnosticUIController
+import com.lanhe.gongjuxiang.utils.NetworkOptimizer
 import com.lanhe.gongjuxiang.viewmodels.NetworkDiagnosticViewModel
 import kotlinx.coroutines.launch
 
@@ -29,9 +34,7 @@ class NetworkDiagnosticActivity : AppCompatActivity() {
     private val viewModel: NetworkDiagnosticViewModel by viewModels()
 
     // 工具类
-    private lateinit var networkInfoHelper: NetworkInfoHelper
-    private lateinit var latencyTester: LatencyTester
-    private lateinit var positionScanner: PositionScanner
+    private lateinit var networkHelper: NetworkDiagnosticHelper
     private lateinit var networkOptimizer: NetworkOptimizer
     private lateinit var uiController: NetworkDiagnosticUIController
 
@@ -52,9 +55,7 @@ class NetworkDiagnosticActivity : AppCompatActivity() {
     }
 
     private fun initializeComponents() {
-        networkInfoHelper = NetworkInfoHelper(this)
-        latencyTester = LatencyTester()
-        positionScanner = PositionScanner()
+        networkHelper = NetworkDiagnosticHelper(this)
         networkOptimizer = NetworkOptimizer()
         uiController = NetworkDiagnosticUIController(binding, this)
     }
@@ -96,6 +97,7 @@ class NetworkDiagnosticActivity : AppCompatActivity() {
         binding.btnScanPositions.setOnClickListener { startPositionScan() }
         binding.btnOptimizeNetwork.setOnClickListener { optimizeNetwork() }
         binding.btnShowTips.setOnClickListener { uiController.showNetworkTips() }
+        binding.btnRefreshWifiSignals.setOnClickListener { refreshWifiSignals() }
     }
 
     private fun setupObservers() {
@@ -112,7 +114,7 @@ class NetworkDiagnosticActivity : AppCompatActivity() {
         }
 
         viewModel.wifiSignals.observe(this) { wifiSignals ->
-            wifiSignalAdapter.updateData(wifiSignals.sortedByDescending { it.rssi })
+            wifiSignalAdapter.updateData(wifiSignals)
             uiController.updateWifiSignalsSummary(wifiSignals)
         }
 
@@ -134,11 +136,17 @@ class NetworkDiagnosticActivity : AppCompatActivity() {
     }
 
     private fun checkPermissions() {
-        val permissions = arrayOf(
+        val permissions = mutableListOf(
             Manifest.permission.ACCESS_WIFI_STATE,
             Manifest.permission.ACCESS_NETWORK_STATE,
             Manifest.permission.INTERNET
         )
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            permissions.add(Manifest.permission.NEARBY_WIFI_DEVICES)
+        } else {
+            permissions.add(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
 
         val missingPermissions = permissions.filter {
             ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
@@ -148,28 +156,37 @@ class NetworkDiagnosticActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this, missingPermissions.toTypedArray(), 1001)
         } else {
             initializeNetworkInfo()
+            refreshWifiSignals()
         }
     }
 
     private fun initializeNetworkInfo() {
         lifecycleScope.launch {
             try {
-                val networkInfo = networkInfoHelper.getCurrentNetworkInfo()
-                // 转换类型为ViewModel期望的格式
-                val vmNetworkInfo = com.lanhe.gongjuxiang.viewmodels.NetworkDiagnosticViewModel.NetworkInfo(
-                    type = networkInfo.type,
-                    ssid = networkInfo.ssid,
-                    bssid = networkInfo.bssid,
-                    signalStrength = networkInfo.signalStrength,
-                    rssi = networkInfo.rssi,
-                    estimatedDistance = networkInfo.estimatedDistance,
-                    linkSpeed = networkInfo.linkSpeed,
-                    frequency = networkInfo.frequency,
-                    isConnected = networkInfo.isConnected
-                )
-                viewModel.updateNetworkInfo(vmNetworkInfo)
+                val networkInfo = networkHelper.getRealNetworkInfo()
+                viewModel.updateNetworkInfo(networkInfo)
+
+                // 同时获取网络使用应用
+                val networkApps = networkHelper.getNetworkUsageApps()
+                viewModel.updateNetworkUsageApps(networkApps)
+
+                // 获取电池消耗应用
+                val batteryApps = networkHelper.getBatteryConsumingApps()
+                viewModel.updateBatteryConsumingApps(batteryApps)
             } catch (e: Exception) {
                 Toast.makeText(this@NetworkDiagnosticActivity, "获取网络信息失败", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun refreshWifiSignals() {
+        lifecycleScope.launch {
+            try {
+                val wifiSignals = networkHelper.scanWifiSignals()
+                viewModel.updateWifiSignals(wifiSignals)
+            } catch (e: Exception) {
+                Toast.makeText(this@NetworkDiagnosticActivity, "扫描WiFi失败", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -178,16 +195,8 @@ class NetworkDiagnosticActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 uiController.setTestingStatus(true)
-                val result = latencyTester.performLatencyTest()
-                // 转换类型为ViewModel期望的格式
-                val vmLatencyResult = com.lanhe.gongjuxiang.viewmodels.NetworkDiagnosticViewModel.LatencyResult(
-                    averageLatency = result.averageLatency,
-                    minLatency = result.minLatency,
-                    maxLatency = result.maxLatency,
-                    packetLoss = result.packetLoss,
-                    quality = result.quality
-                )
-                viewModel.updateLatencyResult(vmLatencyResult)
+                val result = networkHelper.performRealLatencyTest()
+                viewModel.updateLatencyResult(result)
 
                 uiController.setTestingStatus(false)
                 Toast.makeText(
@@ -207,14 +216,8 @@ class NetworkDiagnosticActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 uiController.setScanningStatus(true)
-                val result = positionScanner.performPositionScan()
-                // 转换类型为ViewModel期望的格式
-                val vmPositionResult = com.lanhe.gongjuxiang.viewmodels.NetworkDiagnosticViewModel.PositionScanResult(
-                    bestPosition = result.bestPosition,
-                    recommendedAction = result.recommendedAction,
-                    positions = emptyList() // 暂时使用空列表
-                )
-                viewModel.updatePositionScanResult(vmPositionResult)
+                val result = networkHelper.scanWifiPositions()
+                viewModel.updatePositionScanResult(result)
 
                 uiController.setScanningStatus(false)
                 Toast.makeText(
@@ -250,6 +253,7 @@ class NetworkDiagnosticActivity : AppCompatActivity() {
         if (requestCode == 1001) {
             if (grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
                 initializeNetworkInfo()
+                refreshWifiSignals()
             } else {
                 Toast.makeText(this, "需要网络权限才能进行诊断", Toast.LENGTH_SHORT).show()
             }

@@ -36,6 +36,8 @@ import com.lanhe.gongjuxiang.fragments.*
 import com.lanhe.gongjuxiang.services.ChargingReminderService
 import com.lanhe.gongjuxiang.settings.BatteryOptimizationActivity
 import com.lanhe.gongjuxiang.utils.PreferencesManager
+import com.lanhe.gongjuxiang.utils.ShizukuManager
+import com.lanhe.gongjuxiang.dialogs.ShizukuPermissionDialog
 import com.lanhe.gongjuxiang.viewmodels.MainViewModel
 
 /**
@@ -66,6 +68,9 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
+        // 初始化Shizuku
+        initializeShizuku()
+
         // Detect device type and orientation
         detectDeviceConfiguration()
 
@@ -82,8 +87,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.toolbar)
-
         // Setup shared element transitions
         SharedElementTransitionHelper.setupActivityTransitions(this)
 
@@ -99,6 +102,9 @@ class MainActivity : AppCompatActivity() {
         } else {
             setupBottomNavigation()
         }
+
+        // 检查Shizuku权限
+        checkShizukuPermission()
 
         setupFab()
         setupTransitions()
@@ -319,6 +325,52 @@ class MainActivity : AppCompatActivity() {
     private fun hasSecurityWarnings(): Boolean {
         // 检查是否有安全警告
         return viewModel.hasSecurityWarnings()
+    }
+
+    /**
+     * 初始化Shizuku
+     */
+    private fun initializeShizuku() {
+        // 初始化ShizukuManager
+        ShizukuManager.initWithContext(this)
+    }
+
+    /**
+     * 检查Shizuku权限
+     */
+    private fun checkShizukuPermission() {
+        // 检查是否需要Shizuku权限
+        val needShizuku = true // 默认启用Shizuku功能
+
+        if (needShizuku && !ShizukuManager.isShizukuAvailable()) {
+            // 延迟显示权限请求对话框，避免影响启动体验
+            binding.root.postDelayed({
+                showShizukuPermissionDialog()
+            }, 1000)
+        }
+    }
+
+    /**
+     * 显示Shizuku权限对话框
+     */
+    private fun showShizukuPermissionDialog() {
+        ShizukuPermissionDialog(
+            context = this,
+            onGranted = {
+                // 权限授予后的处理
+                viewModel.onShizukuPermissionGranted()
+                // 可以显示提示
+                com.google.android.material.snackbar.Snackbar.make(
+                    binding.root,
+                    "Shizuku权限已授予，可以使用高级功能",
+                    com.google.android.material.snackbar.Snackbar.LENGTH_SHORT
+                ).show()
+            },
+            onDenied = {
+                // 权限拒绝后的处理
+                viewModel.onShizukuPermissionDenied()
+            }
+        ).show()
     }
 
     private fun formatNetworkSpeed(network: com.lanhe.gongjuxiang.models.NetworkStats): String {
