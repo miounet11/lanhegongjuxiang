@@ -2,18 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/nav_home"
-        android:icon="@drawable/ic_home_24"
         android:title="首页" />
     <item
         android:id="@+id/nav_tools"
-        android:icon="@drawable/ic_performance_24"
         android:title="工具" />
     <item
         android:id="@+id/nav_monitor"
-        android:icon="@drawable/ic_security_24"
         android:title="监控" />
     <item
         android:id="@+id/nav_settings"
-        android:icon="@drawable/ic_settings_24"
         android:title="设置" />
 </menu>

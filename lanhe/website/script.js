@@ -288,11 +288,11 @@ style.textContent = `
         }
         to {
             transform: translateX(0);
-            opacity: 0;
+            opacity: 1;
         }
     }
 
-    .body.loaded {
+    body.loaded {
         opacity: 1;
     }
 
@@ -340,7 +340,8 @@ document.head.appendChild(style);
 
 // 下载按钮点击跟踪
 document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('btn-download') || e.target.closest('.btn-download')) {
+    const target = e.target.closest('.btn-download');
+    if (target) {
         // 这里可以添加下载统计代码
         console.log('下载按钮被点击');
 

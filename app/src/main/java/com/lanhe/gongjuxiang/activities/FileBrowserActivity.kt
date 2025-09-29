@@ -30,7 +30,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.appbar.MaterialToolbar
+import androidx.appcompat.widget.Toolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.lanhe.gongjuxiang.R
 import com.lanhe.gongjuxiang.adapters.FileAdapter
@@ -50,7 +50,7 @@ class FileBrowserActivity : AppCompatActivity() {
     private val TAG = FileBrowserActivity::class.java.simpleName
 
     // UI组件
-    private lateinit var toolbar: MaterialToolbar
+    private lateinit var toolbar: Toolbar
     private lateinit var recyclerView: RecyclerView
     private lateinit var fabSelectFile: FloatingActionButton
 

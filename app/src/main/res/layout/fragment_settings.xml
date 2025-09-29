@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorBackground"
+    android:background="?attr/colorSurface"
     android:fillViewport="true">
 
     <LinearLayout
@@ -37,7 +37,7 @@
                     android:orientation="vertical"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/settings_icon">
+                    app:layout_constraintEnd_toEndOf="parent">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -56,17 +56,6 @@
                         android:alpha="0.8" />
                 </LinearLayout>
 
-                <!-- 设置图标 -->
-                <ImageView
-                    android:id="@+id/settings_icon"
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:background="@drawable/bg_icon_circle"
-                    android:padding="16dp"
-                    android:src="@drawable/ic_settings_24"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="?attr/colorPrimary" />
 
                 <!-- 应用信息 -->
                 <LinearLayout
@@ -182,10 +171,6 @@
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
 
-                    <ImageView
-                        style="@style/Widget.App.Icon.CircleBackground"
-                        android:src="@drawable/ic_settings_24"
-                        app:tint="?attr/colorPrimary" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -210,14 +195,6 @@
                             android:textAppearance="@style/TextAppearance.App.BodySmall"
                             android:textColor="?attr/colorOnSurfaceVariant" />
                     </LinearLayout>
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_optimize"
-                        android:tint="?attr/colorOnSurfaceVariant"
-                        android:alpha="0.6"
-                        app:tint="?attr/colorOnSurfaceVariant" />
                 </LinearLayout>
 
                 <View
@@ -234,11 +211,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
-
-                    <ImageView
-                        style="@style/Widget.App.Icon.CircleBackground.Secondary"
-                        android:src="@drawable/ic_optimize"
-                        app:tint="?attr/colorSecondary" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -263,14 +235,6 @@
                             android:textAppearance="@style/TextAppearance.App.BodySmall"
                             android:textColor="?attr/colorOnSurfaceVariant" />
                     </LinearLayout>
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_optimize"
-                        android:tint="?attr/colorOnSurfaceVariant"
-                        android:alpha="0.6"
-                        app:tint="?attr/colorOnSurfaceVariant" />
                 </LinearLayout>
 
                 <View
@@ -287,11 +251,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
-
-                    <ImageView
-                        style="@style/Widget.App.Icon.CircleBackground.Warning"
-                        android:src="@drawable/ic_browser_24"
-                        app:tint="@color/status_warning" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -316,14 +275,6 @@
                             android:textAppearance="@style/TextAppearance.App.BodySmall"
                             android:textColor="?attr/colorOnSurfaceVariant" />
                     </LinearLayout>
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_optimize"
-                        android:tint="?attr/colorOnSurfaceVariant"
-                        android:alpha="0.6"
-                        app:tint="?attr/colorOnSurfaceVariant" />
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -359,15 +310,9 @@
                     android:orientation="vertical"
                     android:padding="@dimen/spacing_md">
 
-                    <ImageView
-                        style="@style/Widget.App.Icon.CircleBackground.Success"
-                        android:src="@drawable/ic_optimize"
-                        app:tint="@color/status_success" />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_xs"
                         android:text="关于应用"
                         android:textAppearance="@style/TextAppearance.App.FeatureTitle"
                         android:textColor="?attr/colorOnSurface" />
@@ -390,15 +335,9 @@
                     android:orientation="vertical"
                     android:padding="@dimen/spacing_md">
 
-                    <ImageView
-                        style="@style/Widget.App.Icon.CircleBackground"
-                        android:src="@drawable/ic_optimize"
-                        app:tint="?attr/colorPrimary" />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_xs"
                         android:text="检查更新"
                         android:textAppearance="@style/TextAppearance.App.FeatureTitle"
                         android:textColor="?attr/colorOnSurface" />
@@ -420,15 +359,9 @@
                     android:orientation="vertical"
                     android:padding="@dimen/spacing_md">
 
-                    <ImageView
-                        style="@style/Widget.App.Icon.CircleBackground.Secondary"
-                        android:src="@drawable/ic_optimize"
-                        app:tint="?attr/colorSecondary" />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_xs"
                         android:text="快捷设置"
                         android:textAppearance="@style/TextAppearance.App.FeatureTitle"
                         android:textColor="?attr/colorOnSurface" />
@@ -468,11 +401,6 @@
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
 
-                    <ImageView
-                        style="@style/Widget.App.Icon.CircleBackground.Success"
-                        android:src="@drawable/ic_optimize"
-                        app:tint="@color/status_success" />
-
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -496,14 +424,6 @@
                             android:textAppearance="@style/TextAppearance.App.BodySmall"
                             android:textColor="?attr/colorOnSurfaceVariant" />
                     </LinearLayout>
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_optimize"
-                        android:tint="?attr/colorOnSurfaceVariant"
-                        android:alpha="0.6"
-                        app:tint="?attr/colorOnSurfaceVariant" />
                 </LinearLayout>
 
                 <View
@@ -520,11 +440,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
-
-                    <ImageView
-                        style="@style/Widget.App.Icon.CircleBackground.Warning"
-                        android:src="@drawable/ic_optimize"
-                        app:tint="@color/status_warning" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -549,14 +464,6 @@
                             android:textAppearance="@style/TextAppearance.App.BodySmall"
                             android:textColor="?attr/colorOnSurfaceVariant" />
                     </LinearLayout>
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_optimize"
-                        android:tint="?attr/colorOnSurfaceVariant"
-                        android:alpha="0.6"
-                        app:tint="?attr/colorOnSurfaceVariant" />
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -576,19 +483,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:id="@+id/card_test"
-                style="@style/Widget.App.ListItem"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:padding="@dimen/list_item_padding">
-
-                <ImageView
-                    style="@style/Widget.App.Icon.CircleBackground.Secondary"
-                    android:src="@drawable/ic_optimize"
-                    app:tint="?attr/colorSecondary" />
+                <LinearLayout
+                    android:id="@+id/card_test"
+                    style="@style/Widget.App.ListItem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/list_item_padding">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -613,14 +515,6 @@
                         android:textAppearance="@style/TextAppearance.App.BodySmall"
                         android:textColor="?attr/colorOnSurfaceVariant" />
                 </LinearLayout>
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_optimize"
-                    android:tint="?attr/colorOnSurfaceVariant"
-                    android:alpha="0.6"
-                    app:tint="?attr/colorOnSurfaceVariant" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 

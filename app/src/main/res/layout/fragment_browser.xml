@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorBackground"
+    android:background="?attr/colorSurface"
     android:fillViewport="true">
 
     <LinearLayout
@@ -37,7 +37,7 @@
                     android:orientation="vertical"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/browser_icon">
+                    app:layout_constraintEnd_toEndOf="parent">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -56,17 +56,6 @@
                         android:alpha="0.8" />
                 </LinearLayout>
 
-                <!-- 浏览器图标 -->
-                <ImageView
-                    android:id="@+id/browser_icon"
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:background="@drawable/bg_icon_circle"
-                    android:padding="16dp"
-                    android:src="@drawable/ic_browser_24"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="?attr/colorPrimary" />
 
                 <!-- 快速操作按钮 -->
                 <LinearLayout
@@ -87,9 +76,7 @@
                         android:layout_marginEnd="@dimen/spacing_sm"
                         android:text="启动浏览器"
                         android:textColor="?attr/colorOnPrimary"
-                        app:backgroundTint="?attr/colorPrimary"
-                        app:icon="@drawable/ic_browser_24"
-                        app:iconGravity="textStart" />
+                        app:backgroundTint="?attr/colorPrimary" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_browser_settings"
@@ -98,9 +85,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginStart="@dimen/spacing_sm"
-                        android:text="设置"
-                        app:icon="@drawable/ic_settings_24"
-                        app:iconGravity="textStart" />
+                        android:text="设置" />
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -155,9 +140,7 @@
                     style="@style/Widget.App.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="搜索"
-                    app:icon="@drawable/ic_optimize"
-                    app:iconGravity="textStart" />
+                    android:text="搜索" />
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -184,9 +167,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="添加书签"
-                android:textSize="12sp"
-                app:icon="@drawable/ic_optimize"
-                app:iconSize="16dp" />
+                android:textSize="12sp" />
         </LinearLayout>
 
         <!-- 网站快捷方式网格 -->
@@ -211,15 +192,9 @@
                     android:orientation="vertical"
                     android:padding="@dimen/spacing_md">
 
-                    <ImageView
-                        style="@style/Widget.App.Icon.CircleBackground"
-                        android:src="@drawable/ic_optimize"
-                        app:tint="?attr/colorPrimary" />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_xs"
                         android:text="百度"
                         android:textAppearance="@style/TextAppearance.App.FeatureTitle"
                         android:textColor="?attr/colorOnSurface" />
@@ -242,15 +217,9 @@
                     android:orientation="vertical"
                     android:padding="@dimen/spacing_md">
 
-                    <ImageView
-                        style="@style/Widget.App.Icon.CircleBackground.Secondary"
-                        android:src="@drawable/ic_optimize"
-                        app:tint="?attr/colorSecondary" />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_xs"
                         android:text="淘宝"
                         android:textAppearance="@style/TextAppearance.App.FeatureTitle"
                         android:textColor="?attr/colorOnSurface" />
@@ -272,15 +241,9 @@
                     android:orientation="vertical"
                     android:padding="@dimen/spacing_md">
 
-                    <ImageView
-                        style="@style/Widget.App.Icon.CircleBackground.Warning"
-                        android:src="@drawable/ic_optimize"
-                        app:tint="@color/status_warning" />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_xs"
                         android:text="微博"
                         android:textAppearance="@style/TextAppearance.App.FeatureTitle"
                         android:textColor="?attr/colorOnSurface" />
@@ -310,15 +273,9 @@
                     android:orientation="vertical"
                     android:padding="@dimen/spacing_md">
 
-                    <ImageView
-                        style="@style/Widget.App.Icon.CircleBackground.Success"
-                        android:src="@drawable/ic_optimize"
-                        app:tint="@color/status_success" />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_xs"
                         android:text="Bilibili"
                         android:textAppearance="@style/TextAppearance.App.FeatureTitle"
                         android:textColor="?attr/colorOnSurface" />
@@ -341,15 +298,9 @@
                     android:orientation="vertical"
                     android:padding="@dimen/spacing_md">
 
-                    <ImageView
-                        style="@style/Widget.App.Icon.CircleBackground.Secondary"
-                        android:src="@drawable/ic_optimize"
-                        app:tint="?attr/colorSecondary" />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_xs"
                         android:text="GitHub"
                         android:textAppearance="@style/TextAppearance.App.FeatureTitle"
                         android:textColor="?attr/colorOnSurface" />
@@ -371,15 +322,9 @@
                     android:orientation="vertical"
                     android:padding="@dimen/spacing_md">
 
-                    <ImageView
-                        style="@style/Widget.App.Icon.CircleBackground"
-                        android:src="@drawable/ic_optimize"
-                        app:tint="?attr/colorPrimary" />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_xs"
                         android:text="YouTube"
                         android:textAppearance="@style/TextAppearance.App.FeatureTitle"
                         android:textColor="?attr/colorOnSurface" />
@@ -418,10 +363,6 @@
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
 
-                    <ImageView
-                        style="@style/Widget.App.Icon.CircleBackground.Secondary"
-                        android:src="@drawable/ic_optimize"
-                        app:tint="?attr/colorSecondary" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -469,10 +410,6 @@
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
 
-                    <ImageView
-                        style="@style/Widget.App.Icon.CircleBackground.Success"
-                        android:src="@drawable/ic_security_with_badge"
-                        app:tint="@color/status_success" />
 
                     <LinearLayout
                         android:layout_width="0dp"

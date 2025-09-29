@@ -27,22 +27,16 @@
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/bottom_nav_height"
+        android:layout_marginBottom="80dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <!-- 底部导航 -->
+        <!-- 底部导航 -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav_view"
-        style="@style/Widget.App.BottomNavigation"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/bottom_nav_height"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="?attr/colorSurface"
-        android:elevation="@dimen/bottom_nav_elevation"
-        app:itemIconTint="@color/bottom_nav_item_color"
-        app:itemTextColor="@color/bottom_nav_text_tint"
-        app:itemActiveIndicatorStyle="@style/Widget.App.BottomNavigation.ActiveIndicator"
-        app:itemRippleColor="@drawable/bottom_nav_ripple"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav_menu" />
 
@@ -53,7 +47,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginBottom="72dp"
-        app:srcCompat="@android:drawable/ic_menu_manage" />
+        android:layout_marginBottom="88dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

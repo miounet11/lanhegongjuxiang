@@ -118,11 +118,6 @@
         <item name="android:elevation">@dimen/bottom_nav_elevation</item>
         <item name="itemIconTint">@color/bottom_nav_item_color</item>
         <item name="itemTextColor">@color/bottom_nav_text_tint</item>
-        <item name="itemActiveIndicatorStyle">@style/Widget.App.BottomNavigation.ActiveIndicator</item>
         <item name="itemRippleColor">?attr/colorPrimary</item>
-    </style>
-
-    <style name="Widget.App.BottomNavigation.ActiveIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
-        <item name="android:color">?attr/colorPrimaryContainer</item>
     </style>
 </resources>

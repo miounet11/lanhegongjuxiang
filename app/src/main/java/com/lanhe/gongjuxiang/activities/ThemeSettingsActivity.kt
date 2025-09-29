@@ -26,13 +26,12 @@ class ThemeSettingsActivity : AppCompatActivity() {
     }
 
     private fun setupToolbar() {
-        setSupportActionBar(binding.toolbar)
+        // 使用系统默认的ActionBar而不是自定义Toolbar
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
             title = "🎨 主题设置"
         }
-        binding.toolbar.setNavigationOnClickListener { onBackPressed() }
     }
 
     private fun setupThemeOptions() {

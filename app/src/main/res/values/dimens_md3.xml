@@ -14,18 +14,18 @@
     <dimen name="spacing_unit">8dp</dimen>
     
     <!-- 组件间距 -->
-    <dimen name="spacing_xs">4dp</dimen>     <!-- 0.5x -->
-    <dimen name="spacing_sm">8dp</dimen>     <!-- 1x -->
-    <dimen name="spacing_md">16dp</dimen>    <!-- 2x -->
-    <dimen name="spacing_lg">24dp</dimen>    <!-- 3x -->
-    <dimen name="spacing_xl">32dp</dimen>    <!-- 4x -->
+    <dimen name="spacing_xs">2dp</dimen>     <!-- 0.5x -->
+    <dimen name="spacing_sm">6dp</dimen>     <!-- 1x -->
+    <dimen name="spacing_md">12dp</dimen>    <!-- 2x -->
+    <dimen name="spacing_lg">16dp</dimen>    <!-- 3x -->
+    <dimen name="spacing_xl">20dp</dimen>    <!-- 4x -->
     <dimen name="spacing_xxl">48dp</dimen>   <!-- 6x -->
     <dimen name="spacing_xxxl">64dp</dimen>  <!-- 8x -->
     
     <!-- 页面边距 -->
-    <dimen name="margin_page">16dp</dimen>
-    <dimen name="margin_section">24dp</dimen>
-    <dimen name="margin_card">12dp</dimen>
+    <dimen name="margin_page">12dp</dimen>
+    <dimen name="margin_section">16dp</dimen>
+    <dimen name="margin_card">8dp</dimen>
     
     <!-- 卡片规格 -->
     <dimen name="card_radius">12dp</dimen>
@@ -33,19 +33,19 @@
     <dimen name="card_radius_small">8dp</dimen>
     <dimen name="card_elevation">2dp</dimen>
     <dimen name="card_elevation_focus">6dp</dimen>
-    <dimen name="card_padding">16dp</dimen>
-    <dimen name="card_padding_large">20dp</dimen>
+    <dimen name="card_padding">12dp</dimen>
+    <dimen name="card_padding_large">16dp</dimen>
     
     <!-- 按钮规格 -->
-    <dimen name="button_height">48dp</dimen>
-    <dimen name="button_height_large">56dp</dimen>
-    <dimen name="button_height_small">40dp</dimen>
+    <dimen name="button_height">44dp</dimen>
+    <dimen name="button_height_large">48dp</dimen>
+    <dimen name="button_height_small">36dp</dimen>
     <dimen name="button_radius">12dp</dimen>
     <dimen name="button_padding_horizontal">24dp</dimen>
     <dimen name="button_padding_vertical">12dp</dimen>
     
     <!-- 输入框规格 -->
-    <dimen name="input_height">56dp</dimen>
+    <dimen name="input_height">48dp</dimen>
     <dimen name="input_radius">8dp</dimen>
     <dimen name="input_padding">16dp</dimen>
     
@@ -75,15 +75,15 @@
     <dimen name="hero_card_elevation">4dp</dimen>
     
     <!-- 功能网格规格 -->
-    <dimen name="feature_card_height">90dp</dimen>
+    <dimen name="feature_card_height">80dp</dimen>
     <dimen name="feature_card_spacing">8dp</dimen>
     <dimen name="feature_icon_size">32dp</dimen>
     
     <!-- 列表项规格 -->
-    <dimen name="list_item_height">72dp</dimen>
-    <dimen name="list_item_height_small">56dp</dimen>
-    <dimen name="list_item_height_large">88dp</dimen>
-    <dimen name="list_item_padding">16dp</dimen>
+    <dimen name="list_item_height">64dp</dimen>
+    <dimen name="list_item_height_small">48dp</dimen>
+    <dimen name="list_item_height_large">72dp</dimen>
+    <dimen name="list_item_padding">12dp</dimen>
     
     <!-- 分隔线规格 -->
     <dimen name="divider_height">1dp</dimen>
