@@ -1,100 +1,57 @@
-# 蓝河助手项目架构文档
+# CLAUDE.md
 
-## 变更记录 (Changelog)
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-**最新扫描时间：** 2025-09-15 13:45:51
-- 深度补捞完成：工具类实现、界面布局、模块库详情
-- 新增Room数据库架构详情分析
-- 完善Shizuku权限管理系统实现
-- 补充系统优化器完整功能清单
-- 更新模块结构图和导航面包屑
+## Project Overview
 
-**上次扫描时间：** 2025-09-15 12:04:50
-- 自适应初始化架构师首次分析
-- 完成项目结构全面扫描
-- 生成模块化架构文档
+蓝河助手 (Lanhe Assistant) is an Android system optimization tool with 20+ utility modules including performance monitoring, battery management, network optimization, and system management. Built with Kotlin using MVVM architecture pattern.
 
-## 项目愿景
+**Key Technologies:**
+- Platform: Android (Kotlin 2.0.21)
+- Min SDK: 24 (Android 7.0) / Target SDK: 36 (Android 15)
+- Architecture: MVVM + Repository pattern
+- UI: Material Design 3.0 with ViewBinding
+- Database: Room with Coroutines
+- Build: Gradle 8.12.1 with Kotlin DSL
+- Special: Shizuku framework for system-level operations
 
-蓝河助手（蓝河工具箱）是一款专为Android用户打造的全面系统优化工具，集成了20+实用功能模块，为用户提供一站式的手机优化体验。包含智能优化引擎、性能监控、网络诊断、浏览器、系统管理等核心功能。
+## Build & Development Commands
 
-## 架构总览
+### Essential Commands
 
-### 技术栈
-- **平台：** Android (Kotlin)
-- **最低支持：** Android 7.0 (API 24)
-- **目标版本：** Android 15 (API 36)
-- **架构模式：** MVVM + Repository模式
-- **UI框架：** Material Design 3.0
-- **数据存储：** Room数据库
-- **依赖注入：** 未使用（原生Android开发）
-- **特殊权限：** Shizuku框架集成
-
-### 模块结构图
-
-```mermaid
-graph TD
-    A["(根) 蓝河助手"] --> B["app/"];
-    A --> C["mokuai/"];
-    B --> D["主应用模块"];
-    D --> E["activities/"];
-    D --> F["utils/"];
-    D --> G["models/"];
-    D --> H["services/"];
-    D --> I["viewmodels/"];
-    C --> L["core/"];
-    C --> M["modules/"];
-    L --> N["shizuku-manager/"];
-    M --> O["network/"];
-    M --> P["database/"];
-    F --> Q["ShizukuManager"];
-    F --> R["SystemOptimizer"];
-    F --> S["AppDatabase"];
-    F --> T["PerformanceMonitor"];
-
-    click B "./app/CLAUDE.md" "查看主应用模块文档"
-    click C "./mokuai/CLAUDE.md" "查看模块库文档"
-    click E "./app/src/main/java/com/lanhe/gongjuxiang/activities/CLAUDE.md" "查看Activity模块文档"
-    click F "./app/src/main/java/com/lanhe/gongjuxiang/utils/CLAUDE.md" "查看工具类模块文档"
-```
-
-## 模块索引
-
-| 模块路径 | 类型 | 职责描述 | 技术栈 | 状态 |
-|---------|------|----------|---------|------|
-| `app/` | Android应用 | 主应用模块，包含所有功能实现 | Kotlin, Android SDK | ✅ 完整 |
-| `mokuai/` | 模块库 | 可复用的功能模块库 | Java/Kotlin | 🔧 开发中 |
-| `app/src/main/java/com/lanhe/gongjuxiang/activities/` | UI层 | 界面控制器，26个Activity | Kotlin, ViewBinding | ✅ 完整 |
-| `app/src/main/java/com/lanhe/gongjuxiang/utils/` | 工具层 | 核心工具类和管理器，38个工具类 | Kotlin | ✅ 完整 |
-| `app/src/main/java/com/lanhe/gongjuxiang/models/` | 数据层 | 数据模型和实体类 | Kotlin, Room | ✅ 完整 |
-| `app/src/main/java/com/lanhe/gongjuxiang/services/` | 服务层 | 后台服务和前台服务 | Kotlin | ✅ 完整 |
-
-## 运行与开发
-
-### 环境要求
-- **Android Studio：** 2024.1 或更高版本
-- **JDK：** 11
-- **Gradle：** 8.12.1
-- **Kotlin：** 2.0.21
-- **Android Gradle Plugin：** 8.12.1
-
-### 构建步骤
 ```bash
-# 1. 克隆项目
-git clone <repository-url>
-
-# 2. 导入Android Studio
-# 打开Android Studio并导入项目
-
-# 3. 同步Gradle
+# Clean and build project
 ./gradlew clean build
 
-# 4. 运行应用
+# Build debug APK
+./gradlew assembleDebug
+
+# Build release APK (requires keystore config in local.properties)
+./gradlew assembleRelease
+
+# Install debug build to connected device
 ./gradlew installDebug
+
+# Run unit tests
+./gradlew test
+
+# Run instrumentation tests (requires connected device/emulator)
+./gradlew connectedAndroidTest
+
+# Run unit tests for a specific module
+./gradlew :app:testDebugUnitTest
+
+# Run lint checks
+./gradlew lint
+
+# List all available tasks
+./gradlew tasks
 ```
 
-### 签名配置
-项目使用发布签名，需要在 `local.properties` 中配置：
+### Signing Configuration
+
+Release builds require keystore configuration in `local.properties`:
+
 ```properties
 RELEASE_STORE_FILE=keystore.jks
 RELEASE_STORE_PASSWORD=<password>
@@ -102,113 +59,163 @@ RELEASE_KEY_ALIAS=<alias>
 RELEASE_KEY_PASSWORD=<password>
 ```
 
-## 测试策略
+The keystore file `keystore.jks` is already present in the project root.
 
-### 单元测试
-- **工具：** JUnit 4, Mockito
-- **覆盖：** utils包核心工具类
-- **位置：** `app/src/test/`
+## Architecture Patterns
 
-### 仪器测试
-- **工具：** Espresso, AndroidX Test
-- **覆盖：** Activity和Fragment UI测试
-- **位置：** `app/src/androidTest/`
+### MVVM Structure
 
-### 测试运行
-```bash
-# 单元测试
-./gradlew test
-
-# 仪器测试
-./gradlew connectedAndroidTest
+```
+app/src/main/java/com/lanhe/gongjuxiang/
+├── activities/          # 26 Activity classes (UI controllers)
+├── fragments/           # Fragment components for navigation
+├── viewmodels/          # ViewModel classes for UI state
+├── utils/               # 59 utility classes (core business logic)
+│   ├── ShizukuManager.kt      # Shizuku permission management
+│   ├── SystemOptimizer.kt     # System optimization engine
+│   ├── PerformanceMonitor.kt  # Performance monitoring
+│   └── AppDatabase.kt         # Room database definition
+├── models/              # Data models and entities
+├── services/            # Background and foreground services
+├── adapters/            # RecyclerView adapters
+└── browser/             # Built-in WebView browser
 ```
 
-## 编码规范
+### Key Architectural Decisions
 
-### Kotlin代码风格
-- 遵循Kotlin官方编码约定
-- 使用ViewBinding替代findViewById
-- 优先使用协程处理异步操作
-- 使用sealed class处理状态管理
+1. **No Dependency Injection Framework**: Uses manual dependency management rather than Hilt/Dagger
+2. **Shizuku Integration**: System-level operations require Shizuku framework (optional but recommended)
+3. **Hidden API Access**: Uses `org.lsposed.hiddenapibypass` to access hidden Android APIs
+4. **ViewBinding**: All layouts use ViewBinding (enabled in build.gradle.kts)
+5. **Coroutines**: All async operations use Kotlin Coroutines
 
-### 命名约定
-- **Activity：** `XxxActivity.kt`
-- **Fragment：** `XxxFragment.kt` 
-- **Adapter：** `XxxAdapter.kt`
-- **ViewModel：** `XxxViewModel.kt`
-- **工具类：** `XxxManager.kt` / `XxxHelper.kt`
+### Room Database Schema
 
-### 架构约定
-- 使用Repository模式管理数据
-- ViewModel不直接持有Context
-- 使用LiveData进行数据观察
-- 异常处理统一封装
+Main entities tracked in Room database:
+- `PerformanceDataEntity`: CPU/memory/battery metrics over time
+- `OptimizationHistoryEntity`: History of optimization operations
+- `BatteryStatsEntity`: Battery usage statistics
 
-## AI 使用指引
+Database version: 1 (see `AppDatabase.kt` in utils/)
 
-### 项目上下文
-- **领域：** Android系统工具开发
-- **用户群体：** Android高级用户和开发者
-- **核心价值：** 系统优化、性能提升、功能增强
+## Critical Implementation Notes
 
-### 常用任务
-1. **功能开发：** 新增工具功能模块
-2. **性能优化：** 内存、电池、网络优化
-3. **UI改进：** Material Design组件应用
-4. **权限管理：** Shizuku权限集成
-5. **数据处理：** Room数据库操作
+### Shizuku Permission System
 
-### 代码风格偏好
-- 简洁的函数命名
-- 完整的错误处理
-- 性能优先的实现方案
-- 用户体验友好的交互设计
+The app uses Shizuku for system-level operations. Key points:
 
-## AI Team Configuration (autogenerated by team-configurator, 2025-09-23)
+```kotlin
+// Check availability
+ShizukuManager.isShizukuAvailable(): Boolean
 
-**Important: YOU MUST USE subagents when available for the task.**
+// Request permission
+ShizukuManager.requestPermission(context: Context)
 
-### Detected Tech Stack
-- **Platform**: Android (Kotlin)
-- **Architecture**: MVVM + Repository pattern  
-- **UI Framework**: Material Design 3.0 with ViewBinding
-- **Database**: Room (SQLite) with Coroutines
-- **Build System**: Gradle (Kotlin DSL) with Android Gradle Plugin 8.12.1
-- **Dependencies**: Shizuku framework, Retrofit, OkHttp, Glide, Lottie
-- **Special Features**: System-level optimizations, Hidden API access
-- **Testing**: JUnit 4, Mockito, Espresso
+// System operations (requires Shizuku)
+ShizukuManager.getRunningProcesses(): List<ProcessInfo>
+ShizukuManager.getCpuUsage(): Float
+```
 
-### AI Team Assignments
+User must manually install and activate Shizuku app for advanced features.
 
-| Task | Agent | Notes |
-|------|-------|-------|
-| Code quality assurance | `code-reviewer` | MANDATORY for all PRs and commits |
-| Performance bottlenecks | `performance-optimizer` | System optimization focus |
-| Codebase exploration | `code-archaeologist` | Legacy code analysis, refactoring prep |
-| API design (REST/JSON) | `api-architect` | Network layer and data contracts |
-| Backend logic | `backend-developer` | Kotlin server-side logic |
-| Documentation updates | `documentation-specialist` | README, API docs, architecture guides |
-| Complex task coordination | `tech-lead-orchestrator` | Multi-step feature development |
+### Module Dependencies
 
-### Specialized Patterns
+The project includes 4 custom modules under `mokuai/`:
+- `:mokuai:mokuai:modules:network`
+- `:mokuai:mokuai:modules:performance-monitor`
+- `:mokuai:mokuai:modules:memory-manager`
+- `:mokuai:mokuai:modules:filesystem`
 
-**Android Development Tasks:**
-- Use `backend-developer` for Kotlin business logic and data layer
-- Use `api-architect` for network API contracts and data models
-- Use `performance-optimizer` for system-level optimizations and battery management
-- Use `code-archaeologist` for understanding complex utility classes and services
+These are declared in `settings.gradle.kts` and provide reusable functionality.
 
-**System Optimization Focus:**
-- Battery optimization → `performance-optimizer`
-- Memory management → `performance-optimizer` 
-- Network efficiency → `api-architect` + `performance-optimizer`
-- Shizuku integration → `backend-developer` + `code-reviewer`
+## Coding Conventions
 
-**Quality Assurance:**
-- Always run `code-reviewer` before merging
-- Use `documentation-specialist` for user-facing documentation
-- Use `tech-lead-orchestrator` for features spanning multiple modules
+### Kotlin Style
 
----
+- Use ViewBinding instead of findViewById
+- Prefer Kotlin Coroutines for async operations
+- Use sealed classes for state management
+- Follow official Kotlin coding conventions
 
+### Naming Patterns
 
+- Activities: `XxxActivity.kt`
+- Fragments: `XxxFragment.kt`
+- Adapters: `XxxAdapter.kt`
+- ViewModels: `XxxViewModel.kt`
+- Utilities: `XxxManager.kt` or `XxxHelper.kt`
+
+### Architecture Guidelines
+
+- Use Repository pattern for data management
+- ViewModels must not hold Context references
+- Use LiveData/StateFlow for reactive data
+- Centralize error handling in base classes
+
+## Dependency Management
+
+Dependencies are managed via `gradle/libs.versions.toml` using Gradle version catalogs.
+
+**Major dependencies:**
+- AndroidX Core/AppCompat/Material
+- Lifecycle (ViewModel, LiveData): 2.8.7
+- Room: 2.7.0
+- Navigation: 2.8.3
+- Retrofit: 2.9.0
+- Shizuku API: 13.1.0
+- Glide: 4.16.0
+- Lottie: 6.4.0
+- TensorFlow Lite: 2.14.0 (for AI suggestions)
+
+## Testing Strategy
+
+### Unit Tests
+
+Location: `app/src/test/`
+- JUnit 4 for test framework
+- Mockito 5.8.0 for mocking
+- Focus on utils package core logic
+
+### Instrumentation Tests
+
+Location: `app/src/androidTest/`
+- Espresso 3.6.1 for UI testing
+- AndroidX Test for testing infrastructure
+- Focus on Activity and Fragment interactions
+
+## Common Development Tasks
+
+### Adding a New Feature Module
+
+1. Create utility class in `utils/` package
+2. Add corresponding Activity in `activities/` package
+3. Update navigation in MainActivity
+4. Add Room entities if data persistence needed
+5. Update layouts in `res/layout/`
+
+### Working with Shizuku
+
+When adding system-level features:
+1. Check Shizuku availability before operations
+2. Handle permission denial gracefully
+3. Provide fallback for non-Shizuku users
+4. Document required Shizuku version
+
+### Database Migrations
+
+Current version: 1. When modifying entities:
+1. Update entity classes with @Entity
+2. Increment database version in AppDatabase
+3. Provide migration strategy or set fallbackToDestructiveMigration
+
+## Project Structure Notes
+
+165 Kotlin source files total in `app/src/main/`
+
+Main entry point: `MainActivity.kt` + `LanheApplication.kt`
+
+The app uses a hybrid architecture:
+- Bottom Navigation for primary tabs
+- Navigation Component for fragment navigation
+- DrawerLayout for side menu
+- Toolbar with CoordinatorLayout for collapsing effects
