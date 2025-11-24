@@ -1,0 +1,312 @@
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
+    id("jacoco")
+}
+
+android {
+    namespace = "com.lanhe.gongjuxiang"
+    compileSdk = 36
+
+    lint {
+        baseline = file("lint-baseline.xml")
+        warningsAsErrors = false
+        abortOnError = false
+    }
+
+    defaultConfig {
+        applicationId = "com.lanhe.gongjuxiang"
+        minSdk = 24
+        targetSdk = 36
+        versionCode = 1
+        versionName = "1.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        create("release") {
+            storeFile = file(project.property("RELEASE_STORE_FILE").toString())
+            storePassword = project.property("RELEASE_STORE_PASSWORD").toString())
+            keyAlias = project.property("RELEASE_KEY_ALIAS").toString())
+            keyPassword = project.property("RELEASE_KEY_PASSWORD").toString())
+        }
+    }
+
+    buildTypes {
+        debug {
+            isDebuggable = true
+            testCoverageEnabled = true
+            enableAndroidTestCoverage = true
+        }
+        release {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+    buildFeatures {
+        viewBinding = true
+        dataBinding = true
+        buildConfig = true
+    }
+
+    // 测试配置
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+            all {
+                // Jacoco配置
+                jacoco {
+                    includeNoLocationClasses = true
+                    excludes = ['jdk.internal.*']
+                }
+            }
+        }
+        
+        animationsDisabled = true
+    }
+
+    // KSP配置
+    kapt {
+        correctErrorTypes = true
+    }
+    
+    // 打包选项
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/gradle/incremental.annotation.processors"
+        }
+    }
+}
+
+dependencies {
+    // Core AndroidX
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.fragment)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.cardview)
+    implementation(libs.androidx.viewpager2)
+
+    // Architecture Components
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+
+    // Navigation Component
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
+
+    // Shizuku框架 - 系统级操作
+    implementation(libs.shizuku.api)
+    implementation(libs.shizuku.provider)
+
+    // Android隐藏API绕过
+    implementation(libs.hiddenapibypass)
+
+    // 协程和异步操作
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.work.runtime.ktx)
+
+    // 数据存储
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    kapt(libs.androidx.room.compiler)
+
+    // 网络请求
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.okhttp.logging)
+
+    // 动画库
+    implementation(libs.lottie)
+
+    // 权限管理
+    implementation(libs.dexter)
+
+    // UI增强库
+    implementation(libs.shimmer)
+    implementation(libs.androidx.swiperefreshlayout)
+
+    // 图片处理库 (Glide)
+    implementation(libs.glide)
+    kapt(libs.glide.compiler)
+
+    // Advanced UI Components for premium experience
+    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation("androidx.dynamicanimation:dynamicanimation:1.0.0")
+    implementation("androidx.transition:transition:1.5.1")
+    implementation("androidx.interpolator:interpolator:1.0.0")
+
+    // Advanced RecyclerView animations
+    implementation("jp.wasabeef:recyclerview-animators:4.0.2")
+
+    // Fluent System Icons - Microsoft官方图标库
+    implementation("com.microsoft.design:fluent-system-icons:1.1.307@aar")
+
+    // Analytics & Monitoring
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
+    debugImplementation(libs.leakcanary)
+
+    // Memory Management
+    implementation("com.facebook.fresco:fresco:3.1.3") // Image memory management
+
+    // Network Optimization
+    implementation("com.squareup.okhttp3:okhttp-dnsoverhttps:4.12.0") // DNS over HTTPS
+
+    // Storage & File Management
+    implementation("commons-io:commons-io:2.15.1") // File utilities
+    implementation("org.apache.commons:commons-compress:1.25.0") // Compression utilities
+
+    // Game Mode & FPS
+    implementation("jp.co.cyberagent.android:gpuimage:2.1.0") // GPU processing
+
+    // AI & Machine Learning
+    implementation("org.tensorflow:tensorflow-lite:2.14.0") // TensorFlow Lite for AI suggestions
+    implementation("org.tensorflow:tensorflow-lite-support:0.4.4") // TensorFlow support
+
+    // Advanced Features
+    implementation(libs.play.review)
+    implementation(libs.play.review.ktx)
+    implementation(libs.androidx.splashscreen)
+    implementation(libs.androidx.dynamic.animation)
+    implementation(libs.androidx.transition)
+
+    // Enhanced Image Processing
+    implementation(libs.glide.transformations)
+
+    // Biometric & Security
+    implementation(libs.androidx.biometric)
+    implementation(libs.androidx.security.crypto)
+
+    // System Features
+    implementation("androidx.window:window:1.3.0")
+
+    // 蓝河工具箱模块库集成
+    implementation(project(":mokuai:mokuai:modules:network"))
+    implementation(project(":mokuai:mokuai:modules:performance-monitor"))
+    implementation(project(":mokuai:mokuai:modules:memory-manager"))
+    implementation(project(":mokuai:mokuai:modules:filesystem"))
+
+    // 测试依赖
+    testImplementation(libs.junit)
+    testImplementation(libs.mockito.core)
+    testImplementation("org.robolectric:robolectric:4.10.3")
+    testImplementation("androidx.test:core:1.5.0")
+    testImplementation("androidx.test.ext:junit:1.1.5")
+    testImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    testImplementation("org.mockito:mockito-inline:5.2.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+    testImplementation("androidx.room:room-testing:2.7.0")
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
+    
+    // Android测试依赖
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation("androidx.test:core:1.5.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.5.1")
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.5.1")
+    androidTestImplementation("androidx.test.espresso:espresso-web:3.5.1")
+    androidTestImplementation("androidx.test:runner:1.5.2")
+    androidTestImplementation("androidx.test:rules:1.5.0")
+    androidTestImplementation("androidx.test.uiautomator:uiautomator:2.2.0")
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
+    androidTestImplementation("androidx.room:room-testing:2.7.0")
+    androidTestImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
+}
+
+// Jacoco配置
+jacoco {
+    toolVersion = "0.8.8"
+}
+
+// 单元测试覆盖率任务
+tasks.register("jacocoTestReport", JacocoReport::class) {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports for the debug build."
+    
+    dependsOn("testDebugUnitTest")
+    
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+    
+    val fileFilter = listOf(
+        "**/R.class",
+        "**/R$*.class",
+        "**/BuildConfig.*",
+        "**/Manifest*.*",
+        "**/*Test*.*",
+        "android/**/*.*",
+        "**/*_ViewBinding*.*",
+        "**/*_Hilt*.*"
+    )
+    
+    val debugTree = fileTree("${project.buildDir}/intermediates/javac/debug/classes") {
+        exclude(fileFilter)
+    }
+    
+    val mainSrc = "${project.projectDir}/src/main/java"
+    
+    sourceDirectories.setFrom(files(mainSrc))
+    classDirectories.setFrom(files(debugTree))
+    executionData.setFrom(fileTree("${project.buildDir}") {
+        include(listOf("jacoco/testDebugUnitTest.exec"))
+    })
+}
+
+// 集成测试覆盖率任务
+tasks.register("jacocoAndroidTestReport", JacocoReport::class) {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports for Android tests."
+    
+    dependsOn("connectedDebugAndroidTest")
+    
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+    
+    val fileFilter = listOf(
+        "**/R.class",
+        "**/R$*.class",
+        "**/BuildConfig.*",
+        "**/Manifest*.*",
+        "**/*Test*.*",
+        "android/**/*.*",
+        "**/*_ViewBinding*.*"
+    )
+    
+    val debugTree = fileTree("${project.buildDir}/intermediates/javac/debug/classes") {
+        exclude(fileFilter)
+    }
+    
+    val mainSrc = "${project.projectDir}/src/main/java"
+    
+    sourceDirectories.setFrom(files(mainSrc))
+    classDirectories.setFrom(files(debugTree))
+    executionData.setFrom(fileTree("${project.buildDir}") {
+        include(listOf("outputs/code_coverage/debugAndroidTest/connected/**/*.ec"))
+    })
+}

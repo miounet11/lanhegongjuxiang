@@ -1,63 +1,92 @@
 plugins {
     id("com.android.library")
     id("kotlin-android")
+    id("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
-    namespace = "com.hippo.ehviewer.module.network"
+    namespace = "com.lanhe.module.network"
     compileSdk = 36
 
     defaultConfig {
-        minSdk = 21
-        targetSdk = 36
-
+        minSdk = 24
+        
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
+        debug {
+            isMinifyEnabled = false
+            buildConfigField("String", "BASE_URL", "\"https://api.lanhe.com/debug/\"")
+        }
         release {
             isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            buildConfigField("String", "BASE_URL", "\"https://api.lanhe.com/\"")
         }
-    }
-
-    lint {
-        abortOnError = false
-        checkReleaseBuilds = false
     }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-
-    kotlinOptions {
-        jvmTarget = "11"
+    
+    lint {
+        abortOnError = false
+        checkReleaseBuilds = false
+    }
+    
+    
+    
+    buildFeatures {
+        buildConfig = true
     }
 }
 
 dependencies {
+    // 核心模块
+    implementation(project(":mokuai:mokuai:core:common"))
+    
     // Android核心库
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-
-    // 网络库
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
-
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    
+    // 网络库 - 使用版本目录
+    implementation(libs.okhttp)
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.12.0"))
+    implementation("com.squareup.okhttp3:logging-interceptor")
+    
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
+    
     // JSON处理
-    implementation("com.squareup.moshi:moshi:1.15.0")
+    implementation(libs.moshi)
     implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
-
-    // 依赖注入
-    implementation("javax.inject:javax.inject:1")
-
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
+    
+    // Hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.android)
+    
+    // 缓存
+    implementation("androidx.datastore:datastore:1.1.2")
+    
     // 测试依赖
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("org.mockito:mockito-core:5.8.0")
+    testImplementation(libs.junit)
+    testImplementation(libs.mockito.core)
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
     testImplementation("androidx.arch.core:core-testing:2.2.0")
-
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 }

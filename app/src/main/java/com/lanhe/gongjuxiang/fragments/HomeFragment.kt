@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -66,6 +67,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
+        // 新的浏览器为中心的首页设计不需要特性列表 RecyclerView
+        // 保持此代码以备后用，但 RecyclerView 在新布局中设置为 visibility="gone"
         coreFeatureAdapter = CoreFeatureAdapter { feature ->
             handleFeatureClick(feature)
         }
@@ -89,76 +92,90 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupQuickActions() {
-        // 快速操作按钮
-        binding.btnQuickOptimize.setOnClickListener {
-            startActivity(Intent(context, CoreOptimizationActivity::class.java))
+        // ========== 搜索框功能 ==========
+        // 处理搜索框文本输入
+        binding.etSearch.doOnTextChanged { text, _, _, _ ->
+            // 显示或隐藏清除按钮
+            binding.ivClear.visibility = if (text?.isNotEmpty() == true) View.VISIBLE else View.GONE
         }
-        binding.btnSystemMonitor.setOnClickListener {
+
+        // 清除按钮点击事件
+        binding.ivClear.setOnClickListener {
+            binding.etSearch.text.clear()
+            binding.ivClear.visibility = View.GONE
+        }
+
+        // 搜索框输入事件 - 支持URL/搜索词/语音输入
+        binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH) {
+                performSearch(binding.etSearch.text.toString())
+                true
+            } else {
+                false
+            }
+        }
+
+        // 语音搜索按钮
+        binding.ivVoice.setOnClickListener {
+            // 暂时显示Toast，可后续集成语音识别
+            Toast.makeText(context, "语音搜索功能开发中...", Toast.LENGTH_SHORT).show()
+        }
+
+        // ========== 快速搜索芯片 ==========
+        // 百度搜索
+        binding.chipBaidu.setOnClickListener {
+            performSearch("https://www.baidu.com")
+        }
+
+        // 谷歌搜索
+        binding.chipGoogle.setOnClickListener {
+            performSearch("https://www.google.com")
+        }
+
+        // 视频搜索
+        binding.chipVideo.setOnClickListener {
+            performSearch("https://www.baidu.com/s?tn=baiduimage&word=")
+        }
+
+        // 新闻搜索
+        binding.chipNews.setOnClickListener {
+            performSearch("https://news.baidu.com")
+        }
+
+        // ========== 浏览器快速操作卡片 ==========
+        // 打开浏览器
+        setupCardWithAnimation(binding.cardOpenBrowser) {
+            startActivity(Intent(context, ChromiumBrowserActivity::class.java))
+        }
+
+        // 浏览历史
+        setupCardWithAnimation(binding.cardHistory) {
+            // 启动浏览器并显示历史
+            startActivity(Intent(context, ChromiumBrowserActivity::class.java).apply {
+                putExtra("action", "show_history")
+            })
+        }
+
+        // 书签
+        setupCardWithAnimation(binding.cardBookmarks) {
+            // 启动浏览器并显示书签
+            startActivity(Intent(context, ChromiumBrowserActivity::class.java).apply {
+                putExtra("action", "show_bookmarks")
+            })
+        }
+
+        // 浏览器设置
+        setupCardWithAnimation(binding.cardBrowserSettings) {
+            // 启动浏览器设置
+            startActivity(Intent(context, ChromiumBrowserActivity::class.java).apply {
+                putExtra("action", "settings")
+            })
+        }
+
+        // ========== 系统状态卡片点击事件 ==========
+        binding.heroStatusCard.setOnClickListener {
+            // 点击系统状态卡片进入详细系统监控
             startActivity(Intent(context, SystemMonitorActivity::class.java))
-        }
-        binding.btnPerformanceTools.setOnClickListener {
-            // 性能工具功能
-            startActivity(Intent(context, PerformanceToolsActivity::class.java))
-        }
-        binding.btnSecurityCenter.setOnClickListener {
-            // 安全中心功能
-            startActivity(Intent(context, SecurityCenterActivity::class.java))
-        }
-
-        // Search functionality
-        binding.etSearch.setOnEditorActionListener { _, _, _ ->
-            performSearch(binding.etSearch.text.toString())
-            true
-        }
-
-        // Show more tools button
-        binding.btnShowMoreTools.setOnClickListener {
-            // Switch to Tools tab (which is FunctionsFragment)
-            (activity as? MainActivity)?.let { mainActivity ->
-                // This will be handled by ViewPager navigation
-                // Navigate to index 1 (Tools tab)
-            }
-        }
-
-        // 快捷功能卡片点击事件 with animations
-        binding.cardSystemMonitor?.let { card ->
-            setupCardWithAnimation(card) {
-                startActivity(Intent(context, SystemMonitorActivity::class.java))
-            }
-        }
-
-        binding.cardSecurityCenter?.let { card ->
-            setupCardWithAnimation(card) {
-                // 导航到安全Fragment
-                (activity as? MainActivity)?.let { mainActivity ->
-                    // 这里可以通过Navigation组件切换到安全Fragment
-                    // 或者启动SecurityActivity
-                }
-            }
-        }
-
-        binding.cardNetworkDiagnostic?.let { card ->
-            setupCardWithAnimation(card) {
-                startActivity(Intent(context, NetworkDiagnosticActivity::class.java))
-            }
-        }
-
-        binding.cardAppManager?.let { card ->
-            setupCardWithAnimation(card) {
-                startActivity(Intent(context, AppManagerActivity::class.java))
-            }
-        }
-
-        binding.cardFileBrowser?.let { card ->
-            setupCardWithAnimation(card) {
-                startActivity(Intent(context, FileBrowserActivity::class.java))
-            }
-        }
-
-        binding.cardSystemSettings?.let { card ->
-            setupCardWithAnimation(card) {
-                startActivity(Intent(context, QuickSettingsActivity::class.java))
-            }
         }
     }
 
@@ -177,17 +194,34 @@ class HomeFragment : Fragment() {
     private fun performSearch(query: String) {
         if (query.isBlank()) return
 
-        // Filter features based on search query
-        val filteredFeatures = loadCoreFeatures().filter { feature ->
-            feature.title.contains(query, ignoreCase = true) ||
-            feature.description.contains(query, ignoreCase = true) ||
-            feature.category.contains(query, ignoreCase = true)
+        // 隐藏软键盘
+        val imm = context?.getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as? android.view.inputmethod.InputMethodManager
+        imm?.hideSoftInputFromWindow(binding.etSearch.windowToken, 0)
+
+        // 清除搜索框
+        binding.etSearch.text.clear()
+
+        // 启动浏览器并传递搜索URL
+        val intent = Intent(context, ChromiumBrowserActivity::class.java)
+
+        // 判断是否是完整URL
+        val urlToLoad = when {
+            query.startsWith("http://") || query.startsWith("https://") -> {
+                // 完整URL，直接使用
+                query
+            }
+            query.contains(".") && !query.contains(" ") -> {
+                // 看起来像域名（包含点，但不包含空格），自动补全为https://
+                "https://$query"
+            }
+            else -> {
+                // 搜索词，使用百度搜索
+                "https://www.baidu.com/s?wd=$query"
+            }
         }
 
-        // Update RecyclerView with filtered results
-        lifecycleScope.launch {
-            coreFeatureAdapter.submitList(filteredFeatures)
-        }
+        intent.putExtra("url", urlToLoad)
+        startActivity(intent)
     }
 
     private fun loadCoreFeatures(): List<CoreFeature> {
@@ -301,7 +335,7 @@ class HomeFragment : Fragment() {
             // 加载真实数据
             delay(500) // 短暂延迟以显示加载效果
 
-            loadCoreFeatures()
+            // 不再加载特性列表，直接加载系统状态
             loadSystemStatus()
 
             showShimmerEffect(false)
@@ -311,10 +345,8 @@ class HomeFragment : Fragment() {
 
     private fun refreshData() {
         lifecycleScope.launch {
-            // 获取真实系统数据
+            // 刷新系统状态数据
             delay(500)
-
-            loadCoreFeatures()
 
             val cpuUsage = systemMonitor.getCpuUsage()
             val memoryUsage = systemMonitor.getMemoryUsage()
@@ -350,22 +382,16 @@ class HomeFragment : Fragment() {
     private fun showShimmerEffect(show: Boolean) {
         if (show) {
             binding.heroStatusCard.visibility = View.GONE
-            binding.recyclerViewFeatures.visibility = View.GONE
-            // Shimmer views will be shown by default in layout
+            // RecyclerView 保持隐藏（新布局中不使用）
         } else {
-            // Animate content appearance with staggered effect
-            val viewsToAnimate = listOf(
-                binding.heroStatusCard,
-                binding.quickActionsGrid,
-                binding.recyclerViewFeatures
+            // 动画显示系统状态卡片
+            binding.heroStatusCard.alpha = 0f
+            binding.heroStatusCard.visibility = View.VISIBLE
+
+            ViewAnimations.staggeredListAnimation(
+                listOf(binding.heroStatusCard),
+                100L
             )
-
-            viewsToAnimate.forEach { view ->
-                view.alpha = 0f
-                view.visibility = View.VISIBLE
-            }
-
-            ViewAnimations.staggeredListAnimation(viewsToAnimate, 100L)
         }
     }
 

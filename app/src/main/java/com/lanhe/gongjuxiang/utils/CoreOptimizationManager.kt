@@ -8,7 +8,6 @@ import android.os.Build
 import android.os.SystemClock
 import android.util.Log
 import androidx.lifecycle.lifecycleScope
-import com.lanhe.gongjuxiang.shizuku.ShizukuManagerImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -45,7 +44,6 @@ class CoreOptimizationManager(private val context: Context) {
     private var downloadOptimizationJob: kotlinx.coroutines.Job? = null
     private var networkVideoOptimizationJob: kotlinx.coroutines.Job? = null
 
-    private val shizukuManager = ShizukuManagerImpl(context)
     private val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
     private val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
@@ -279,21 +277,15 @@ class CoreOptimizationManager(private val context: Context) {
         showNotification("弱网络视频优化", "视频优化已停止")
     }
 
-    // Real CPU optimization functions
     private suspend fun performInitialFpsOptimization() {
         withContext(Dispatchers.IO) {
             try {
-                // Use Shizuku if available for better control
-                if (shizukuManager.isAvailable()) {
-                    shizukuManager.setCpuGovernor(GOVERNOR_PERFORMANCE)
-                } else {
-                    // Fallback to standard Android APIs
-                    activityManager.isLowRamDevice().let { isLowRam ->
-                        if (!isLowRam) {
-                            // Can be more aggressive with optimization
-                            executeShellCommand("settings put global animator_duration_scale 0.5")
-                            executeShellCommand("settings put global transition_animation_scale 0.5")
-                        }
+                // Fallback to standard Android APIs
+                activityManager.isLowRamDevice().let { isLowRam ->
+                    if (!isLowRam) {
+                        // Can be more aggressive with optimization
+                        executeShellCommand("settings put global animator_duration_scale 0.5")
+                        executeShellCommand("settings put global transition_animation_scale 0.5")
                     }
                 }
             } catch (e: Exception) {
@@ -304,25 +296,14 @@ class CoreOptimizationManager(private val context: Context) {
 
     private suspend fun getCpuUsage(): Float {
         return try {
-            if (shizukuManager.isAvailable()) {
-                // getCpuInfo returns CPU information, calculate usage from frequency
-                val cpuInfo = shizukuManager.getCpuInfo()
-                // Estimate usage based on current frequency relative to max
-                if (cpuInfo.maxFrequency > 0) {
-                    ((cpuInfo.currentFrequency / cpuInfo.maxFrequency) * 100).coerceIn(0f, 100f)
-                } else {
-                    50f // Default if no frequency info available
-                }
+            // Fallback: read from /proc/stat
+            val statFile = File("/proc/stat")
+            if (statFile.exists()) {
+                val lines = statFile.readLines()
+                val cpuLine = lines.firstOrNull { it.startsWith("cpu ") }
+                cpuLine?.let { parseCpuUsage(it) } ?: 0f
             } else {
-                // Fallback: read from /proc/stat
-                val statFile = File("/proc/stat")
-                if (statFile.exists()) {
-                    val lines = statFile.readLines()
-                    val cpuLine = lines.firstOrNull { it.startsWith("cpu ") }
-                    cpuLine?.let { parseCpuUsage(it) } ?: 0f
-                } else {
-                    0f
-                }
+                0f
             }
         } catch (e: Exception) {
             Log.e(TAG, "Failed to get CPU usage", e)
@@ -356,12 +337,8 @@ class CoreOptimizationManager(private val context: Context) {
     private suspend fun setCpuGovernor(governor: String) {
         withContext(Dispatchers.IO) {
             try {
-                if (shizukuManager.isAvailable()) {
-                    shizukuManager.setCpuGovernor(governor)
-                } else {
-                    // Try via shell (may not work without root)
-                    executeShellCommand("echo '$governor' > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor")
-                }
+                // Try via shell (may not work without root)
+                executeShellCommand("echo '$governor' > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor")
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to set CPU governor", e)
             }
@@ -385,23 +362,8 @@ class CoreOptimizationManager(private val context: Context) {
     private suspend fun performMemoryOptimization() {
         withContext(Dispatchers.IO) {
             try {
-                if (shizukuManager.isAvailable()) {
-                    // Use Shizuku for more effective memory management
-                    val processes = shizukuManager.getRunningProcesses()
-                    // Filter out important processes (lower values are more important)
-                    // We want to kill only background processes with high memory usage
-                    processes.filter { process ->
-                        // Check if it's a background process by looking at name patterns
-                        !process.name.contains("system", ignoreCase = true) &&
-                        !process.name.contains("android", ignoreCase = true) &&
-                        process.memoryUsage > 50000000 // Using more than 50MB
-                    }.forEach { process ->
-                        shizukuManager.killProcess(process.pid)
-                    }
-                } else {
-                    // Use standard Android API
-                    activityManager.killBackgroundProcesses("com.example.app")
-                }
+                // Use standard Android API
+                activityManager.killBackgroundProcesses("com.example.app")
 
                 // Trigger garbage collection
                 System.gc()

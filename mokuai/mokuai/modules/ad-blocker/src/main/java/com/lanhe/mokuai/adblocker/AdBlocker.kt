@@ -474,7 +474,7 @@ class AdBlocker(private val context: Context) {
             for (i in 0 until hiding.length()) {
                 val rule = hiding.getJSONObject(i)
                 elementHidingRules.add(ElementHidingRule(
-                    domain = rule.optString("domain", null),
+                    domain = rule.optString("domain", ""),
                     selector = rule.getString("selector")
                 ))
             }

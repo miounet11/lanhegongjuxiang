@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>蓝河助手 - 文件管理器</title>
+    <link rel="stylesheet" href="chrome://lanhe-theme/css/material-design.css">
+    <link rel="stylesheet" href="chrome://lanhe-theme/css/file-manager.css">
+</head>
+<body>
+    <div id="app" class="file-manager">
+        <!-- 顶部工具栏 -->
+        <header class="toolbar">
+            <div class="toolbar-left">
+                <button class="btn-icon" id="back-btn" title="后退">
+                    <i class="material-icons">arrow_back</i>
+                </button>
+                <button class="btn-icon" id="forward-btn" title="前进">
+                    <i class="material-icons">arrow_forward</i>
+                </button>
+                <button class="btn-icon" id="up-btn" title="上级目录">
+                    <i class="material-icons">keyboard_arrow_up</i>
+                </button>
+
+                <!-- 路径导航 -->
+                <div class="path-navigator" id="path-navigator">
+                    <!-- 动态生成路径导航 -->
+                </div>
+            </div>
+
+            <div class="toolbar-center">
+                <!-- 搜索框 -->
+                <div class="search-box">
+                    <i class="material-icons">search</i>
+                    <input type="text" id="search-input" placeholder="搜索文件和文件夹...">
+                    <button class="btn-icon" id="clear-search" title="清除搜索">
+                        <i class="material-icons">clear</i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="toolbar-right">
+                <!-- 视图切换 -->
+                <div class="view-switcher">
+                    <button class="btn-icon active" data-view="grid" title="网格视图">
+                        <i class="material-icons">grid_view</i>
+                    </button>
+                    <button class="btn-icon" data-view="list" title="列表视图">
+                        <i class="material-icons">list</i>
+                    </button>
+                    <button class="btn-icon" data-view="detail" title="详细视图">
+                        <i class="material-icons">view_list</i>
+                    </button>
+                </div>
+
+                <!-- 排序选项 -->
+                <div class="sort-controls">
+                    <select id="sort-select">
+                        <option value="name">按名称</option>
+                        <option value="size">按大小</option>
+                        <option value="date">按修改时间</option>
+                        <option value="type">按类型</option>
+                    </select>
+                    <button class="btn-icon" id="sort-order" title="升序/降序">
+                        <i class="material-icons">sort</i>
+                    </button>
+                </div>
+
+                <!-- 更多操作 -->
+                <button class="btn-icon" id="more-menu" title="更多选项">
+                    <i class="material-icons">more_vert</i>
+                </button>
+            </div>
+        </header>
+
+        <!-- 主要内容区域 -->
+        <main class="main-content">
+            <!-- 存储空间信息 -->
+            <div class="storage-info" id="storage-info">
+                <div class="storage-bar">
+                    <div class="storage-used" id="storage-used"></div>
+                </div>
+                <div class="storage-text">
+                    <span id="storage-used-text">0 GB</span> 已用 /
+                    <span id="storage-total-text">0 GB</span> 总计
+                </div>
+            </div>
+
+            <!-- 文件列表区域 -->
+            <div class="file-container" id="file-container">
+                <div class="file-grid" id="file-grid">
+                    <!-- 动态生成文件项 -->
+                </div>
+            </div>
+
+            <!-- 加载中 -->
+            <div class="loading" id="loading" style="display: none;">
+                <div class="loading-spinner"></div>
+                <div class="loading-text">加载中...</div>
+            </div>
+        </main>
+
+        <!-- 文件详情面板 -->
+        <aside class="detail-panel" id="detail-panel" style="display: none;">
+            <div class="panel-header">
+                <h3>文件详情</h3>
+                <button class="btn-icon" id="close-detail" title="关闭">
+                    <i class="material-icons">close</i>
+                </button>
+            </div>
+
+            <div class="panel-content" id="detail-content">
+                <!-- 动态生成文件详情 -->
+            </div>
+        </aside>
+    </div>
+
+    <!-- 右键菜单 -->
+    <div class="context-menu" id="context-menu" style="display: none;">
+        <div class="context-menu-item" data-action="open">打开</div>
+        <div class="context-menu-item" data-action="share">分享</div>
+        <div class="context-menu-item" data-action="copy">复制</div>
+        <div class="context-menu-item" data-action="move">移动</div>
+        <div class="context-menu-item" data-action="rename">重命名</div>
+        <div class="context-menu-item" data-action="delete">删除</div>
+        <div class="context-menu-divider"></div>
+        <div class="context-menu-item" data-action="properties">属性</div>
+    </div>
+
+    <!-- 多媒体预览模态框 -->
+    <div class="media-viewer" id="media-viewer" style="display: none;">
+        <div class="media-header">
+            <span id="media-title">文件预览</span>
+            <div class="media-actions">
+                <button class="btn-icon" id="media-download" title="下载">
+                    <i class="material-icons">download</i>
+                </button>
+                <button class="btn-icon" id="media-share" title="分享">
+                    <i class="material-icons">share</i>
+                </button>
+                <button class="btn-icon" id="media-close" title="关闭">
+                    <i class="material-icons">close</i>
+                </button>
+            </div>
+        </div>
+
+        <div class="media-content" id="media-content">
+            <!-- 动态加载多媒体内容 -->
+        </div>
+    </div>
+
+    <!-- APK安装对话框 -->
+    <div class="dialog" id="apk-install-dialog" style="display: none;">
+        <div class="dialog-content">
+            <h3>APK安装</h3>
+            <div class="apk-info" id="apk-info">
+                <!-- 动态生成APK信息 -->
+            </div>
+            <div class="dialog-actions">
+                <button class="btn btn-secondary" id="apk-cancel">取消</button>
+                <button class="btn btn-primary" id="apk-install">安装</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 提示消息 -->
+    <div class="toast" id="toast" style="display: none;">
+        <span id="toast-message"></span>
+    </div>
+
+    <!-- 加载JavaScript模块 -->
+    <script type="module" src="chrome://lanhe-core/modules/file-manager.js"></script>
+    <script type="module" src="chrome://lanhe-core/modules/media-viewer.js"></script>
+    <script type="module" src="chrome://lanhe-core/modules/apk-installer.js"></script>
+    <script type="module" src="chrome://lanhe-core/modules/api-bridge.js"></script>
+</body>
+</html>

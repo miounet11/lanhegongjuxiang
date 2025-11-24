@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <!-- 工具栏 -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimaryVariant"
+        app:elevation="4dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimaryVariant"
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:title="Chromium浏览器"
+            app:titleTextColor="@color/white" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- 浏览器工具栏 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:background="@color/white"
+        android:elevation="2dp">
+
+        <!-- 返回按钮 -->
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_arrow_back"
+            android:contentDescription="返回"
+            android:background="?attr/selectableItemBackground"
+            android:scaleType="centerInside" />
+
+        <!-- 前进按钮 -->
+        <ImageButton
+            android:id="@+id/btn_forward"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_arrow_forward"
+            android:contentDescription="前进"
+            android:background="?attr/selectableItemBackground"
+            android:scaleType="centerInside"
+            android:layout_marginStart="4dp" />
+
+        <!-- 刷新按钮 -->
+        <ImageButton
+            android:id="@+id/btn_refresh"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_refresh"
+            android:contentDescription="刷新"
+            android:background="?attr/selectableItemBackground"
+            android:scaleType="centerInside"
+            android:layout_marginStart="4dp" />
+
+        <!-- 地址栏 -->
+        <EditText
+            android:id="@+id/address_bar"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:hint="输入网址或搜索"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:background="@drawable/rounded_edittext_bg"
+            android:inputType="textUri"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:textSize="14sp" />
+
+        <!-- 账户按钮 -->
+        <ImageButton
+            android:id="@+id/btn_account"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_account"
+            android:contentDescription="账户"
+            android:background="?attr/selectableItemBackground"
+            android:scaleType="centerInside" />
+
+        <!-- 菜单按钮 -->
+        <ImageButton
+            android:id="@+id/btn_menu"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_more_vert"
+            android:contentDescription="菜单"
+            android:background="?attr/selectableItemBackground"
+            android:scaleType="centerInside"
+            android:layout_marginStart="4dp" />
+    </LinearLayout>
+
+    <!-- 进度条 -->
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:visibility="gone"
+        android:progress="0"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal" />
+
+    <!-- WebView -->
+    <android.webkit.WebView
+        android:id="@+id/webView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/white" />
+
+    <!-- 底部状态栏 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:background="@color/light_gray"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/status_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@color/dark_gray" />
+    </LinearLayout>
+</LinearLayout>

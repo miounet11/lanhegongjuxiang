@@ -1,0 +1,87 @@
+plugins {
+    id("com.android.library")
+    id("kotlin-android")
+    id("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
+}
+
+android {
+    namespace = "com.lanhe.module.network"
+    compileSdk = 36
+
+    defaultConfig {
+        minSdk = 24
+        
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
+    }
+
+    buildTypes {
+        debug {
+            isMinifyEnabled = false
+            buildConfigField("String", "BASE_URL", "\"https://api.lanhe.com/debug/\"")
+        }
+        release {
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            buildConfigField("String", "BASE_URL", "\"https://api.lanhe.com/\"")
+        }
+    }
+    
+    lint {
+        abortOnError = false
+        checkReleaseBuilds = false
+    }
+    
+    
+    
+    buildFeatures {
+        buildConfig = true
+    }
+}
+
+dependencies {
+    // 核心模块
+    implementation(project(":mokuai:mokuai:core:common"))
+    
+    // Android核心库
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    
+    // 网络库 - 使用版本目录
+    implementation(libs.okhttp)
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.12.0"))
+    implementation("com.squareup.okhttp3:logging-interceptor")
+    
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
+    
+    // JSON处理
+    implementation(libs.moshi)
+    implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
+    
+    // Hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.android)
+    
+    // 缓存
+    implementation("androidx.datastore:datastore:1.1.2")
+    
+    // 测试依赖
+    testImplementation(libs.junit)
+    testImplementation(libs.mockito.core)
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+    
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+}

@@ -776,8 +776,8 @@ class UrlOpener(private val context: Context) {
                         name = item.getString("name"),
                         pattern = item.getString("pattern"),
                         action = RuleAction.valueOf(item.getString("action")),
-                        targetApp = item.optString("targetApp", null),
-                        replacement = item.optString("replacement", null),
+                        targetApp = item.optString("targetApp", ""),
+                        replacement = item.optString("replacement", ""),
                         enabled = item.getBoolean("enabled"),
                         priority = item.getInt("priority")
                     )
@@ -800,8 +800,8 @@ class UrlOpener(private val context: Context) {
                         id = item.getString("id"),
                         keyword = item.getString("keyword"),
                         url = item.getString("url"),
-                        description = item.optString("description", null),
-                        icon = item.optString("icon", null),
+                        description = item.optString("description", ""),
+                        icon = item.optString("icon", ""),
                         usageCount = item.getInt("usageCount"),
                         lastUsed = item.getLong("lastUsed")
                     )
@@ -822,7 +822,7 @@ class UrlOpener(private val context: Context) {
                 list.add(
                     UrlHistory(
                         url = item.getString("url"),
-                        title = item.optString("title", null),
+                        title = item.optString("title", ""),
                         timestamp = item.getLong("timestamp"),
                         openCount = item.getInt("openCount")
                     )

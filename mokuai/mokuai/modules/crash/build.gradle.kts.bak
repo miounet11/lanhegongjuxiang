@@ -1,0 +1,62 @@
+plugins {
+    id("com.android.library")
+    id("kotlin-android")
+    id("kotlin-kapt")
+}
+
+android {
+    namespace = "com.lanhe.module.crash"
+    compileSdk = 36
+
+    defaultConfig {
+        minSdk = 24
+        targetSdk = 36
+        
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+    
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+    
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+}
+
+dependencies {
+    // 核心模块
+    implementation(project(":mokuai:mokuai:core:common"))
+    
+    // Android Core
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    
+    // Crash reporting
+    implementation("com.google.firebase:firebase-crashlytics-ktx:19.0.3")
+    
+    // Acra for local crash handling
+    implementation("ch.acra:acra-core:5.11.3")
+    implementation("ch.acra:acra-dialog:5.11.3")
+    
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.android)
+    
+    // Testing
+    testImplementation(libs.junit)
+    testImplementation(libs.mockito.core)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+}

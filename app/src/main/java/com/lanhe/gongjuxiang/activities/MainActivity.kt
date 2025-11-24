@@ -5,6 +5,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import android.animation.ObjectAnimator
 import android.view.animation.DecelerateInterpolator
 import androidx.activity.viewModels
@@ -29,15 +30,12 @@ import com.lanhe.gongjuxiang.ui.haptic.HapticFeedbackManager
 import com.lanhe.gongjuxiang.ui.transitions.SharedElementTransitionHelper
 import com.lanhe.gongjuxiang.ui.animations.RecyclerViewAnimations
 import com.lanhe.gongjuxiang.R
-import com.lanhe.gongjuxiang.browser.BrowserSettingsActivity
-import com.lanhe.gongjuxiang.browser.YcWebViewBrowser
 import com.lanhe.gongjuxiang.databinding.ActivityMainBinding
 import com.lanhe.gongjuxiang.fragments.*
 import com.lanhe.gongjuxiang.services.ChargingReminderService
 import com.lanhe.gongjuxiang.settings.BatteryOptimizationActivity
 import com.lanhe.gongjuxiang.utils.PreferencesManager
 import com.lanhe.gongjuxiang.utils.ShizukuManager
-import com.lanhe.gongjuxiang.dialogs.ShizukuPermissionDialog
 import com.lanhe.gongjuxiang.viewmodels.MainViewModel
 
 /**
@@ -300,7 +298,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openBrowser() {
-        YcWebViewBrowser.start(this)
+        Intent(this, ChromiumBrowserActivity::class.java).apply {
+            startActivity(this)
+        }
     }
 
     private fun openBatteryOptimization() {
@@ -308,7 +308,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openBrowserSettings() {
-        BrowserSettingsActivity.start(this)
+        // Chromium浏览器设置已整合到浏览器内部
+        Toast.makeText(this, "浏览器设置功能开发中...", Toast.LENGTH_SHORT).show()
     }
 
     private fun showAbout() {
@@ -354,23 +355,13 @@ class MainActivity : AppCompatActivity() {
      * 显示Shizuku权限对话框
      */
     private fun showShizukuPermissionDialog() {
-        ShizukuPermissionDialog(
-            context = this,
-            onGranted = {
-                // 权限授予后的处理
-                viewModel.onShizukuPermissionGranted()
-                // 可以显示提示
-                com.google.android.material.snackbar.Snackbar.make(
-                    binding.root,
-                    "Shizuku权限已授予，可以使用高级功能",
-                    com.google.android.material.snackbar.Snackbar.LENGTH_SHORT
-                ).show()
-            },
-            onDenied = {
-                // 权限拒绝后的处理
-                viewModel.onShizukuPermissionDenied()
-            }
+        // 显示提示用户安装Shizuku
+        com.google.android.material.snackbar.Snackbar.make(
+            binding.root,
+            "需要安装Shizuku应用以使用高级功能",
+            com.google.android.material.snackbar.Snackbar.LENGTH_LONG
         ).show()
+        viewModel.onShizukuPermissionDenied()
     }
 
     private fun formatNetworkSpeed(network: com.lanhe.gongjuxiang.models.NetworkStats): String {

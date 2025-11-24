@@ -79,4 +79,8 @@
     <color name="red">#B83232</color>
     <color name="yellow">#B7791F</color>
     <color name="green">#3F7A64</color>
+
+    <!-- Chromium浏览器颜色 -->
+    <color name="light_gray">#F5F5F5</color>
+    <color name="dark_gray">#424242</color>
 </resources>

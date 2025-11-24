@@ -8,10 +8,10 @@ import android.os.ParcelFileDescriptor
 import android.webkit.MimeTypeMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.apache.poi.xwpf.extractor.XWPFWordExtractor
-import org.apache.poi.xwpf.usermodel.XWPFDocument
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import org.apache.poi.hssf.usermodel.HSSFWorkbook
+// import org.apache.poi.xwpf.extractor.XWPFWordExtractor
+// import org.apache.poi.xwpf.usermodel.XWPFDocument
+// import org.apache.poi.xssf.usermodel.XSSFWorkbook
+// import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import java.io.*
 import java.util.zip.ZipFile
 import javax.xml.parsers.DocumentBuilderFactory
@@ -21,6 +21,7 @@ import org.w3c.dom.NodeList
 
 /**
  * 文本提取器 - 从各种文件格式中提取文本内容
+ * 注意：Word和Excel格式支持被禁用以保持Android 7.0+兼容性
  */
 class TextExtractor(private val context: Context) {
 
@@ -47,11 +48,23 @@ class TextExtractor(private val context: Context) {
                 mimeType in listOf(
                     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                     "application/msword"
-                ) -> extractFromWord(uri)
+                ) -> {
+                    // Word extraction disabled for minSdk 24 compatibility
+                    ExtractionResult(
+                        success = false,
+                        error = "Word document extraction requires minSdk 26+ (POI library limitation)"
+                    )
+                }
                 mimeType in listOf(
                     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                     "application/vnd.ms-excel"
-                ) -> extractFromExcel(uri)
+                ) -> {
+                    // Excel extraction disabled for minSdk 24 compatibility
+                    ExtractionResult(
+                        success = false,
+                        error = "Excel extraction requires minSdk 26+ (POI library limitation)"
+                    )
+                }
                 mimeType == "application/epub+zip" -> extractFromEpub(uri)
                 mimeType?.startsWith("image/") == true -> extractFromImage(uri)
                 fileName?.endsWith(".md") == true -> extractFromMarkdown(uri)
@@ -145,8 +158,9 @@ class TextExtractor(private val context: Context) {
     }
 
     /**
-     * 从Word文档提取文本
+     * 从Word文档提取文本 - 禁用以保持minSdk 24兼容性
      */
+    /* Disabled: POI requires minSdk 26+
     private suspend fun extractFromWord(uri: Uri): ExtractionResult = withContext(Dispatchers.IO) {
         try {
             context.contentResolver.openInputStream(uri)?.use { inputStream ->
@@ -187,10 +201,12 @@ class TextExtractor(private val context: Context) {
             )
         }
     }
+    */
 
     /**
-     * 从Excel提取文本
+     * 从Excel提取文本 - 禁用以保持minSdk 24兼容性
      */
+    /* Disabled: POI requires minSdk 26+
     private suspend fun extractFromExcel(uri: Uri): ExtractionResult = withContext(Dispatchers.IO) {
         try {
             context.contentResolver.openInputStream(uri)?.use { inputStream ->
@@ -238,6 +254,7 @@ class TextExtractor(private val context: Context) {
             )
         }
     }
+    */
 
     /**
      * 从EPUB电子书提取文本

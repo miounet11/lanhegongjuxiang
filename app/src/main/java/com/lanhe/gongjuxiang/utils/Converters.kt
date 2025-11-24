@@ -8,6 +8,8 @@ import java.util.*
 /**
  * Room数据库类型转换器
  * 用于转换复杂数据类型到数据库支持的基本类型
+ *
+ * 注意：避免在这里引用自定义类型，改用JSON字符串存储
  */
 class Converters {
 
@@ -54,51 +56,5 @@ class Converters {
     @TypeConverter
     fun toDate(timestamp: Long?): Date? {
         return timestamp?.let { Date(it) }
-    }
-
-    // List<OptimizationItem> 转换器
-    @TypeConverter
-    fun fromOptimizationItemList(items: List<OptimizationItem>?): String {
-        return gson.toJson(items ?: emptyList<OptimizationItem>())
-    }
-
-    @TypeConverter
-    fun toOptimizationItemList(value: String): List<OptimizationItem> {
-        val listType = object : TypeToken<List<OptimizationItem>>() {}.type
-        return try {
-            gson.fromJson(value, listType) ?: emptyList()
-        } catch (e: Exception) {
-            emptyList()
-        }
-    }
-
-    // 优化类型枚举转换器
-    @TypeConverter
-    fun fromOptimizationState(state: OptimizationState): String {
-        return state.name
-    }
-
-    @TypeConverter
-    fun toOptimizationState(value: String): OptimizationState {
-        return try {
-            OptimizationState.valueOf(value)
-        } catch (e: Exception) {
-            OptimizationState.IDLE
-        }
-    }
-
-    // 建议严重程度枚举转换器
-    @TypeConverter
-    fun fromTipSeverity(severity: TipSeverity): String {
-        return severity.name
-    }
-
-    @TypeConverter
-    fun toTipSeverity(value: String): TipSeverity {
-        return try {
-            TipSeverity.valueOf(value)
-        } catch (e: Exception) {
-            TipSeverity.LOW
-        }
     }
 }

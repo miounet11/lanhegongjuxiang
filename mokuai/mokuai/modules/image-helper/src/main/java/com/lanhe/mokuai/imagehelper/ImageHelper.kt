@@ -552,7 +552,7 @@ class ImageHelper(private val context: Context) {
     // ========== 滤镜实现 ==========
 
     private fun applyGrayscale(source: Bitmap): Bitmap {
-        val result = Bitmap.createBitmap(source.width, source.height, source.config)
+        val result = Bitmap.createBitmap(source.width, source.height, source.config ?: Bitmap.Config.ARGB_8888)
         val canvas = Canvas(result)
         val paint = Paint()
         val colorMatrix = ColorMatrix().apply {
@@ -564,7 +564,7 @@ class ImageHelper(private val context: Context) {
     }
 
     private fun applySepia(source: Bitmap): Bitmap {
-        val result = Bitmap.createBitmap(source.width, source.height, source.config)
+        val result = Bitmap.createBitmap(source.width, source.height, source.config ?: Bitmap.Config.ARGB_8888)
         val canvas = Canvas(result)
         val paint = Paint()
         val sepiaMatrix = ColorMatrix(floatArrayOf(
@@ -594,7 +594,7 @@ class ImageHelper(private val context: Context) {
     }
 
     private fun applySharpen(source: Bitmap): Bitmap {
-        val result = source.copy(source.config, true)
+        val result = source.copy(source.config ?: Bitmap.Config.ARGB_8888, true)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             val rs = RenderScript.create(context)
             val input = Allocation.createFromBitmap(rs, source)
@@ -615,7 +615,7 @@ class ImageHelper(private val context: Context) {
     }
 
     private fun adjustBrightness(source: Bitmap, brightness: Float): Bitmap {
-        val result = Bitmap.createBitmap(source.width, source.height, source.config)
+        val result = Bitmap.createBitmap(source.width, source.height, source.config ?: Bitmap.Config.ARGB_8888)
         val canvas = Canvas(result)
         val paint = Paint()
         val colorMatrix = ColorMatrix().apply {
@@ -632,7 +632,7 @@ class ImageHelper(private val context: Context) {
     }
 
     private fun adjustContrast(source: Bitmap, contrast: Float): Bitmap {
-        val result = Bitmap.createBitmap(source.width, source.height, source.config)
+        val result = Bitmap.createBitmap(source.width, source.height, source.config ?: Bitmap.Config.ARGB_8888)
         val canvas = Canvas(result)
         val paint = Paint()
         val translate = (1f - contrast) / 2f * 255f
@@ -649,7 +649,7 @@ class ImageHelper(private val context: Context) {
 
     private fun applyVintage(source: Bitmap): Bitmap {
         // 组合多个效果：降低饱和度 + 暖色调 + 暗角
-        var result = source.copy(source.config, true)
+        var result = source.copy(source.config ?: Bitmap.Config.ARGB_8888, true)
 
         // 降低饱和度
         result = applySaturation(result, 0.6f)
@@ -664,7 +664,7 @@ class ImageHelper(private val context: Context) {
     }
 
     private fun applyNegative(source: Bitmap): Bitmap {
-        val result = Bitmap.createBitmap(source.width, source.height, source.config)
+        val result = Bitmap.createBitmap(source.width, source.height, source.config ?: Bitmap.Config.ARGB_8888)
         val canvas = Canvas(result)
         val paint = Paint()
         val colorMatrix = ColorMatrix(floatArrayOf(
@@ -679,7 +679,7 @@ class ImageHelper(private val context: Context) {
     }
 
     private fun applySaturation(source: Bitmap, saturation: Float): Bitmap {
-        val result = Bitmap.createBitmap(source.width, source.height, source.config)
+        val result = Bitmap.createBitmap(source.width, source.height, source.config ?: Bitmap.Config.ARGB_8888)
         val canvas = Canvas(result)
         val paint = Paint()
         val colorMatrix = ColorMatrix().apply {
@@ -691,7 +691,7 @@ class ImageHelper(private val context: Context) {
     }
 
     private fun applyWarmTone(source: Bitmap): Bitmap {
-        val result = Bitmap.createBitmap(source.width, source.height, source.config)
+        val result = Bitmap.createBitmap(source.width, source.height, source.config ?: Bitmap.Config.ARGB_8888)
         val canvas = Canvas(result)
         val paint = Paint()
         val colorMatrix = ColorMatrix(floatArrayOf(
@@ -706,7 +706,7 @@ class ImageHelper(private val context: Context) {
     }
 
     private fun applyVignette(source: Bitmap): Bitmap {
-        val result = source.copy(source.config, true)
+        val result = source.copy(source.config ?: Bitmap.Config.ARGB_8888, true)
         val canvas = Canvas(result)
 
         val centerX = source.width / 2f

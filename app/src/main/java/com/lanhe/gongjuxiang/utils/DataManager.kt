@@ -90,8 +90,8 @@ class DataManager(private val context: Context) {
                 optimizationType = type,
                 success = success,
                 message = message,
-                beforeDataId = beforeDataId,
-                afterDataId = afterDataId,
+                beforeDataId = beforeDataId ?: 0,
+                afterDataId = afterDataId ?: 0,
                 improvements = improvements.joinToString(","),
                 duration = duration
             )

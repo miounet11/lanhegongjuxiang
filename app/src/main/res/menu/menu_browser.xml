@@ -2,34 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!-- 清除缓存 -->
     <item
-        android:id="@+id/action_bookmark"
-        android:title="添加书签"
-        android:icon="@android:drawable/ic_menu_add"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/action_file_browser"
-        android:title="文件浏览器"
-        android:icon="@android:drawable/ic_menu_view"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/action_download"
-        android:title="下载管理"
-        android:icon="@android:drawable/ic_menu_save"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/action_history"
-        android:title="历史记录"
-        android:icon="@android:drawable/ic_menu_recent_history"
+        android:id="@+id/action_clear_cache"
+        android:title="清除缓存"
         app:showAsAction="never" />
 
+    <!-- 清除历史 -->
     <item
-        android:id="@+id/action_settings"
-        android:title="浏览器设置"
-        android:icon="@android:drawable/ic_menu_preferences"
+        android:id="@+id/action_clear_history"
+        android:title="清除历史"
         app:showAsAction="never" />
 
 </menu>

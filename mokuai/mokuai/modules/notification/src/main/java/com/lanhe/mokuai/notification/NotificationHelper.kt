@@ -16,6 +16,8 @@ import android.service.notification.StatusBarNotification
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.RemoteInput
+import androidx.core.content.ContextCompat
+import android.Manifest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
@@ -313,7 +315,16 @@ class NotificationHelper(private val context: Context) {
         config.extras?.let { builder.extras.putAll(it) }
 
         val notification = builder.build()
-        notificationManagerCompat.notify(config.id, notification)
+
+        // 检查权限（Android 13+需要POST_NOTIFICATIONS权限）
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)
+                == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                notificationManagerCompat.notify(config.id, notification)
+            }
+        } else {
+            notificationManagerCompat.notify(config.id, notification)
+        }
 
         // 保存到历史记录
         saveToHistory(config)

@@ -1,13 +1,14 @@
 [versions]
 # Android SDK
-agp = "8.12.1"
-kotlin = "2.0.21"
+agp = "8.7.3"  # 升级到支持Kotlin 2.0的版本
+kotlin = "2.0.21"  # 升级到Kotlin 2.0以完全兼容KSP 2.0
+ksp = "2.0.21-1.0.25"  # KSP版本与Kotlin 2.0完全兼容
 compileSdk = "36"
 minSdk = "24"
 targetSdk = "36"
 
 # Core AndroidX
-coreKtx = "1.17.0"
+coreKtx = "1.15.0"  # 降级以兼容AGP 8.7.3
 appcompat = "1.7.1"
 material = "1.12.0"
 activity = "1.10.1"
@@ -165,3 +166,4 @@ mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mo
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.lanhe.gongjuxiang.activities.AppManagerActivity
 import com.lanhe.gongjuxiang.activities.BatteryManagerActivity
-import com.lanhe.gongjuxiang.activities.BrowserActivity
+import com.lanhe.gongjuxiang.activities.ChromiumBrowserActivity
 import com.lanhe.gongjuxiang.activities.CoreOptimizationActivity
 import com.lanhe.gongjuxiang.activities.CpuManagerActivity
 import com.lanhe.gongjuxiang.activities.FileBrowserActivity
@@ -317,9 +317,17 @@ class FunctionsFragment : Fragment() {
 
     private fun openSmartBrowser() {
         try {
-            startActivity(Intent(requireContext(), BrowserActivity::class.java))
+            startActivity(Intent(requireContext(), ChromiumBrowserActivity::class.java))
         } catch (e: Exception) {
             Toast.makeText(context, "无法打开智能浏览器: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun openFileManager() {
+        try {
+            startActivity(Intent(requireContext(), FileBrowserActivity::class.java))
+        } catch (e: Exception) {
+            Toast.makeText(context, "无法打开文件管理器: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -428,6 +436,13 @@ class FunctionsFragment : Fragment() {
                     "Web browsing • Bookmarks • Downloads • Ad blocking • Image optimization",
                     android.R.drawable.ic_menu_view,
                     "工具"
+                ),
+                CoreFeature(
+                    "file_manager",
+                    "Chromium文件管理器",
+                    "Advanced file management • Multimedia preview • APK installation • Cloud storage",
+                    android.R.drawable.ic_menu_save,
+                    "文件"
                 )
             )
 
@@ -438,11 +453,12 @@ class FunctionsFragment : Fragment() {
                     "app_management" -> openAppManagement()
                     "system_monitor" -> openSystemMonitoring()
                     "smart_browser" -> openSmartBrowser()
+                    "file_manager" -> openFileManager()
                 }
             }
 
             binding.rvCoreFeatures.apply {
-                layoutManager = GridLayoutManager(requireContext(), 2)
+                layoutManager = GridLayoutManager(requireContext(), 3) // 改为3列以适应更多功能
                 adapter = coreFeatureAdapter
             }
 

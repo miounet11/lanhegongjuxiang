@@ -61,7 +61,8 @@ class SettingsFragment : Fragment() {
 
         // 浏览器设置
         binding.cardBrowserSettings.setOnClickListener {
-            startActivity(Intent(context, BrowserSettingsActivity::class.java))
+            // 启动Chromium浏览器
+            startActivity(Intent(context, ChromiumBrowserActivity::class.java))
         }
 
         // 快捷设置

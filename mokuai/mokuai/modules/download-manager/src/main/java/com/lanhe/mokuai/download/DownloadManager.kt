@@ -868,7 +868,7 @@ class DownloadManager(private val context: Context) {
             retryCount = json.getInt("retryCount"),
             createTime = json.getLong("createTime"),
             completeTime = json.getLong("completeTime"),
-            errorMessage = json.optString("errorMessage", null),
+            errorMessage = json.optString("errorMessage", ""),
             metadata = metadata
         )
     }

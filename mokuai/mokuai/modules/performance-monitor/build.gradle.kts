@@ -2,6 +2,7 @@ plugins {
     id("com.android.library")
     id("kotlin-android")
     id("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -9,17 +10,22 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        minSdk = 21
-        targetSdk = 36
-
+        minSdk = 24
+        
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
+        debug {
+            isMinifyEnabled = false
+        }
         release {
             isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 
@@ -27,30 +33,49 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-
-    kotlinOptions {
-        jvmTarget = "11"
-    }
+    
+    
 }
 
 dependencies {
-    // Core AndroidX
+    // 核心模块
+    implementation(project(":mokuai:mokuai:core:common"))
+    implementation(project(":mokuai:mokuai:core:shizuku-api"))
+    
+    // Android Core
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-
+    
     // Architecture Components
     implementation(libs.androidx.lifecycle.runtime.ktx)
-
-    // Dependency Injection
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    
+    // Hilt - 使用版本目录
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
-
+    
+    // WorkManager for background tasks
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation("androidx.hilt:hilt-work:1.2.0")
+    kapt("androidx.hilt:hilt-compiler:1.2.0")
+    
     // Async operations
     implementation(libs.kotlinx.coroutines.android)
-
+    
+    // Shizuku for system APIs
+    implementation(libs.shizuku.api)
+    implementation(libs.shizuku.provider)
+    
+    // Hidden API bypass
+    implementation(libs.hiddenapibypass)
+    
+    // Chart libraries for visualization
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    
     // Testing
     testImplementation(libs.junit)
     testImplementation(libs.mockito.core)
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }

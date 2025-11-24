@@ -35,6 +35,9 @@
     <!-- 通知权限 -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
+    <!-- Shizuku权限 -->
+    <uses-permission android:name="moe.shizuku.manager.permission.API_V23" />
+    
     <!-- 硬件特性声明 -->
     <uses-feature android:name="android.hardware.fingerprint" android:required="false" />
     <uses-feature android:name="android.hardware.camera" android:required="false" />
@@ -67,6 +70,9 @@
     <!-- 震动权限（用于触觉反馈） -->
     <uses-permission android:name="android.permission.VIBRATE" />
 
+    <!-- Shizuku权限 -->
+    <uses-permission android:name="moe.shizuku.manager.permission.API_V23" />
+    
     <!-- 硬件特性声明 -->
     <uses-feature android:name="android.hardware.telephony" android:required="false" />
 
@@ -245,29 +251,22 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.蓝河工具箱.NoActionBar" />
 
-        <!-- 浏览器活动 -->
+        <!-- Chromium浏览器活动 -->
         <activity
-            android:name=".activities.BrowserActivity"
+            android:name=".activities.ChromiumBrowserActivity"
             android:exported="false"
-            android:label="智能浏览器"
+            android:label="Chromium浏览器"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
+            android:configChanges="orientation|keyboardHidden|screenSize|keyboard" />
 
-        <!-- 浏览器设置活动 -->
-        <activity
-            android:name=".activities.BrowserSettingsActivity"
-            android:exported="false"
-            android:label="浏览器设置"
-            android:parentActivityName=".activities.BrowserActivity"
-            android:screenOrientation="portrait" />
 
         <!-- 文件浏览器活动 -->
         <activity
             android:name=".activities.FileBrowserActivity"
             android:exported="false"
             android:label="文件浏览器"
-            android:parentActivityName=".activities.BrowserActivity"
+            android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
 
         <!-- 图片查看器活动 -->
