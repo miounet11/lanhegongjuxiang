@@ -1,0 +1,196 @@
+// Jacoco测试覆盖率配置
+// 将此配置添加到 app/build.gradle.kts 文件中
+
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+android {
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+            returnDefaultValues = true
+
+            all {
+                jacoco {
+                    includeNoLocationClasses = true
+                    excludes = ['jdk.internal.*']
+                }
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            testCoverageEnabled true
+        }
+    }
+}
+
+// Jacoco测试报告任务
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports"
+
+    reports {
+        xml.enabled = true
+        csv.enabled = false
+        html.enabled = true
+        html.destination file("${buildDir}/reports/jacoco/jacocoTestReport/html")
+    }
+
+    def fileFilter = [
+        // 排除Android生成的类
+        '**/R.class',
+        '**/R$*.class',
+        '**/BuildConfig.*',
+        '**/Manifest*.*',
+        '**/*Test*.*',
+        '**/databinding/**',
+        '**/viewbinding/**',
+        'android/**/*.*',
+
+        // 排除第三方库
+        '**/*_MembersInjector.class',
+        '**/*_Factory.class',
+        '**/*_Provide*Factory.class',
+        '**/Dagger*Component.class',
+        '**/Dagger*Component$Builder.class',
+        '**/*Module_*Factory.class',
+
+        // 排除数据类和模型（通常不需要测试）
+        '**/models/**',
+        '**/entities/**',
+
+        // 排除UI相关（Activity, Fragment等通常用仪器测试）
+        '**/activities/**',
+        '**/fragments/**',
+        '**/adapters/**'
+    ]
+
+    def debugTree = fileTree(dir: "${buildDir}/intermediates/javac/debug", excludes: fileFilter)
+    def kotlinDebugTree = fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug", excludes: fileFilter)
+
+    def mainSrc = "${project.projectDir}/src/main/java"
+    def kotlinSrc = "${project.projectDir}/src/main/kotlin"
+
+    sourceDirectories.from = files([mainSrc, kotlinSrc])
+    classDirectories.from = files([debugTree, kotlinDebugTree])
+
+    executionData.from = fileTree(dir: buildDir, includes: [
+        'jacoco/testDebugUnitTest.exec',
+        'outputs/code-coverage/connected/*coverage.ec'
+    ])
+}
+
+// Jacoco覆盖率验证任务
+task jacocoTestCoverageVerification(type: JacocoCoverageVerification, dependsOn: ['jacocoTestReport']) {
+    group = "Verification"
+    description = "Verify test coverage"
+
+    violationRules {
+        rule {
+            enabled = true
+
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.60  // 60%最小行覆盖率
+            }
+        }
+
+        rule {
+            enabled = true
+            element = 'CLASS'
+
+            includes = [
+                'com.lanhe.gongjuxiang.utils.*'
+            ]
+
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.50  // utils包50%分支覆盖率
+            }
+        }
+
+        rule {
+            enabled = true
+            element = 'PACKAGE'
+
+            includes = [
+                'com.lanhe.gongjuxiang.utils'
+            ]
+
+            limit {
+                counter = 'INSTRUCTION'
+                value = 'COVEREDRATIO'
+                minimum = 0.70  // utils包70%指令覆盖率
+            }
+        }
+    }
+
+    def fileFilter = [
+        '**/R.class',
+        '**/R$*.class',
+        '**/BuildConfig.*',
+        '**/Manifest*.*',
+        '**/*Test*.*',
+        'android/**/*.*',
+        '**/databinding/**',
+        '**/viewbinding/**'
+    ]
+
+    def debugTree = fileTree(dir: "${buildDir}/intermediates/javac/debug", excludes: fileFilter)
+    def kotlinDebugTree = fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug", excludes: fileFilter)
+
+    sourceDirectories.from = files(["${project.projectDir}/src/main/java"])
+    classDirectories.from = files([debugTree, kotlinDebugTree])
+
+    executionData.from = fileTree(dir: buildDir, includes: [
+        'jacoco/testDebugUnitTest.exec',
+        'outputs/code-coverage/connected/*coverage.ec'
+    ])
+}
+
+// 配置测试任务以生成覆盖率数据
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+    jacoco.excludes = ['jdk.internal.*']
+
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+        showStandardStreams = false
+        showCauses = true
+        showStackTraces = true
+    }
+
+    // 生成测试报告
+    reports {
+        html.enabled = true
+        junitXml.enabled = true
+    }
+
+    // 测试完成后自动生成覆盖率报告
+    finalizedBy jacocoTestReport
+}
+
+// 添加测试覆盖率任务到check任务
+check.dependsOn jacocoTestCoverageVerification
+
+// 自定义任务：运行所有测试并生成报告
+task testWithCoverage(dependsOn: ['clean', 'testDebugUnitTest', 'jacocoTestReport', 'jacocoTestCoverageVerification']) {
+    group = "Verification"
+    description = "Run all tests with coverage report"
+
+    doLast {
+        println "================================"
+        println "测试覆盖率报告已生成"
+        println "HTML报告: file://${buildDir}/reports/jacoco/jacocoTestReport/html/index.html"
+        println "XML报告: ${buildDir}/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
+        println "================================"
+    }
+}

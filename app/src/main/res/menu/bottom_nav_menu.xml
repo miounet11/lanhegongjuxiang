@@ -7,7 +7,7 @@
     <item
         android:id="@+id/nav_tools"
         android:icon="@drawable/ic_optimize"
-        android:title="工具" />
+        android:title="工具箱" />
     <item
         android:id="@+id/nav_monitor"
         android:icon="@drawable/ic_performance_24"

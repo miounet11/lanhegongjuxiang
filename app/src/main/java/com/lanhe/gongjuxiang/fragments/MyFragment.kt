@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.lanhe.gongjuxiang.R
+import com.lanhe.gongjuxiang.activities.ChromiumBrowserActivity
 import com.lanhe.gongjuxiang.databinding.FragmentMyBinding
 
 class MyFragment : Fragment() {
@@ -33,24 +34,18 @@ class MyFragment : Fragment() {
     private fun setupClickListeners() {
         // 关于我们
         binding.llAboutUs.setOnClickListener {
-            try {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse("https://github.com/lanhe/toolbox")
-                startActivity(intent)
-            } catch (e: Exception) {
-                Toast.makeText(context, "无法打开关于页面", Toast.LENGTH_SHORT).show()
-            }
+            ChromiumBrowserActivity.openUrl(
+                requireContext(),
+                "https://github.com/lanhe/toolbox"
+            )
         }
 
         // 使用帮助
         binding.llHelp.setOnClickListener {
-            try {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse("https://github.com/lanhe/toolbox/wiki")
-                startActivity(intent)
-            } catch (e: Exception) {
-                Toast.makeText(context, "无法打开帮助页面", Toast.LENGTH_SHORT).show()
-            }
+            ChromiumBrowserActivity.openUrl(
+                requireContext(),
+                "https://github.com/lanhe/toolbox/wiki"
+            )
         }
 
         // 意见反馈

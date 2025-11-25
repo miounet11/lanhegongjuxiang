@@ -36,19 +36,31 @@ import com.lanhe.gongjuxiang.services.ChargingReminderService
 import com.lanhe.gongjuxiang.settings.BatteryOptimizationActivity
 import com.lanhe.gongjuxiang.utils.PreferencesManager
 import com.lanhe.gongjuxiang.utils.ShizukuManager
+import com.lanhe.gongjuxiang.utils.PermissionHelper
+import com.lanhe.gongjuxiang.utils.PermissionConstants
 import com.lanhe.gongjuxiang.viewmodels.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * 主活动 - 统一UI设计
  * 采用现代化的Material Design，统一展示所有功能
  */
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
     private lateinit var viewPager: ViewPager2
-    private lateinit var preferencesManager: PreferencesManager
+
+    @Inject
+    lateinit var preferencesManager: PreferencesManager
+
+    @Inject
+    lateinit var shizukuManager: ShizukuManager
+
     private lateinit var hapticFeedbackManager: HapticFeedbackManager
+    private lateinit var permissionHelper: PermissionHelper
     private var isTablet = false
     private var isLandscape = false
 
@@ -66,7 +78,7 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
-        // 初始化Shizuku
+        // 初始化Shizuku (通过注入的方式)
         initializeShizuku()
 
         // Detect device type and orientation
@@ -75,15 +87,18 @@ class MainActivity : AppCompatActivity() {
         // Enable edge-to-edge display
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        // Initialize managers
-        preferencesManager = PreferencesManager(this)
+        // Initialize managers (non-injected ones)
         hapticFeedbackManager = HapticFeedbackManager.getInstance(this)
+        permissionHelper = PermissionHelper.getInstance(this)
 
         // Apply theme based on user preference
         applyTheme()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Check and request critical permissions first
+        checkAndRequestPermissions()
 
         // Setup shared element transitions
         SharedElementTransitionHelper.setupActivityTransitions(this)
@@ -104,7 +119,7 @@ class MainActivity : AppCompatActivity() {
         // 检查Shizuku权限
         checkShizukuPermission()
 
-        setupFab()
+
         setupTransitions()
 
         // 启动充电提醒服务
@@ -185,12 +200,7 @@ class MainActivity : AppCompatActivity() {
         setupBottomNavigationBadges()
     }
 
-    private fun setupFab() {
-        binding.fab?.setOnClickListener {
-            // 一键优化功能
-            performQuickOptimization()
-        }
-    }
+
 
 
     private fun observeViewModel() {
@@ -209,10 +219,7 @@ class MainActivity : AppCompatActivity() {
             updateNetworkStatus(network)
         }
 
-        // 观察优化状态
-        viewModel.optimizationState.observe(this) { state ->
-            updateOptimizationState(state)
-        }
+
     }
 
     private fun updatePerformanceIndicators(data: com.lanhe.gongjuxiang.models.PerformanceData) {
@@ -244,29 +251,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<android.widget.TextView>(R.id.tv_network_speed)?.text = formatNetworkSpeed(network)
     }
 
-    private fun updateOptimizationState(state: com.lanhe.gongjuxiang.utils.OptimizationState) {
-        val fab = findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.fab)
-        fab?.apply {
-            when (state) {
-                com.lanhe.gongjuxiang.utils.OptimizationState.IDLE -> {
-                    setImageResource(android.R.drawable.ic_menu_manage)
-                    isEnabled = true
-                }
-                com.lanhe.gongjuxiang.utils.OptimizationState.RUNNING -> {
-                    setImageResource(android.R.drawable.ic_popup_sync)
-                    isEnabled = false
-                }
-                com.lanhe.gongjuxiang.utils.OptimizationState.COMPLETED -> {
-                    setImageResource(android.R.drawable.checkbox_on_background)
-                    isEnabled = true
-                }
-                com.lanhe.gongjuxiang.utils.OptimizationState.ERROR -> {
-                    setImageResource(android.R.drawable.ic_delete)
-                    isEnabled = true
-                }
-            }
-        }
-    }
+
 
     private fun setupBottomNavigationBadges() {
         val bottomNavView = binding.bottomNavView
@@ -292,10 +277,7 @@ class MainActivity : AppCompatActivity() {
         setupBottomNavigationBadges()
     }
 
-    private fun performQuickOptimization() {
-        // 执行一键优化
-        viewModel.performQuickOptimization()
-    }
+
 
     private fun openBrowser() {
         Intent(this, ChromiumBrowserActivity::class.java).apply {
@@ -332,22 +314,36 @@ class MainActivity : AppCompatActivity() {
      * 初始化Shizuku
      */
     private fun initializeShizuku() {
-        // 初始化ShizukuManager
-        ShizukuManager.initWithContext(this)
+        // ShizukuManager已通过Hilt注入，无需手动初始化
+        // 检查权限状态
+        if (shizukuManager.isShizukuAvailable()) {
+            Toast.makeText(this, "Shizuku服务已就绪", Toast.LENGTH_SHORT).show()
+        }
     }
 
     /**
      * 检查Shizuku权限
+     * 只在首次启动或权限状态变化时显示提示
      */
     private fun checkShizukuPermission() {
         // 检查是否需要Shizuku权限
         val needShizuku = true // 默认启用Shizuku功能
 
         if (needShizuku && !ShizukuManager.isShizukuAvailable()) {
-            // 延迟显示权限请求对话框，避免影响启动体验
-            binding.root.postDelayed({
-                showShizukuPermissionDialog()
-            }, 1000)
+            // 检查是否已经显示过权限对话框（避免重复显示）
+            val hasShownPermissionDialog = preferencesManager.isShizukuPermissionDialogShown()
+
+            if (!hasShownPermissionDialog) {
+                // 延迟显示权限请求对话框，避免影响启动体验
+                binding.root.postDelayed({
+                    showShizukuPermissionDialog()
+                    // 标记已显示，避免重复
+                    preferencesManager.setShizukuPermissionDialogShown(true)
+                }, 1000)
+            }
+        } else if (ShizukuManager.isShizukuAvailable()) {
+            // 权限已授予，重置标记以便下次需要时重新显示
+            preferencesManager.setShizukuPermissionDialogShown(false)
         }
     }
 
@@ -355,13 +351,36 @@ class MainActivity : AppCompatActivity() {
      * 显示Shizuku权限对话框
      */
     private fun showShizukuPermissionDialog() {
-        // 显示提示用户安装Shizuku
-        com.google.android.material.snackbar.Snackbar.make(
-            binding.root,
-            "需要安装Shizuku应用以使用高级功能",
-            com.google.android.material.snackbar.Snackbar.LENGTH_LONG
-        ).show()
-        viewModel.onShizukuPermissionDenied()
+        // 使用完整的AlertDialog，提供"去设置"选项
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("🔑 需要Shizuku权限")
+            .setMessage(
+                """
+                为了使用以下高级功能，需要安装并授权Shizuku：
+                
+                ⚡ 深度系统优化
+                🎯 进程管理与控制  
+                🔧 应用权限管理
+                🛡️ 系统设置修改
+                
+                点击"去设置"进行配置，或稍后在高级设置中启用。
+                """.trimIndent()
+            )
+            .setPositiveButton("去设置") { _, _ ->
+                // 跳转到Shizuku授权页面
+                try {
+                    val intent = Intent(this, ShizukuAuthActivity::class.java)
+                    startActivity(intent)
+                } catch (e: Exception) {
+                    Toast.makeText(this, "无法打开Shizuku设置", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("稍后设置") { dialog, _ ->
+                dialog.dismiss()
+                viewModel.onShizukuPermissionDenied()
+            }
+            .setCancelable(false)
+            .show()
     }
 
     private fun formatNetworkSpeed(network: com.lanhe.gongjuxiang.models.NetworkStats): String {
@@ -421,6 +440,104 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         // 停止充电提醒服务
         ChargingReminderService.stopService(this)
+        // 清理权限助手
+        permissionHelper.clear()
+    }
+
+    /**
+     * 检查并请求关键权限
+     */
+    private fun checkAndRequestPermissions() {
+        // 请求关键权限
+        permissionHelper.requestCriticalPermissions(this, object : PermissionHelper.PermissionCallback {
+            override fun onPermissionsGranted() {
+                // 所有关键权限已授予
+                initializeAfterPermissions()
+            }
+
+            override fun onPermissionsDenied(deniedPermissions: List<String>) {
+                // 权限被拒绝，降级模式运行
+                handlePermissionDenied(deniedPermissions)
+                initializeAfterPermissions()
+            }
+
+            override fun onPermissionsPermanentlyDenied(permanentlyDeniedPermissions: List<String>) {
+                // 权限被永久拒绝，降级模式运行
+                handlePermissionPermanentlyDenied(permanentlyDeniedPermissions)
+                initializeAfterPermissions()
+            }
+        })
+    }
+
+    /**
+     * 权限检查后的初始化
+     */
+    private fun initializeAfterPermissions() {
+        // 继续其他初始化操作
+        viewModel.refreshData()
+    }
+
+    /**
+     * 处理权限被拒绝的情况
+     */
+    private fun handlePermissionDenied(deniedPermissions: List<String>) {
+        // 根据被拒绝的权限禁用相关功能
+        deniedPermissions.forEach { permission ->
+            when {
+                permission.contains("STORAGE") -> {
+                    viewModel.disableStorageFeatures()
+                }
+                permission.contains("POST_NOTIFICATIONS") -> {
+                    viewModel.disableNotificationFeatures()
+                }
+            }
+        }
+    }
+
+    /**
+     * 处理权限被永久拒绝的情况
+     */
+    private fun handlePermissionPermanentlyDenied(permanentlyDeniedPermissions: List<String>) {
+        // 根据被永久拒绝的权限禁用相关功能
+        permanentlyDeniedPermissions.forEach { permission ->
+            when {
+                permission.contains("STORAGE") -> {
+                    viewModel.disableStorageFeatures()
+                    showFeatureDisabledToast("文件管理功能已禁用，需要存储权限")
+                }
+                permission.contains("POST_NOTIFICATIONS") -> {
+                    viewModel.disableNotificationFeatures()
+                    showFeatureDisabledToast("通知功能已禁用")
+                }
+            }
+        }
+    }
+
+    /**
+     * 显示功能禁用提示
+     */
+    private fun showFeatureDisabledToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        // 处理权限请求结果
+        permissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // 处理从设置页面返回的结果
+        if (requestCode == PermissionHelper.REQUEST_CODE_SETTINGS) {
+            // 重新检查权限
+            checkAndRequestPermissions()
+        }
     }
 
     // New methods for enhanced UI functionality

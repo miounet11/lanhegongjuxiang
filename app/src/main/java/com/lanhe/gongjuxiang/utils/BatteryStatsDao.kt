@@ -129,7 +129,33 @@ interface BatteryStatsDao {
      */
     @Query("DELETE FROM battery_stats")
     suspend fun clearAllStats()
+
+    /**
+     * 获取最新统计 - Flow版本（用于Repository）
+     */
+    @Query("SELECT * FROM battery_stats ORDER BY timestamp DESC LIMIT 1")
+    fun getLatestStats(): Flow<BatteryStatsEntity?>
+
+    /**
+     * 获取时间范围内的统计 - Flow版本（用于Repository）
+     */
+    @Query("SELECT * FROM battery_stats WHERE timestamp BETWEEN :startTime AND :endTime ORDER BY timestamp DESC")
+    fun getStatsBetween(startTime: Long, endTime: Long): Flow<List<BatteryStatsEntity>>
+
+    /**
+     * 获取电池健康趋势
+     */
+    @Query("SELECT batteryLevel as healthPercentage, timestamp FROM battery_stats ORDER BY timestamp DESC LIMIT 100")
+    fun getHealthTrend(): Flow<List<BatteryHealthTrend>>
 }
+
+/**
+ * 电池健康趋势数据类
+ */
+data class BatteryHealthTrend(
+    val timestamp: Long,
+    val healthPercentage: Float
+)
 
 /**
  * 电池消耗率统计数据类

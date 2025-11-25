@@ -14,10 +14,11 @@ import com.lanhe.gongjuxiang.adapters.ProcessListAdapter
 import com.lanhe.gongjuxiang.databinding.ActivitySystemMonitorBinding
 import com.lanhe.gongjuxiang.utils.AnimationUtils
 import com.lanhe.gongjuxiang.utils.ShizukuManager
-import com.lanhe.gongjuxiang.viewmodels.SystemMonitorViewModel
 import com.lanhe.gongjuxiang.utils.SystemInfo
 import com.lanhe.gongjuxiang.utils.PerformanceMetrics
 import com.lanhe.gongjuxiang.utils.NetworkInfo
+import com.lanhe.gongjuxiang.viewmodels.SystemMonitorViewModel
+import com.lanhe.gongjuxiang.models.ProcessInfo  // 添加正确的ProcessInfo import
 import kotlinx.coroutines.launch
 
 /**
@@ -342,13 +343,19 @@ class SystemMonitorActivity : AppCompatActivity() {
                 binding.btnKillProcess.isEnabled = false
                 binding.btnSystemInfo.isEnabled = false
             }
+            com.lanhe.gongjuxiang.utils.ShizukuState.Checking -> {
+                binding.tvShizukuStatus.text = "⏳ 正在检查Shizuku状态..."
+                binding.tvShizukuStatus.setTextColor(getColor(android.R.color.darker_gray))
+                binding.btnKillProcess.isEnabled = false
+                binding.btnSystemInfo.isEnabled = false
+            }
         }
     }
 
     /**
      * 显示进程详情
      */
-    private fun showProcessDetails(process: com.lanhe.gongjuxiang.utils.ProcessInfo) {
+    private fun showProcessDetails(process: com.lanhe.gongjuxiang.models.ProcessInfo) {
         val memoryMB = process.memoryUsage / (1024 * 1024)
         val message = """
             进程名称: ${process.processName}
@@ -385,7 +392,6 @@ class SystemMonitorActivity : AppCompatActivity() {
                 运行时间: ${formatUptime(systemInfo.uptime)}
                 CPU核心: ${systemInfo.cpuCores}
                 总内存: ${formatBytes(systemInfo.totalMemory)}
-                可用内存: ${formatBytes(systemInfo.availableMemory)}
                 电池电量: ${systemInfo.batteryLevel}%
             """.trimIndent()
 

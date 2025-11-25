@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/etContents"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@android:drawable/edit_text"
+        android:gravity="top|start"
+        android:hint="每行一个内容\n例如：\nhttp://example.com\n联系电话：12345678\nWiFi密码：password"
+        android:inputType="textMultiLine"
+        android:padding="8dp" />
+
+</LinearLayout>

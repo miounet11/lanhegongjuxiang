@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.roundToInt
+import com.lanhe.gongjuxiang.models.OptimizationPriority  // 导入models包中的OptimizationPriority
 
 /**
  * AI智能性能建议引擎
@@ -863,6 +864,4 @@ enum class AnomalySeverity {
     LOW, MEDIUM, HIGH, CRITICAL
 }
 
-enum class OptimizationPriority {
-    LOW, MEDIUM, HIGH, CRITICAL
-}
+// OptimizationPriority已经在models包中定义，此处删除重复定义

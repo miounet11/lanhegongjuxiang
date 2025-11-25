@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_select_all"
+        android:title="全选"
+        android:icon="@drawable/ic_select_all"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_deselect_all"
+        android:title="取消全选"
+        android:icon="@drawable/ic_deselect_all"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_compress"
+        android:title="开始压缩"
+        android:icon="@drawable/ic_compress"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_refresh"
+        android:title="重新扫描"
+        android:icon="@drawable/ic_refresh"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_info"
+        android:title="功能说明"
+        android:icon="@drawable/ic_info"
+        app:showAsAction="never" />
+
+</menu>

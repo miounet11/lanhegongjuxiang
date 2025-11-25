@@ -6,6 +6,7 @@ import android.net.Uri
 import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
+import com.lanhe.gongjuxiang.activities.ChromiumBrowserActivity
 import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.IOException
@@ -180,26 +181,14 @@ class UpdateChecker(private val context: Context) {
      * 打开GitHub仓库
      */
     fun openGitHubRepo() {
-        try {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(GITHUB_REPO_URL))
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            context.startActivity(intent)
-        } catch (e: Exception) {
-            Toast.makeText(context, "无法打开浏览器", Toast.LENGTH_SHORT).show()
-        }
+        ChromiumBrowserActivity.openUrl(context, GITHUB_REPO_URL)
     }
 
     /**
      * 下载最新版本
      */
     fun downloadUpdate(versionInfo: VersionInfo) {
-        try {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(versionInfo.downloadUrl))
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            context.startActivity(intent)
-        } catch (e: Exception) {
-            Toast.makeText(context, "无法打开下载链接", Toast.LENGTH_SHORT).show()
-        }
+        ChromiumBrowserActivity.openUrl(context, versionInfo.downloadUrl)
     }
 
     /**

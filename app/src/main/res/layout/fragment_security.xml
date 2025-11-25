@@ -7,190 +7,157 @@
     android:layout_height="match_parent"
     android:background="?attr/colorSurface">
 
-<androidx.core.widget.NestedScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
-
-    <FrameLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <!-- Shimmer placeholder -->
         <LinearLayout
-            android:id="@+id/shimmer_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/spacing_md"
-            android:visibility="gone">
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="48dp">
 
-            <!-- Hero card shimmer -->
-            <include layout="@layout/shimmer_status_card" />
-
-            <!-- List items shimmer -->
-            <include layout="@layout/shimmer_list_item" />
-            <include layout="@layout/shimmer_list_item" />
-            <include layout="@layout/shimmer_list_item" />
-            <include layout="@layout/shimmer_list_item" />
-
-        </LinearLayout>
-
-        <!-- Main content -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/main_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="@dimen/spacing_md"
-        android:paddingEnd="@dimen/spacing_md"
-        android:paddingTop="@dimen/spacing_sm"
-        android:paddingBottom="@dimen/spacing_md">
-
-        <!-- 安全概览Hero卡片 -->
-        <com.google.android.material.card.MaterialCardView
-        android:id="@+id/hero_security_card"
-        style="@style/Widget.App.Card.Hero"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/spacing_lg"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/security_functions_title">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <!-- Header Section -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/card_padding_large">
+                android:orientation="vertical"
+                android:paddingTop="48dp"
+                android:paddingBottom="24dp">
 
-                <!-- 标题区域 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="安全中心"
+                    android:textColor="@color/text_primary"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="系统安全防护与权限管理"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <!-- Security Metrics Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/hero_security_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                app:cardBackgroundColor="@color/card_background"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/divider"
+                app:strokeWidth="1dp">
+
                 <LinearLayout
-                    android:id="@+id/title_section"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent">
+                    android:padding="20dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <!-- Metrics Row -->
+                    <LinearLayout
+                        android:id="@+id/security_metrics"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="安全中心"
-                        android:textAppearance="@style/TextAppearance.App.Hero"
-                        android:textColor="?attr/colorOnPrimaryContainer" />
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_security_score"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="85"
+                                android:textColor="@color/primary"
+                                android:textSize="24sp"
+                                android:textStyle="bold"
+                                tools:text="85" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="安全分数"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_risk_apps"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="@color/success"
+                                android:textSize="24sp"
+                                android:textStyle="bold"
+                                tools:text="0" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="风险应用"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_permission_count"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="12"
+                                android:textColor="@color/primary"
+                                android:textSize="24sp"
+                                android:textStyle="bold"
+                                tools:text="12" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="权限检查"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- 一键安全检查按钮 -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_security_check"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_xs"
-                        android:text="系统安全防护与权限管理"
-                        android:textAppearance="@style/TextAppearance.App.BodyMedium"
-                        android:textColor="?attr/colorOnPrimaryContainer"
-                        android:alpha="0.8" />
+                        android:layout_marginTop="20dp"
+                        android:text="一键安全检查"
+                        android:textColor="@color/white"
+                        app:backgroundTint="@color/primary"
+                        app:cornerRadius="12dp" />
+
                 </LinearLayout>
-
-
-                <!-- 安全指标 -->
-                <LinearLayout
-                    android:id="@+id/security_metrics"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_lg"
-                    android:orientation="horizontal"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/title_section"
-                    app:layout_constraintEnd_toEndOf="parent">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tv_security_score"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="85"
-                            android:textAppearance="@style/TextAppearance.App.StatusValue"
-                            android:textColor="?attr/colorOnPrimaryContainer"
-                            tools:text="85" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="安全分数"
-                            android:textAppearance="@style/TextAppearance.App.Caption"
-                            android:textColor="?attr/colorOnPrimaryContainer" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tv_risk_apps"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textAppearance="@style/TextAppearance.App.StatusValue"
-                            android:textColor="?attr/colorOnPrimaryContainer"
-                            tools:text="0" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="风险应用"
-                            android:textAppearance="@style/TextAppearance.App.Caption"
-                            android:textColor="?attr/colorOnPrimaryContainer" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tv_permission_count"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="12"
-                            android:textAppearance="@style/TextAppearance.App.StatusValue"
-                            android:textColor="?attr/colorOnPrimaryContainer"
-                            tools:text="12" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="权限检查"
-                            android:textAppearance="@style/TextAppearance.App.Caption"
-                            android:textColor="?attr/colorOnPrimaryContainer" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <!-- 一键安全检查按钮 -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_security_check"
-                    style="@style/Widget.App.Button.Large"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_lg"
-                    android:text="一键安全检查"
-                    android:textColor="?attr/colorOnPrimary"
-                    app:backgroundTint="?attr/colorPrimary"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/security_metrics" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
+            </com.google.android.material.card.MaterialCardView>
 
         <!-- Shizuku状态卡片 -->
         <TextView
@@ -492,9 +459,8 @@
                 android:layout_marginStart="@dimen/spacing_xs" />
         </LinearLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </FrameLayout>
+        </LinearLayout>
 
-</androidx.core.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

@@ -66,7 +66,11 @@ class SystemMonitorHelper(private val context: Context) {
                 return CpuInfo(total, active, idle)
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            // 仅在非权限错误时打印堆栈，避免刷屏
+            val msg = e.message ?: ""
+            if (!msg.contains("EACCES") && !msg.contains("Permission denied")) {
+                e.printStackTrace()
+            }
         }
 
         return CpuInfo(100, 50, 50) // 默认50%使用率

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.lanhe.gongjuxiang.databinding.ItemProcessBinding
-import com.lanhe.gongjuxiang.utils.ProcessInfo
+import com.lanhe.gongjuxiang.models.ProcessInfo
 
 /**
  * 进程列表适配器

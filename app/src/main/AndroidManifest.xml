@@ -18,6 +18,14 @@
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
 
+    <!-- 媒体文件权限 (Android 13+) -->
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
+    <!-- 相机权限 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <!-- 网络权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -69,6 +77,9 @@
 
     <!-- 震动权限（用于触觉反馈） -->
     <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- 安装未知来源应用权限 -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <!-- Shizuku权限 -->
     <uses-permission android:name="moe.shizuku.manager.permission.API_V23" />
@@ -186,6 +197,14 @@
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
 
+        <!-- WiFi管理活动 -->
+        <activity
+            android:name=".activities.WifiSettingsActivity"
+            android:exported="false"
+            android:label="WiFi管理"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
+
         <!-- Shizuku授权活动 -->
         <activity
             android:name=".activities.ShizukuAuthActivity"
@@ -260,6 +279,79 @@
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize|keyboard" />
 
+        <!-- 书签管理Activity -->
+        <activity
+            android:name=".activities.BookmarkActivity"
+            android:exported="false"
+            android:label="书签管理"
+            android:parentActivityName=".activities.ChromiumBrowserActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- 浏览历史Activity -->
+        <activity
+            android:name=".activities.HistoryActivity"
+            android:exported="false"
+            android:label="浏览历史"
+            android:parentActivityName=".activities.ChromiumBrowserActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- 下载管理Activity -->
+        <activity
+            android:name=".activities.DownloadActivity"
+            android:exported="false"
+            android:label="下载管理"
+            android:parentActivityName=".activities.ChromiumBrowserActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- 浏览器设置Activity -->
+        <activity
+            android:name=".activities.BrowserSettingsActivity"
+            android:exported="false"
+            android:label="浏览器设置"
+            android:parentActivityName=".activities.ChromiumBrowserActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- 🌐 蓝河浏览器独立启动器 -->
+        <!-- 在桌面显示为独立应用图标 -->
+        <activity
+            android:name=".activities.BrowserLauncherActivity"
+            android:exported="true"
+            android:label="蓝河浏览器"
+            android:icon="@drawable/ic_web"
+            android:theme="@android:style/Theme.NoDisplay">
+
+            <!-- 桌面快捷方式 -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- 处理http/https链接 - 默认浏览器 -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+            </intent-filter>
+
+            <!-- 处理网页文件 -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="file" />
+                <data android:mimeType="text/html" />
+                <data android:mimeType="application/xhtml+xml" />
+            </intent-filter>
+
+            <!-- 处理Web搜索 -->
+            <intent-filter>
+                <action android:name="android.intent.action.WEB_SEARCH" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
 
         <!-- 文件浏览器活动 -->
         <activity
@@ -322,6 +414,13 @@
             android:exported="false"
             android:foregroundServiceType="dataSync" />
 
+        <!-- 网络监控服务 -->
+        <service
+            android:name=".services.NetworkMonitorService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
         <!-- 号码卫士服务 -->
         <service
             android:name=".utils.CallBlocker"
@@ -329,6 +428,17 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.telecom.CallScreeningService" />
+            </intent-filter>
+        </service>
+
+        <!-- 通知监听服务 -->
+        <service
+            android:name=".services.NotificationListenerService"
+            android:label="蓝河助手通知监听"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
 
@@ -387,8 +497,55 @@
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.蓝河工具箱.NoActionBar" />
 
+        <!-- 剪贴板历史Activity -->
+        <activity
+            android:name=".activities.ClipboardHistoryActivity"
+            android:exported="false"
+            android:label="剪贴板历史"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.蓝河工具箱.NoActionBar" />
+
+        <!-- 二维码工具Activity -->
+        <activity
+            android:name=".activities.QRCodeToolActivity"
+            android:exported="false"
+            android:label="二维码工具"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.蓝河工具箱.NoActionBar" />
+
+        <!-- 应用使用统计Activity -->
+        <activity
+            android:name=".activities.AppUsageStatsActivity"
+            android:exported="false"
+            android:label="应用使用统计"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.蓝河工具箱.NoActionBar" />
+
+        <!-- 通知历史Activity -->
+        <activity
+            android:name=".activities.NotificationHistoryActivity"
+            android:exported="false"
+            android:label="通知历史"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.蓝河工具箱.NoActionBar" />
+
         <!-- 小部件提供器 - 暂时移除，等待资源文件准备完成 -->
         <!-- <receiver android:name=".utils.LanheWidgetProvider" ... /> -->
+
+        <!-- FileProvider用于共享APK文件 -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
     </application>
 

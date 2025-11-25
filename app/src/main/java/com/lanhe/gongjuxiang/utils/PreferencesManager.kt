@@ -45,6 +45,17 @@ class PreferencesManager(context: Context) {
         private const val KEY_NOTIFICATION_ENABLED = "notification_enabled"
         private const val KEY_FIRST_LAUNCH = "first_launch"
         private const val KEY_PAGE_TRANSFORMER = "page_transformer_type"
+        private const val KEY_SHIZUKU_PERMISSION_DIALOG_SHOWN = "shizuku_permission_dialog_shown"
+    }
+
+    // Shizuku Permission Dialog
+    fun isShizukuPermissionDialogShown(): Boolean {
+        return prefs.getBoolean(KEY_SHIZUKU_PERMISSION_DIALOG_SHOWN, false)
+    }
+
+    fun setShizukuPermissionDialogShown(shown: Boolean) {
+        editor.putBoolean(KEY_SHIZUKU_PERMISSION_DIALOG_SHOWN, shown)
+        editor.apply()
     }
 
     // FPS提升相关方法
@@ -351,6 +362,89 @@ class PreferencesManager(context: Context) {
 
     fun setPageTransformerType(type: String) {
         editor.putString(KEY_PAGE_TRANSFORMER, type)
+        editor.apply()
+    }
+
+    /**
+     * 通用getString方法
+     */
+    fun getString(key: String, defaultValue: String): String {
+        return prefs.getString(key, defaultValue) ?: defaultValue
+    }
+
+    /**
+     * 通用putString方法
+     */
+    fun putString(key: String, value: String) {
+        editor.putString(key, value)
+        editor.apply()
+    }
+
+    /**
+     * 通用getBoolean方法
+     */
+    fun getBoolean(key: String, defaultValue: Boolean): Boolean {
+        return prefs.getBoolean(key, defaultValue)
+    }
+
+    /**
+     * 通用putBoolean方法
+     */
+    fun putBoolean(key: String, value: Boolean) {
+        editor.putBoolean(key, value)
+        editor.apply()
+    }
+
+    /**
+     * 获取Int值
+     */
+    fun getInt(key: String, defaultValue: Int): Int {
+        return prefs.getInt(key, defaultValue)
+    }
+
+    /**
+     * 保存Int值
+     */
+    fun putInt(key: String, value: Int) {
+        editor.putInt(key, value)
+        editor.apply()
+    }
+
+    /**
+     * 获取Long值
+     */
+    fun getLong(key: String, defaultValue: Long): Long {
+        return prefs.getLong(key, defaultValue)
+    }
+
+    /**
+     * 保存Long值
+     */
+    fun putLong(key: String, value: Long) {
+        editor.putLong(key, value)
+        editor.apply()
+    }
+
+    /**
+     * 获取Float值
+     */
+    fun getFloat(key: String, defaultValue: Float): Float {
+        return prefs.getFloat(key, defaultValue)
+    }
+
+    /**
+     * 保存Float值
+     */
+    fun putFloat(key: String, value: Float) {
+        editor.putFloat(key, value)
+        editor.apply()
+    }
+
+    /**
+     * 删除指定key的值
+     */
+    fun remove(key: String) {
+        editor.remove(key)
         editor.apply()
     }
 }

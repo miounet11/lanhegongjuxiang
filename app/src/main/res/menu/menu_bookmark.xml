@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="搜索"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="always|collapseActionView" />
+
+    <item
+        android:id="@+id/action_add"
+        android:icon="@android:drawable/ic_input_add"
+        android:title="添加书签"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_import"
+        android:title="导入书签"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_export"
+        android:title="导出书签"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_clear"
+        android:title="清空所有书签"
+        app:showAsAction="never" />
+
+</menu>

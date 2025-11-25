@@ -22,15 +22,17 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="100dp">
 
                 <!-- 大搜索框区域 -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp"
-                    android:gravity="center_horizontal">
+                    android:paddingHorizontal="16dp"
+                    android:paddingTop="48dp"
+                    android:paddingBottom="24dp">
 
                     <!-- 欢迎标语 -->
                     <TextView
@@ -168,7 +170,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -220,7 +225,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="打开浏览器"
                                     android:textColor="@color/text_primary"
-                                    android:textSize="14sp"
+                                    android:textSize="12sp"
                                     android:layout_marginTop="8dp" />
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
@@ -259,7 +264,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="浏览历史"
                                     android:textColor="@color/text_primary"
-                                    android:textSize="14sp"
+                                    android:textSize="12sp"
                                     android:layout_marginTop="8dp" />
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
@@ -298,7 +303,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="书签"
                                     android:textColor="@color/text_primary"
-                                    android:textSize="14sp"
+                                    android:textSize="12sp"
                                     android:layout_marginTop="8dp" />
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
@@ -337,7 +342,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="设置"
                                     android:textColor="@color/text_primary"
-                                    android:textSize="14sp"
+                                    android:textSize="12sp"
                                     android:layout_marginTop="8dp" />
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>

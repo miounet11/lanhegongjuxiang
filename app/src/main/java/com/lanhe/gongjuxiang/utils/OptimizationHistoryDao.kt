@@ -111,6 +111,30 @@ interface OptimizationHistoryDao {
      */
     @Query("DELETE FROM optimization_history")
     suspend fun clearAllHistory()
+
+    /**
+     * 获取最近的历史记录 - Flow版本（用于Repository）
+     */
+    @Query("SELECT * FROM optimization_history ORDER BY timestamp DESC LIMIT :limit")
+    fun getRecentHistory(limit: Int = 50): Flow<List<OptimizationHistoryEntity>>
+
+    /**
+     * 获取总优化次数（suspend版本用于统计）
+     */
+    @Query("SELECT COUNT(*) FROM optimization_history")
+    suspend fun getTotalCount(): Int
+
+    /**
+     * 获取成功次数（suspend版本用于统计）
+     */
+    @Query("SELECT COUNT(*) FROM optimization_history WHERE success = 1")
+    suspend fun getSuccessCount(): Int
+
+    /**
+     * 获取最新历史 - 别名方法
+     */
+    @Query("SELECT * FROM optimization_history ORDER BY timestamp DESC LIMIT 1")
+    suspend fun getLatestHistory(): OptimizationHistoryEntity?
 }
 
 /**

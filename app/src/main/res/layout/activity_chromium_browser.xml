@@ -1,137 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white">
+    android:background="@color/background">
 
-    <!-- 工具栏 -->
+    <!-- WebView Container -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:progressDrawable="@drawable/progress_gradient"
+            android:visibility="gone"
+            android:elevation="10dp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.webkit.WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toTopOf="@id/bottom_bar"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Bottom Navigation Bar -->
+        <LinearLayout
+            android:id="@+id/bottom_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/surface"
+            android:elevation="16dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider_light" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp">
+
+                <ImageButton
+                    android:id="@+id/btn_back"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Back"
+                    android:src="@drawable/ic_arrow_back"
+                    app:tint="@color/text_primary" />
+
+                <ImageButton
+                    android:id="@+id/btn_forward"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Forward"
+                    android:src="@drawable/ic_arrow_forward"
+                    app:tint="@color/text_primary" />
+
+                <ImageButton
+                    android:id="@+id/btn_home"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Home"
+                    android:src="@drawable/ic_home"
+                    app:tint="@color/primary" />
+
+                <ImageButton
+                    android:id="@+id/btn_tabs"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Tabs"
+                    android:src="@drawable/ic_tab"
+                    app:tint="@color/text_primary" />
+
+                <ImageButton
+                    android:id="@+id/btn_menu"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Menu"
+                    android:src="@drawable/ic_more_vert"
+                    app:tint="@color/text_primary" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Floating Top Address Bar -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimaryVariant"
-        app:elevation="4dp">
+        android:background="@android:color/transparent"
+        app:elevation="0dp">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimaryVariant"
-            app:navigationIcon="?attr/homeAsUpIndicator"
-            app:title="Chromium浏览器"
-            app:titleTextColor="@color/white" />
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <!-- 浏览器工具栏 -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="8dp"
-        android:background="@color/white"
-        android:elevation="2dp">
-
-        <!-- 返回按钮 -->
-        <ImageButton
-            android:id="@+id/btn_back"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_arrow_back"
-            android:contentDescription="返回"
-            android:background="?attr/selectableItemBackground"
-            android:scaleType="centerInside" />
-
-        <!-- 前进按钮 -->
-        <ImageButton
-            android:id="@+id/btn_forward"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_arrow_forward"
-            android:contentDescription="前进"
-            android:background="?attr/selectableItemBackground"
-            android:scaleType="centerInside"
-            android:layout_marginStart="4dp" />
-
-        <!-- 刷新按钮 -->
-        <ImageButton
-            android:id="@+id/btn_refresh"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_refresh"
-            android:contentDescription="刷新"
-            android:background="?attr/selectableItemBackground"
-            android:scaleType="centerInside"
-            android:layout_marginStart="4dp" />
-
-        <!-- 地址栏 -->
-        <EditText
-            android:id="@+id/address_bar"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:hint="输入网址或搜索"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:background="@drawable/rounded_edittext_bg"
-            android:inputType="textUri"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:textSize="14sp" />
-
-        <!-- 账户按钮 -->
-        <ImageButton
-            android:id="@+id/btn_account"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_account"
-            android:contentDescription="账户"
-            android:background="?attr/selectableItemBackground"
-            android:scaleType="centerInside" />
-
-        <!-- 菜单按钮 -->
-        <ImageButton
-            android:id="@+id/btn_menu"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_more_vert"
-            android:contentDescription="菜单"
-            android:background="?attr/selectableItemBackground"
-            android:scaleType="centerInside"
-            android:layout_marginStart="4dp" />
-    </LinearLayout>
-
-    <!-- 进度条 -->
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:visibility="gone"
-        android:progress="0"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal" />
-
-    <!-- WebView -->
-    <android.webkit.WebView
-        android:id="@+id/webView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/white" />
-
-    <!-- 底部状态栏 -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="8dp"
-        android:background="@color/light_gray"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/status_text"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:textColor="@color/dark_gray" />
-    </LinearLayout>
-</LinearLayout>
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:cardBackgroundColor="@color/surface"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="12dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="4dp"
+                    android:src="@drawable/ic_lock"
+                    app:tint="@color/success" />
+
+                <EditText
+                    android:id="@+id/address_bar"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:fontFamily="sans-serif-medium"
+                    android:hint="Search or type URL"
+                    android:imeOptions="actionGo"
+                    android:inputType="textUri"
+                    android:paddingHorizontal="12dp"
+                    android:singleLine="true"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_hint"
+                    android:textSize="14sp" />
+
+                <!-- 书签按钮 -->
+                <ImageButton
+                    android:id="@+id/btn_bookmark"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginEnd="4dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Bookmark"
+                    android:src="@android:drawable/star_off"
+                    app:tint="@color/warning" />
+
+                <ImageButton
+                    android:id="@+id/btn_refresh"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_refresh"
+                    app:tint="@color/text_secondary" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

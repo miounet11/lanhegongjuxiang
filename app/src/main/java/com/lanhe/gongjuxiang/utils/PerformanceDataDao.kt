@@ -105,6 +105,24 @@ interface PerformanceDataDao {
      */
     @Query("DELETE FROM performance_data")
     suspend fun clearAllData()
+
+    /**
+     * 获取最新数据 - Flow版本（用于Repository）
+     */
+    @Query("SELECT * FROM performance_data ORDER BY timestamp DESC LIMIT 1")
+    fun getLatestData(): Flow<PerformanceDataEntity?>
+
+    /**
+     * 获取指定时间范围内的数据 - Flow版本（用于Repository）
+     */
+    @Query("SELECT * FROM performance_data WHERE timestamp BETWEEN :startTime AND :endTime ORDER BY timestamp DESC")
+    fun getDataBetween(startTime: Long, endTime: Long): Flow<List<PerformanceDataEntity>>
+
+    /**
+     * 删除指定时间之前的数据
+     */
+    @Query("DELETE FROM performance_data WHERE timestamp < :timestamp")
+    suspend fun deleteOlderThan(timestamp: Long): Int
 }
 
 /**

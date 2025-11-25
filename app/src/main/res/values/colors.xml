@@ -3,84 +3,87 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- 浅色模式主题颜色 -->
-    <color name="primary">#1F2933</color>        <!-- 深灰蓝，作为主色强调 -->
-    <color name="primary_dark">#162027</color>   <!-- 更深灰蓝 -->
-    <color name="primary_light">#E6EBF0</color>  <!-- 浅灰蓝，用于容器背景 -->
-    <color name="accent">#1F2933</color>         <!-- 与主色保持一致，弱化装饰色 -->
+    <!-- 2025 Premium Blue Theme -->
+    <!-- Primary Brand Colors -->
+    <color name="primary">#2563EB</color>        <!-- Electric Blue -->
+    <color name="primary_dark">#1E40AF</color>   <!-- Deep Blue -->
+    <color name="primary_light">#DBEAFE</color>  <!-- Soft Blue Tint -->
+    <color name="accent">#06B6D4</color>         <!-- Cyan Accent -->
 
-    <!-- 浅色模式文本颜色 -->
-    <color name="text_primary">#111827</color>     <!-- 深灰黑 -->
-    <color name="text_secondary">#6B7280</color>   <!-- 中灰 -->
-    <color name="text_hint">#9CA3AF</color>        <!-- 浅灰 -->
-    <color name="text_disabled">#CBD5E1</color>    <!-- 更浅灰 -->
+    <!-- Text Colors -->
+    <color name="text_primary">#0F172A</color>     <!-- Slate 900 -->
+    <color name="text_secondary">#64748B</color>   <!-- Slate 500 -->
+    <color name="text_hint">#94A3B8</color>        <!-- Slate 400 -->
+    <color name="text_disabled">#CBD5E1</color>    <!-- Slate 300 -->
 
-    <!-- 浅色模式背景 -->
-    <color name="background">#F8FAFC</color>      <!-- 微暖浅灰 -->
-    <color name="surface">#FFFFFF</color>        <!-- 纯白，用于卡片和面板 -->
-    <color name="card_background">#FFFFFF</color> <!-- 卡片白色 -->
+    <!-- Backgrounds -->
+    <color name="background">#F8FAFC</color>      <!-- Slate 50 -->
+    <color name="surface">#FFFFFF</color>        <!-- Pure White -->
+    <color name="card_background">#FFFFFF</color> <!-- White -->
+    <color name="card_background_highlight">#F0F9FF</color> <!-- Light Blue Highlight -->
 
-    <!-- 分割线颜色 -->
+    <!-- Dividers & Borders -->
     <color name="divider">#E2E8F0</color>
     <color name="divider_light">#F1F5F9</color>
 
-    <!-- 状态颜色 -->
-    <color name="success">#3F7A64</color>        <!-- 柔和绿色 -->
-    <color name="warning">#B7791F</color>        <!-- 柔和橙色 -->
-    <color name="error">#B83232</color>          <!-- 柔和红色 -->
-    <color name="info">#3A6EDC</color>          <!-- 柔和蓝色 -->
+    <!-- Functional Colors -->
+    <color name="success">#10B981</color>        <!-- Emerald 500 -->
+    <color name="warning">#F59E0B</color>        <!-- Amber 500 -->
+    <color name="error">#EF4444</color>          <!-- Red 500 -->
+    <color name="info">#3B82F6</color>           <!-- Blue 500 -->
 
-    <!-- 导航栏颜色 -->
-    <color name="nav_selected">#1F2933</color>
-    <color name="nav_unselected">#9CA3AF</color>
+    <!-- Navigation -->
+    <color name="nav_selected">#2563EB</color>
+    <color name="nav_unselected">#94A3B8</color>
 
-    <!-- 开关颜色 -->
+    <!-- Controls -->
     <color name="switch_track">#E2E8F0</color>
     <color name="switch_thumb">#FFFFFF</color>
-    <color name="switch_thumb_checked">#1F2933</color>
+    <color name="switch_thumb_checked">#2563EB</color>
 
-    <!-- 特色颜色 -->
-    <color name="neural_cyan">#1F2933</color>
-    <color name="neural_purple">#1F2933</color>
-    <color name="neural_green">#3F7A64</color>
-    <color name="neural_orange">#B7791F</color>
-    <color name="neural_red">#B83232</color>
+    <!-- Feature Specific -->
+    <color name="neural_cyan">#06B6D4</color>
+    <color name="neural_purple">#8B5CF6</color>
+    <color name="neural_green">#10B981</color>
+    <color name="neural_orange">#F59E0B</color>
+    <color name="neural_red">#EF4444</color>
 
-    <!-- 性能状态指示色 -->
-    <color name="performance_excellent">#1F2933</color>
-    <color name="performance_good">#3F7A64</color>
-    <color name="performance_warning">#B7791F</color>
-    <color name="performance_critical">#B83232</color>
+    <!-- Performance Indicators -->
+    <color name="performance_excellent">#10B981</color>
+    <color name="performance_good">#3B82F6</color>
+    <color name="performance_warning">#F59E0B</color>
+    <color name="performance_critical">#EF4444</color>
 
-    <!-- 渐变背景色 -->
-    <color name="gradient_start">#F8FAFC</color>
+    <!-- Gradients -->
+    <color name="gradient_start">#EFF6FF</color>
     <color name="gradient_end">#FFFFFF</color>
 
-    <!-- 网络诊断专用颜色 -->
-    <color name="signal_excellent">#1F2933</color>
-    <color name="signal_good">#3F7A64</color>
-    <color name="signal_fair">#B7791F</color>
-    <color name="signal_poor">#B83232</color>
-    <color name="signal_weak">#6B7280</color>
+    <!-- Network Diagnostic -->
+    <color name="signal_excellent">#10B981</color>
+    <color name="signal_good">#3B82F6</color>
+    <color name="signal_fair">#F59E0B</color>
+    <color name="signal_poor">#EF4444</color>
+    <color name="signal_weak">#64748B</color>
     <color name="signal_none">#CBD5E1</color>
 
-    <color name="network_blue">#1F2933</color>
-    <color name="warning_red">#B83232</color>
-    <color name="warning_orange">#B7791F</color>
-    <color name="danger_red">#8F1F1F</color>
+    <color name="network_blue">#3B82F6</color>
+    <color name="warning_red">#EF4444</color>
+    <color name="warning_orange">#F59E0B</color>
+    <color name="danger_red">#DC2626</color>
 
-    <!-- 背景颜色 -->
+    <!-- Legacy/Compat -->
     <color name="background_normal">#F8FAFC</color>
     <color name="background_light">#FFFFFF</color>
-    <color name="background_warning">#FDF6EC</color>
+    <color name="background_warning">#FFF7ED</color>
     <color name="gray_light">#E2E8F0</color>
 
-    <!-- AI优化颜色 -->
-    <color name="red">#B83232</color>
-    <color name="yellow">#B7791F</color>
-    <color name="green">#3F7A64</color>
+    <color name="red">#EF4444</color>
+    <color name="yellow">#F59E0B</color>
+    <color name="green">#10B981</color>
 
-    <!-- Chromium浏览器颜色 -->
-    <color name="light_gray">#F5F5F5</color>
-    <color name="dark_gray">#424242</color>
+    <!-- Browser Specific -->
+    <color name="browser_toolbar_bg">#FFFFFF</color>
+    <color name="browser_address_bg">#F1F5F9</color>
+    <color name="light_gray">#F1F5F9</color>
+    <color name="dark_gray">#334155</color>
 </resources>

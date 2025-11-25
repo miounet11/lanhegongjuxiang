@@ -2,8 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
     id("jacoco")
-    // 移除Hilt插件：id("dagger.hilt.android.plugin") - 使用手动DI代替
 }
 
 android {
@@ -23,8 +23,8 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        
+        testInstrumentationRunner = "com.lanhe.gongjuxiang.HiltTestRunner"
+
         // Room schema export
         javaCompileOptions {
             annotationProcessorOptions {
@@ -50,7 +50,8 @@ android {
             versionNameSuffix = "-debug"
         }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true  // 启用代码混淆和优化
+            isShrinkResources = true  // 启用资源压缩
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -109,12 +110,15 @@ dependencies {
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
 
-    // Dependency Injection - 使用手动DI而不是Hilt，以避免编译问题
-    // implementation(libs.hilt.android)
-    // kapt(libs.hilt.compiler)
-    // implementation("androidx.hilt:hilt-navigation-fragment:1.2.0")
+    // Dependency Injection - Hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    implementation("androidx.hilt:hilt-navigation-fragment:1.2.0")
+    implementation("androidx.hilt:hilt-work:1.2.0")
+    kapt("androidx.hilt:hilt-compiler:1.2.0")
     
     // Shizuku框架 - 系统级操作
+    // 注意：使用Maven依赖，Shizuku源码在mokuai/shizuku用于内置应用
     implementation(libs.shizuku.api)
     implementation(libs.shizuku.provider)
 
@@ -124,7 +128,6 @@ dependencies {
     // 协程和异步操作
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.work.runtime.ktx)
-    // implementation("androidx.hilt:hilt-work:1.2.0") // 移除Hilt集成
 
     // 数据存储 - 使用Room
     implementation(libs.androidx.room.runtime)
@@ -149,6 +152,10 @@ dependencies {
     // 图片处理库 (Glide)
     implementation(libs.glide)
     // 移除: ksp(libs.glide.compiler) - 禁用编译器避免注解处理
+
+    // 二维码/条形码处理库 (ZXing)
+    implementation("com.google.zxing:core:3.5.2")
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 
     // Advanced UI Components for premium experience
     implementation("androidx.core:core-splashscreen:1.0.1")
@@ -264,8 +271,8 @@ dependencies {
     testImplementation("androidx.arch.core:core-testing:2.2.0")
     testImplementation("androidx.room:room-testing:2.7.0")
     testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
-    // 移除Hilt测试依赖：testImplementation("com.google.dagger:hilt-android-testing:2.52")
-    // kaptTest("com.google.dagger:hilt-compiler:2.52")
+    testImplementation("com.google.dagger:hilt-android-testing:2.52")
+    kaptTest("com.google.dagger:hilt-compiler:2.52")
 
     // Android测试依赖
     androidTestImplementation(libs.androidx.junit)
@@ -282,8 +289,8 @@ dependencies {
     androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
     androidTestImplementation("androidx.room:room-testing:2.7.0")
     androidTestImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
-    // 移除Hilt测试依赖：androidTestImplementation("com.google.dagger:hilt-android-testing:2.52")
-    // kaptAndroidTest("com.google.dagger:hilt-compiler:2.52")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.52")
+    kaptAndroidTest("com.google.dagger:hilt-compiler:2.52")
 
     // 强制使用Kotlin 2.0.21版本 - 与KSP完全兼容
     implementation("org.jetbrains.kotlin:kotlin-stdlib:2.0.21")

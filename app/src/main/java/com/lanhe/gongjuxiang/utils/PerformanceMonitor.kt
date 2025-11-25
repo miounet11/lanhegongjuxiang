@@ -143,7 +143,11 @@ class PerformanceMonitor(private val context: Context) {
                 }
             }
         } catch (e: IOException) {
-            e.printStackTrace()
+            // 仅在非权限错误时打印堆栈，避免刷屏
+            val msg = e.message ?: ""
+            if (!msg.contains("EACCES") && !msg.contains("Permission denied")) {
+                e.printStackTrace()
+            }
         } finally {
             reader?.close()
         }

@@ -5,6 +5,8 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.provider.Telephony
+import android.util.Log
+import android.widget.Toast
 import androidx.annotation.WorkerThread
 import com.lanhe.gongjuxiang.services.NotificationHelper
 import com.lanhe.gongjuxiang.services.NotificationType
@@ -23,8 +25,13 @@ import java.util.*
  */
 class SmsManager(private val context: Context) {
 
+    companion object {
+        private const val TAG = "SmsManager"
+    }
+
     private val contentResolver: ContentResolver = context.contentResolver
     private val notificationHelper = NotificationHelper(context)
+    private val permissionHelper = PermissionHelper.getInstance(context)
 
     /**
      * 短信数据类
@@ -69,6 +76,15 @@ class SmsManager(private val context: Context) {
     suspend fun getAllSms(): List<SmsMessage> = withContext(Dispatchers.IO) {
         val smsList = mutableListOf<SmsMessage>()
 
+        // 检查短信权限
+        if (!permissionHelper.hasAllPermissions(PermissionConstants.SMS_PERMISSIONS.permissions)) {
+            Log.w(TAG, "SMS permission not granted")
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context, "需要短信权限才能读取短信", Toast.LENGTH_SHORT).show()
+            }
+            return@withContext smsList
+        }
+
         try {
             val uri = Uri.parse("content://sms/")
             val projection = arrayOf(
@@ -82,8 +98,13 @@ class SmsManager(private val context: Context) {
                     smsList.add(sms)
                 }
             }
+        } catch (e: SecurityException) {
+            Log.e(TAG, "Security exception when reading SMS", e)
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context, "短信权限被拒绝", Toast.LENGTH_SHORT).show()
+            }
         } catch (e: Exception) {
-            // 处理权限或其他异常
+            Log.e(TAG, "Error reading SMS", e)
         }
 
         smsList

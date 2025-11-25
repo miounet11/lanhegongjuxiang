@@ -199,6 +199,19 @@ class RealPerformanceMonitorManager(private val context: Context) {
      * 获取真实的CPU使用率
      */
     private suspend fun getRealCpuUsage(): Float = withContext(Dispatchers.IO) {
+        // 1. 优先尝试使用Shizuku获取更精确的CPU数据
+        if (ShizukuManager.isShizukuAvailable()) {
+            try {
+                val shizukuCpu = ShizukuManager.getCpuUsage()
+                if (shizukuCpu > 0) {
+                    return@withContext shizukuCpu.coerceIn(0f, 100f)
+                }
+            } catch (e: Exception) {
+                // Shizuku获取失败，继续尝试普通方法
+            }
+        }
+
+        // 2. 尝试读取 /proc/stat (通常在未root的高版本Android上会失败)
         try {
             val cpuStats = readCpuStats()
             val totalCores = Runtime.getRuntime().availableProcessors()
@@ -211,25 +224,9 @@ class RealPerformanceMonitorManager(private val context: Context) {
                 0f
             }
             
-            // 尝试使用Shizuku获取更精确的CPU数据
-            val shizukuCpuUsage = try {
-                if (ShizukuManager.isShizukuAvailable()) {
-                    ShizukuManager.getCpuUsage()
-                } else {
-                    0f
-                }
-            } catch (e: Exception) {
-                0f
-            }
-            
-            // 优先使用Shizuku数据，否则使用系统数据
-            if (shizukuCpuUsage > 0) {
-                shizukuCpuUsage.coerceIn(0f, 100f)
-            } else {
-                totalUsage.coerceIn(0f, 100f)
-            }
+            totalUsage.coerceIn(0f, 100f)
         } catch (e: Exception) {
-            Log.e(TAG, "获取CPU使用率失败", e)
+            // Log.e(TAG, "获取CPU使用率失败", e) // 避免刷屏
             0f
         }
     }
@@ -260,7 +257,11 @@ class RealPerformanceMonitorManager(private val context: Context) {
                 }
             }
         } catch (e: IOException) {
-            Log.e(TAG, "读取CPU统计失败", e)
+            // 仅在非权限错误时记录日志，避免刷屏
+            val msg = e.message ?: ""
+            if (!msg.contains("EACCES") && !msg.contains("Permission denied")) {
+                Log.e(TAG, "读取CPU统计失败", e)
+            }
         } finally {
             try {
                 reader?.close()

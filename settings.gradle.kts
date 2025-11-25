@@ -48,3 +48,8 @@ include(":mokuai:mokuai:modules:ad-blocker")
 include(":mokuai:mokuai:core:common")
 include(":mokuai:mokuai:core:shizuku-api")
 include(":mokuai:mokuai:core:data")
+
+// Shizuku 源码集成说明：
+// Shizuku源码已克隆到 mokuai/shizuku/ 用于参考和构建独立的Shizuku模块
+// 主应用通过Maven依赖 (libs.shizuku.api, libs.shizuku.provider) 使用Shizuku
+// 若需直接构建Shizuku服务，可进入 mokuai/shizuku/ 目录执行其自有的settings.gradle

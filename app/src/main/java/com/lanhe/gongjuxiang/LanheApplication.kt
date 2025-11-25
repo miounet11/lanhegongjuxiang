@@ -6,28 +6,18 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import android.util.Log
-import com.lanhe.gongjuxiang.utils.AppDatabase
-import com.lanhe.gongjuxiang.utils.DataManager
-import com.lanhe.gongjuxiang.utils.NetworkMonitor
-import com.lanhe.gongjuxiang.utils.PerformanceMonitor
-import com.lanhe.gongjuxiang.utils.PreferencesManager
+import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 import com.lanhe.gongjuxiang.utils.ShizukuManager
-import com.lanhe.gongjuxiang.utils.BatteryMonitor
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 
 /**
  * 蓝河助手应用程序类
  * 负责应用级别的组件初始化和全局状态管理
  *
- * 使用手动依赖注入而不是Hilt，以提供更灵活的控制和避免编译问题
+ * 使用Hilt依赖注入框架管理依赖关系
  */
+@HiltAndroidApp
 class LanheApplication : Application() {
-
-    // 应用级别的CoroutineScope
-    private val applicationScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     
     // 单例实例
     companion object {
@@ -43,75 +33,37 @@ class LanheApplication : Application() {
         }
     }
 
-    // 数据库实例
-    val database: AppDatabase by lazy {
-        AppDatabase.getDatabase(this)
-    }
-
     override fun onCreate() {
         super.onCreate()
         INSTANCE = this
-        
-        Log.i("LanheApplication", "Initializing Lanhe Assistant...")
-        
-        // 初始化应用级别的组件
+
+        Log.i("LanheApplication", "Initializing Lanhe Assistant with Hilt...")
+
+        // 初始化应用级别的组件（Hilt会自动处理依赖注入）
         initializeComponents()
-        
+
         Log.i("LanheApplication", "Lanhe Assistant initialization completed")
     }
 
     /**
      * 初始化所有组件
-     * 按照依赖关系顺序初始化
+     * Hilt会自动处理依赖注入，这里只处理必要的初始化
      */
     private fun initializeComponents() {
         try {
-            // 1. 首先初始化首选项管理器（其他组件可能依赖它）
-            initializePreferencesManager()
-            
-            // 2. 初始化通知渠道（必须在后台服务之前）
+            // 初始化通知渠道（必须在后台服务之前）
             initializeNotificationChannels()
-            
-            // 3. 初始化Shizuku管理器（系统级操作）
-            initializeShizukuManager()
-            
-            // 4. 初始化数据库（数据持久化）
-            initializeDatabase()
-            
-            // 5. 初始化数据管理器（依赖数据库）
-            initializeDataManager()
-            
-            // 6. 初始化性能监控器（系统监控）
-            initializePerformanceMonitor()
-            
-            // 7. 初始化电池监控器（后台监控）
-            initializeBatteryMonitor()
-            
-            // 8. 初始化网络监控器（网络状态）
-            initializeNetworkMonitor()
-            
-            // 9. 初始化崩溃处理器
+
+            // 初始化崩溃处理器
             initializeCrashHandler()
-            
+
+            // 初始化内置Shizuku APK
+            initializeBuiltInShizuku()
+
         } catch (e: Exception) {
             Log.e("LanheApplication", "Failed to initialize components", e)
         }
     }
-    
-    /**
-     * 初始化首选项管理器
-     */
-    private fun initializePreferencesManager() {
-        applicationScope.launch {
-            try {
-                // PreferencesManager 会在需要时自动初始化
-                Log.d("LanheApplication", "PreferencesManager ready")
-            } catch (e: Exception) {
-                Log.e("LanheApplication", "Failed to initialize PreferencesManager", e)
-            }
-        }
-    }
-    
     /**
      * 初始化通知渠道
      */
@@ -172,123 +124,44 @@ class LanheApplication : Application() {
             }
         }
     }
-    
-    /**
-     * 初始化Shizuku管理器
-     */
-    private fun initializeShizukuManager() {
-        try {
-            // 初始化ShizukuManager并传入Context
-            ShizukuManager.initWithContext(this)
-            Log.d("LanheApplication", "ShizukuManager initialized")
-        } catch (e: Exception) {
-            Log.e("LanheApplication", "Failed to initialize ShizukuManager", e)
-        }
-    }
-    
-    /**
-     * 初始化数据库
-     */
-    private fun initializeDatabase() {
-        applicationScope.launch {
-            try {
-                // 触发数据库初始化
-                database.performanceDataDao()
-                database.optimizationHistoryDao()
-                database.batteryStatsDao()
-                Log.d("LanheApplication", "Database initialized")
-            } catch (e: Exception) {
-                Log.e("LanheApplication", "Failed to initialize database", e)
-            }
-        }
-    }
-    
-    /**
-     * 初始化数据管理器
-     */
-    private fun initializeDataManager() {
-        applicationScope.launch {
-            try {
-                // DataManager 会在需要时自动初始化
-                Log.d("LanheApplication", "DataManager ready")
-            } catch (e: Exception) {
-                Log.e("LanheApplication", "Failed to initialize DataManager", e)
-            }
-        }
-    }
-    
-    /**
-     * 初始化性能监控器
-     */
-    private fun initializePerformanceMonitor() {
-        applicationScope.launch {
-            try {
-                // PerformanceMonitor 会在需要时自动启动
-                Log.d("LanheApplication", "PerformanceMonitor ready")
-            } catch (e: Exception) {
-                Log.e("LanheApplication", "Failed to initialize PerformanceMonitor", e)
-            }
-        }
-    }
-    
-    /**
-     * 初始化电池监控器
-     */
-    private fun initializeBatteryMonitor() {
-        applicationScope.launch {
-            try {
-                // BatteryMonitor 会在需要时自动初始化
-                Log.d("LanheApplication", "BatteryMonitor ready")
-            } catch (e: Exception) {
-                Log.e("LanheApplication", "Failed to initialize BatteryMonitor", e)
-            }
-        }
-    }
-    
-    /**
-     * 初始化网络监控器
-     */
-    private fun initializeNetworkMonitor() {
-        applicationScope.launch {
-            try {
-                // NetworkMonitor 会在需要时自动初始化
-                Log.d("LanheApplication", "NetworkMonitor ready")
-            } catch (e: Exception) {
-                Log.e("LanheApplication", "Failed to initialize NetworkMonitor", e)
-            }
-        }
-    }
-    
+
     /**
      * 初始化崩溃处理器
      */
     private fun initializeCrashHandler() {
         try {
             val defaultHandler = Thread.getDefaultUncaughtExceptionHandler()
-            
+
             Thread.setDefaultUncaughtExceptionHandler { thread, exception ->
                 Log.e("LanheApplication", "Uncaught exception in thread ${thread.name}", exception)
-                
+
                 // 保存崩溃信息
-                applicationScope.launch {
-                    try {
-                        // 这里可以添加崩溃日志保存逻辑
-                        Log.w("LanheApplication", "Crash info saved")
-                    } catch (e: Exception) {
-                        Log.e("LanheApplication", "Failed to save crash info", e)
-                    }
-                }
-                
+                // 这里可以添加崩溃日志保存逻辑
+
                 // 调用原始处理器
                 defaultHandler?.uncaughtException(thread, exception)
             }
-            
+
             Log.d("LanheApplication", "Crash handler initialized")
         } catch (e: Exception) {
             Log.e("LanheApplication", "Failed to initialize crash handler", e)
         }
     }
-    
+
+    /**
+     * 初始化内置Shizuku APK
+     * 在应用启动时自动检查和安装（如需要）
+     */
+    private fun initializeBuiltInShizuku() {
+        try {
+            Log.i("LanheApplication", "Starting built-in Shizuku initialization...")
+            ShizukuManager.initializeBuiltInShizuku(this)
+            Log.i("LanheApplication", "Built-in Shizuku initialization completed")
+        } catch (e: Exception) {
+            Log.e("LanheApplication", "Failed to initialize built-in Shizuku", e)
+        }
+    }
+
     override fun onTerminate() {
         super.onTerminate()
         Log.i("LanheApplication", "Application terminated")
@@ -297,16 +170,9 @@ class LanheApplication : Application() {
     override fun onLowMemory() {
         super.onLowMemory()
         Log.w("LanheApplication", "System is running low on memory")
-        
+
         // 执行内存清理
-        applicationScope.launch {
-            try {
-                // 可以在这里执行紧急内存清理
-                System.gc()
-            } catch (e: Exception) {
-                Log.e("LanheApplication", "Failed to perform emergency memory cleanup", e)
-            }
-        }
+        System.gc()
     }
     
     override fun onTrimMemory(level: Int) {

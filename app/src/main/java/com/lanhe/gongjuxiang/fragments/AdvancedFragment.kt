@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.lanhe.gongjuxiang.R
 import com.lanhe.gongjuxiang.activities.AppManagerActivity
+import com.lanhe.gongjuxiang.activities.ChromiumBrowserActivity
 import com.lanhe.gongjuxiang.databinding.FragmentAdvancedBinding
 import com.lanhe.gongjuxiang.utils.SystemUtils
 import com.lanhe.gongjuxiang.utils.ShizukuManager
@@ -54,13 +55,10 @@ class AdvancedFragment : Fragment() {
 
         // 使用指南
         binding.llUsageGuide.setOnClickListener {
-            try {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse("https://github.com/lanhe/toolbox")
-                startActivity(intent)
-            } catch (e: Exception) {
-                Toast.makeText(context, "无法打开使用指南", Toast.LENGTH_SHORT).show()
-            }
+            ChromiumBrowserActivity.openUrl(
+                requireContext(),
+                "https://github.com/lanhe/toolbox"
+            )
         }
 
         // 手机改名
@@ -190,6 +188,7 @@ class AdvancedFragment : Fragment() {
             ShizukuState.Granted -> "🔑 Shizuku权限：已授权 ✅"
             ShizukuState.Denied -> "🔑 Shizuku权限：已拒绝 ❌"
             ShizukuState.Unavailable -> "🔑 Shizuku权限：服务不可用 ⚠️"
+            ShizukuState.Checking -> "🔑 Shizuku权限：检查中... ⏳"
         }
 
         // 这里需要假设布局中有对应的TextView来显示状态

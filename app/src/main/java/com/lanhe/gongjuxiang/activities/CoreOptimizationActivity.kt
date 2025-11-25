@@ -3,6 +3,7 @@ package com.lanhe.gongjuxiang.activities
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -12,6 +13,7 @@ import com.lanhe.gongjuxiang.services.CoreOptimizationService
 import com.lanhe.gongjuxiang.utils.AnimationUtils
 import com.lanhe.gongjuxiang.utils.CoreOptimizationManager
 import com.lanhe.gongjuxiang.utils.PreferencesManager
+import com.lanhe.gongjuxiang.utils.setupFeatureInfo
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -39,9 +41,16 @@ class CoreOptimizationActivity : AppCompatActivity() {
         coreOptimizationManager = CoreOptimizationManager(this)
 
         setupToolbar()
+        setupFeatureInfoCard()
         setupSwitches()
         updateUI()
         startBackgroundService()
+    }
+
+    private fun setupFeatureInfoCard() {
+        // 使用findViewById直接获取include的根View
+        val featureInfoCard = binding.root.findViewById<View>(R.id.featureInfoCard)
+        featureInfoCard?.setupFeatureInfo("fps_boost")
     }
 
     private fun setupToolbar() {

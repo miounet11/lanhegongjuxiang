@@ -34,7 +34,9 @@ class SmartCleaner(private val context: Context) {
         THUMBNAIL,      // 缩略图
         APK,            // APK安装包
         EMPTY_FOLDER,   // 空文件夹
-        UNUSED_APP      // 未使用应用数据
+        UNUSED_APP,     // 未使用应用数据
+        LARGE_PHOTO,    // 大尺寸照片
+        WECHAT_DATA     // 微信数据
     }
 
     /**
@@ -47,7 +49,7 @@ class SmartCleaner(private val context: Context) {
     )
 
     /**
-     * 扫描垃圾文件
+     * 扫描垃圾文件（增强版）
      */
     suspend fun scanJunkFiles(): List<CleanItem> = withContext(Dispatchers.IO) {
         val junkFiles = mutableListOf<CleanItem>()
@@ -69,6 +71,12 @@ class SmartCleaner(private val context: Context) {
 
         // 扫描空文件夹
         junkFiles.addAll(scanEmptyFolders())
+
+        // 【新增】扫描大尺寸照片
+        junkFiles.addAll(scanLargePhotos())
+
+        // 【新增】扫描微信数据
+        junkFiles.addAll(scanWeChatData())
 
         junkFiles
     }
@@ -314,6 +322,8 @@ class SmartCleaner(private val context: Context) {
             CleanType.APK -> isFileOlderThan(file, 30)
             CleanType.EMPTY_FOLDER -> true
             CleanType.UNUSED_APP -> false // 需要额外验证
+            CleanType.LARGE_PHOTO -> true // 压缩替代删除
+            CleanType.WECHAT_DATA -> true // 使用WeChatCleaner处理
         }
     }
 
@@ -499,4 +509,276 @@ class SmartCleaner(private val context: Context) {
         // 目前返回一个默认值
         return 150 * 1024L * 1024L // 150MB
     }
+
+    // ==================== 增强功能（整合新工具） ====================
+
+    /**
+     * 【新增】扫描大尺寸照片
+     * 整合PhotoCompressor功能
+     * TODO: PhotoCompressor功能待实现
+     */
+    private suspend fun scanLargePhotos(): List<CleanItem> = withContext(Dispatchers.IO) {
+        val photoItems = mutableListOf<CleanItem>()
+        // TODO: PhotoCompressor功能待实现
+        /*
+        try {
+            val photoCompressor = PhotoCompressor(context)
+            val photos = photoCompressor.scanPhotos()
+
+            photos.forEach { photoInfo ->
+                photoItems.add(CleanItem(
+                    path = photoInfo.path,
+                    size = photoInfo.size,
+                    type = CleanType.LARGE_PHOTO,
+                    description = "大尺寸照片 (${photoInfo.width}×${photoInfo.height}) - ${formatFileSize(photoInfo.size)}",
+                    isSafe = true
+                ))
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        */
+        photoItems
+    }
+
+    /**
+     * 【新增】扫描微信数据
+     * 整合WeChatCleaner功能
+     * TODO: WeChatCleaner功能待实现
+     */
+    private suspend fun scanWeChatData(): List<CleanItem> = withContext(Dispatchers.IO) {
+        val wechatItems = mutableListOf<CleanItem>()
+        // TODO: WeChatCleaner功能待实现
+        /*
+        try {
+            val weChatCleaner = WeChatCleaner(context)
+
+            // 检查微信是否安装
+            if (!weChatCleaner.isWeChatInstalled()) {
+                return@withContext wechatItems
+            }
+
+            // 扫描微信目录
+            val stats = weChatCleaner.scanWeChatDirectory()
+
+            // 添加缓存数据项
+            if (stats.cacheSize > 0) {
+                wechatItems.add(CleanItem(
+                    path = "wechat_cache",
+                    size = stats.cacheSize,
+                    type = CleanType.WECHAT_DATA,
+                    description = "微信缓存数据 - ${formatFileSize(stats.cacheSize)}",
+                    isSafe = true
+                ))
+            }
+
+            // 添加聊天图片项（30天前）
+            if (stats.imageSize > 0) {
+                val estimatedOldSize = (stats.imageSize * 0.4).toLong() // 估算40%为旧图片
+                if (estimatedOldSize > 10 * 1024 * 1024) { // 大于10MB才显示
+                    wechatItems.add(CleanItem(
+                        path = "wechat_images_old",
+                        size = estimatedOldSize,
+                        type = CleanType.WECHAT_DATA,
+                        description = "微信聊天图片(30天前) - ${formatFileSize(estimatedOldSize)}",
+                        isSafe = true
+                    ))
+                }
+            }
+
+            // 添加视频文件项（30天前）
+            if (stats.videoSize > 0) {
+                val estimatedOldSize = (stats.videoSize * 0.3).toLong() // 估算30%为旧视频
+                if (estimatedOldSize > 50 * 1024 * 1024) { // 大于50MB才显示
+                    wechatItems.add(CleanItem(
+                        path = "wechat_videos_old",
+                        size = estimatedOldSize,
+                        type = CleanType.WECHAT_DATA,
+                        description = "微信视频文件(30天前) - ${formatFileSize(estimatedOldSize)}",
+                        isSafe = true
+                    ))
+                }
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        */
+        wechatItems
+    }
+
+    /**
+     * 【新增】清理大尺寸照片（压缩替代删除）
+     * 使用PhotoCompressor进行智能压缩
+     * TODO: PhotoCompressor功能待实现
+     */
+    suspend fun cleanLargePhotos(progressCallback: ((Int, Int) -> Unit)? = null): CleanResult = withContext(Dispatchers.IO) {
+        // TODO: PhotoCompressor功能待实现
+        CleanResult(0L, 0, emptyList())
+        /*
+        try {
+            val photoCompressor = PhotoCompressor(context)
+            val photos = photoCompressor.scanPhotos()
+
+            if (photos.isEmpty()) {
+                return@withContext CleanResult(0L, 0, emptyList())
+            }
+
+            // 执行批量压缩
+            val compressionStats = photoCompressor.compressBatch(photos, progressCallback ?: { _, _ -> })
+
+            // 构建清理结果
+            val cleanedItems = photos.map { photo ->
+                CleanItem(
+                    path = photo.path,
+                    size = photo.size,
+                    type = CleanType.LARGE_PHOTO,
+                    description = "已压缩照片: ${photo.path.substringAfterLast('/')}",
+                    isSafe = true
+                )
+            }
+
+            CleanResult(
+                totalSize = compressionStats.totalSavedSpace,
+                itemsCount = compressionStats.compressedPhotos,
+                cleanedItems = cleanedItems.take(compressionStats.compressedPhotos)
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            CleanResult(0L, 0, emptyList())
+        }
+        */
+    }
+
+    /**
+     * 【新增】清理微信数据
+     * 使用WeChatCleaner进行智能清理
+     * TODO: WeChatCleaner功能待实现
+     */
+    suspend fun cleanWeChatData(retentionDays: Int = 30): CleanResult = withContext(Dispatchers.IO) {
+        // TODO: WeChatCleaner功能待实现
+        CleanResult(0L, 0, emptyList())
+        /*
+        try {
+            val weChatCleaner = WeChatCleaner(context)
+
+            if (!weChatCleaner.isWeChatInstalled()) {
+                return@withContext CleanResult(0L, 0, emptyList())
+            }
+
+            // 执行智能清理
+            val cleanResult = weChatCleaner.smartClean(retentionDays)
+
+            if (!cleanResult.success) {
+                return@withContext CleanResult(0L, 0, emptyList())
+            }
+
+            // 构建清理结果
+            val cleanedItems = listOf(
+                CleanItem(
+                    path = "wechat_smart_clean",
+                    size = cleanResult.freedSpace,
+                    type = CleanType.WECHAT_DATA,
+                    description = "微信智能清理 (保留${retentionDays}天数据)",
+                    isSafe = true
+                )
+            )
+
+            CleanResult(
+                totalSize = cleanResult.freedSpace,
+                itemsCount = cleanResult.deletedFiles,
+                cleanedItems = cleanedItems
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            CleanResult(0L, 0, emptyList())
+        }
+        */
+    }
+
+    /**
+     * 【新增】综合智能清理
+     * 执行所有清理优化操作，包括新增的照片压缩和微信清理
+     *
+     * @param includePhotos 是否包含照片压缩
+     * @param includeWeChat 是否包含微信清理
+     * @param wechatRetentionDays 微信数据保留天数
+     * @return 综合清理结果
+     */
+    suspend fun performSmartClean(
+        includePhotos: Boolean = true,
+        includeWeChat: Boolean = true,
+        wechatRetentionDays: Int = 30
+    ): SmartCleanResult = withContext(Dispatchers.IO) {
+        val results = mutableListOf<CleanResult>()
+        var totalSize = 0L
+        var totalItems = 0
+
+        try {
+            // 1. 常规垃圾文件清理
+            val junkFiles = scanJunkFiles().filter { it.type != CleanType.LARGE_PHOTO && it.type != CleanType.WECHAT_DATA }
+            if (junkFiles.isNotEmpty()) {
+                val junkResult = performClean(junkFiles)
+                results.add(junkResult)
+                totalSize += junkResult.totalSize
+                totalItems += junkResult.itemsCount
+            }
+
+            // 2. 大照片压缩
+            if (includePhotos) {
+                val photoResult = cleanLargePhotos()
+                if (photoResult.totalSize > 0) {
+                    results.add(photoResult)
+                    totalSize += photoResult.totalSize
+                    totalItems += photoResult.itemsCount
+                }
+            }
+
+            // 3. 微信数据清理
+            if (includeWeChat) {
+                val wechatResult = cleanWeChatData(wechatRetentionDays)
+                if (wechatResult.totalSize > 0) {
+                    results.add(wechatResult)
+                    totalSize += wechatResult.totalSize
+                    totalItems += wechatResult.itemsCount
+                }
+            }
+
+            // 4. 内存清理
+            val memoryFreed = cleanMemory()
+            totalSize += memoryFreed
+
+            // 5. 存储清理
+            val storageFreed = cleanStorage()
+            totalSize += storageFreed
+
+            SmartCleanResult(
+                success = true,
+                totalFreedSpace = totalSize,
+                totalItemsCleaned = totalItems,
+                detailResults = results,
+                errorMessage = null
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            SmartCleanResult(
+                success = false,
+                totalFreedSpace = totalSize,
+                totalItemsCleaned = totalItems,
+                detailResults = results,
+                errorMessage = e.message
+            )
+        }
+    }
+
+    /**
+     * 综合智能清理结果数据类
+     */
+    data class SmartCleanResult(
+        val success: Boolean,
+        val totalFreedSpace: Long,
+        val totalItemsCleaned: Int,
+        val detailResults: List<CleanResult>,
+        val errorMessage: String?
+    )
 }

@@ -13,6 +13,7 @@ import android.content.pm.PackageManager
 import android.os.BatteryManager
 import android.os.Build
 import android.os.PowerManager
+import com.lanhe.gongjuxiang.models.BatteryInfo  // 导入models包中的BatteryInfo
 import android.provider.Settings
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
@@ -653,6 +654,9 @@ class AdvancedBatteryOptimizer(private val context: Context) {
             val scale = it.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
             val temperature = it.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, -1)
             val status = it.getIntExtra(BatteryManager.EXTRA_STATUS, -1)
+            val voltage = it.getIntExtra(BatteryManager.EXTRA_VOLTAGE, 0)  // 添加voltage
+            val health = it.getIntExtra(BatteryManager.EXTRA_HEALTH, BatteryManager.BATTERY_HEALTH_UNKNOWN)  // 添加health
+            val pluggedType = it.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0)  // 添加pluggedType
 
             val batteryPercent = if (level >= 0 && scale > 0) {
                 (level.toFloat() / scale.toFloat() * 100f).roundToInt()
@@ -666,9 +670,36 @@ class AdvancedBatteryOptimizer(private val context: Context) {
             BatteryInfo(
                 level = batteryPercent,
                 temperature = temperature / 10f,
-                isCharging = isCharging
+                voltage = voltage / 1000f,
+                current = 0f,
+                status = status,
+                health = health,
+                technology = intent.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY) ?: "Unknown",
+                capacity = 0L,
+                isCharging = isCharging,
+                chargeType = when (pluggedType) {
+                    BatteryManager.BATTERY_PLUGGED_AC -> "AC"
+                    BatteryManager.BATTERY_PLUGGED_USB -> "USB"
+                    BatteryManager.BATTERY_PLUGGED_WIRELESS -> "Wireless"
+                    else -> "None"
+                },
+                timeToFull = 0L,
+                timeToEmpty = 0L
             )
-        } ?: BatteryInfo(50, 25f, false)
+        } ?: BatteryInfo(
+            level = 50,
+            temperature = 25f,
+            voltage = 3.7f,
+            current = 0f,
+            status = BatteryManager.BATTERY_STATUS_UNKNOWN,
+            health = BatteryManager.BATTERY_HEALTH_UNKNOWN,
+            technology = "Li-ion",
+            capacity = 0L,
+            isCharging = false,
+            chargeType = "None",
+            timeToFull = 0L,
+            timeToEmpty = 0L
+        )
     }
 
     private fun getChargeCycles(): Int {
@@ -774,9 +805,5 @@ data class UsagePattern(
     val suggestions: List<String> = emptyList()
 )
 
-data class BatteryInfo(
-    val level: Int,
-    val temperature: Float,
-    val isCharging: Boolean
-)
+// BatteryInfo已经在models包中定义，此处删除重复定义
 

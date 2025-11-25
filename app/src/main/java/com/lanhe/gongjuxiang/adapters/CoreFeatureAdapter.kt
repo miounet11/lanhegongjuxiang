@@ -7,14 +7,14 @@ import android.view.animation.DecelerateInterpolator
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.lanhe.gongjuxiang.databinding.ItemCoreFeatureBinding
+import com.lanhe.gongjuxiang.databinding.ItemCoreFeatureModernBinding
 import com.lanhe.gongjuxiang.models.CoreFeature
 
 class CoreFeatureAdapter(
     private val onFeatureClick: (CoreFeature) -> Unit
 ) : ListAdapter<CoreFeature, CoreFeatureAdapter.CoreFeatureViewHolder>(DiffCallback()) {
 
-    inner class CoreFeatureViewHolder(private val binding: ItemCoreFeatureBinding) :
+    inner class CoreFeatureViewHolder(private val binding: ItemCoreFeatureModernBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(feature: CoreFeature) {
@@ -77,7 +77,7 @@ class CoreFeatureAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoreFeatureViewHolder {
-        val binding = ItemCoreFeatureBinding.inflate(
+        val binding = ItemCoreFeatureModernBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false

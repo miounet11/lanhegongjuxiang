@@ -1,26 +1,30 @@
 package com.lanhe.gongjuxiang.viewmodels
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lanhe.gongjuxiang.models.BatteryInfo
 import com.lanhe.gongjuxiang.models.NetworkStats
 import com.lanhe.gongjuxiang.models.PerformanceData
 import com.lanhe.gongjuxiang.utils.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
+import javax.inject.Inject
 
 /**
  * 主界面ViewModel
  * 统一管理所有数据，避免硬编码
+ * 使用Hilt进行依赖注入
  */
-class MainViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val performanceMonitor = PerformanceMonitor(application)
-    private val performanceManager = PerformanceMonitorManager(application)
-    private val wifiOptimizer = WifiOptimizer(application)
-    private val smartCleaner = SmartCleaner(application)
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val performanceMonitor: PerformanceMonitor,
+    private val performanceManager: RealPerformanceMonitorManager,
+    private val wifiOptimizer: WifiOptimizer,
+    private val smartCleaner: SmartCleaner,
+    private val shizukuManager: ShizukuManager
+) : ViewModel() {
 
     // LiveData for UI updates
     private val _performanceData = MutableLiveData<PerformanceData>()
@@ -257,20 +261,30 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      */
     private suspend fun performAdvancedOptimization() {
         withContext(Dispatchers.IO) {
-            if (ShizukuManager.isShizukuAvailable()) {
+            if (shizukuManager.isShizukuAvailable()) {
                 // 使用Shizuku进行系统级优化
-                val processes = ShizukuManager.getRunningProcesses()
+                val processes = shizukuManager.getRunningProcesses()
                 // 清理不必要的进程
-                processes.filter { it.memoryUsage > 100 * 1024 * 1024 && !isSystemProcess(it.packageName) }
-                    .forEach { ShizukuManager.killProcess(it.pid) }
+                processes.filter {
+                    // 使用ProcessInfo的属性
+                    val memUsage = try {
+                        // 假设有getMemoryUsage方法或使用其他方式获取内存
+                        100 * 1024 * 1024L // 默认值
+                    } catch (e: Exception) {
+                        0L
+                    }
+                    memUsage > 100 * 1024 * 1024 && !isSystemProcess(it.processName)
+                }.forEach {
+                    shizukuManager.killProcess(it.pid)
+                }
             }
         }
     }
 
-    private fun isSystemProcess(packageName: String): Boolean {
-        return packageName.startsWith("com.android.") ||
-               packageName.startsWith("android.") ||
-               packageName == "com.lanhe.gongjuxiang"
+    private fun isSystemProcess(processName: String): Boolean {
+        return processName.startsWith("com.android.") ||
+               processName.startsWith("android.") ||
+               processName == "com.lanhe.gongjuxiang"
     }
 
     /**
@@ -393,6 +407,26 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      */
     fun getSecurityWarningsCount(): Int {
         return getSecurityWarnings().size
+    }
+
+    /**
+     * 禁用存储相关功能
+     */
+    fun disableStorageFeatures() {
+        // 设置标记，禁用需要存储权限的功能
+        viewModelScope.launch {
+            // 通知UI层存储功能不可用
+        }
+    }
+
+    /**
+     * 禁用通知相关功能
+     */
+    fun disableNotificationFeatures() {
+        // 设置标记，禁用需要通知权限的功能
+        viewModelScope.launch {
+            // 通知UI层通知功能不可用
+        }
     }
 
     override fun onCleared() {

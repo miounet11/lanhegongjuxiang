@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_smart_clean"
+        android:title="智能清理"
+        android:icon="@drawable/ic_auto_fix"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_clean_cache"
+        android:title="清理缓存"
+        android:icon="@drawable/ic_cache"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_refresh"
+        android:title="重新扫描"
+        android:icon="@drawable/ic_refresh"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_info"
+        android:title="功能说明"
+        android:icon="@drawable/ic_info"
+        app:showAsAction="never" />
+
+</menu>

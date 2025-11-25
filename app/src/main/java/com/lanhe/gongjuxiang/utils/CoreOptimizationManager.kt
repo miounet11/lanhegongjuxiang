@@ -306,7 +306,11 @@ class CoreOptimizationManager(private val context: Context) {
                 0f
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Failed to get CPU usage", e)
+            // 仅在非权限错误时记录日志，避免刷屏
+            val msg = e.message ?: ""
+            if (!msg.contains("EACCES") && !msg.contains("Permission denied")) {
+                Log.e(TAG, "Failed to get CPU usage", e)
+            }
             0f
         }
     }

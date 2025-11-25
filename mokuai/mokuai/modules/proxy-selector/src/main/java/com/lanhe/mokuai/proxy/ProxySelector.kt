@@ -256,7 +256,7 @@ class ProxySelector(private val context: Context) {
             // 设置认证
             if (!proxy.username.isNullOrEmpty() && !proxy.password.isNullOrEmpty()) {
                 val auth = "${proxy.username}:${proxy.password}"
-                val encodedAuth = Base64.getEncoder().encodeToString(auth.toByteArray())
+                val encodedAuth = android.util.Base64.encodeToString(auth.toByteArray(), android.util.Base64.NO_WRAP)
                 connection.setRequestProperty("Proxy-Authorization", "Basic $encodedAuth")
             }
 

@@ -17,8 +17,8 @@ class SystemMonitorViewModel : ViewModel() {
     val systemStats: LiveData<SystemStats> = _systemStats
 
     // 进程列表
-    private val _processList = MutableLiveData<List<ProcessInfo>>()
-    val processList: LiveData<List<ProcessInfo>> = _processList
+    private val _processList = MutableLiveData<List<com.lanhe.gongjuxiang.models.ProcessInfo>>()
+    val processList: LiveData<List<com.lanhe.gongjuxiang.models.ProcessInfo>> = _processList
 
     // 系统信息
     private val _systemInfo = MutableLiveData<SystemInfo>()
@@ -62,7 +62,7 @@ class SystemMonitorViewModel : ViewModel() {
     /**
      * 更新进程列表
      */
-    fun updateProcessList(processes: List<ProcessInfo>) {
+    fun updateProcessList(processes: List<com.lanhe.gongjuxiang.models.ProcessInfo>) {
         _processList.value = processes.sortedByDescending { it.memoryUsage }
     }
 

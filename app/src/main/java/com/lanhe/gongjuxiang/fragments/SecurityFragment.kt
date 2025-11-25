@@ -227,13 +227,8 @@ class SecurityFragment : Fragment() {
     }
 
     private fun showShimmerEffect(show: Boolean) {
-        if (show) {
-            binding.mainContent?.visibility = View.GONE
-            binding.shimmerContent?.visibility = View.VISIBLE
-        } else {
-            binding.shimmerContent?.visibility = View.GONE
-            binding.mainContent?.visibility = View.VISIBLE
-        }
+        // Shimmer views were removed during layout refactoring
+        // The hero card is now always visible
     }
 
     override fun onDestroyView() {

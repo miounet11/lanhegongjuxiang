@@ -3,7 +3,6 @@ package com.lanhe.gongjuxiang.activities
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lanhe.gongjuxiang.R
@@ -11,10 +10,11 @@ import com.lanhe.gongjuxiang.adapters.StorageFunctionAdapter
 import com.lanhe.gongjuxiang.databinding.ActivityStorageManagerBinding
 import com.lanhe.gongjuxiang.models.StorageFunction
 import com.lanhe.gongjuxiang.utils.AnimationUtils
+import com.lanhe.gongjuxiang.utils.PermissionConstants
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class StorageManagerActivity : AppCompatActivity() {
+class StorageManagerActivity : BasePermissionActivity() {
 
     private lateinit var binding: ActivityStorageManagerBinding
     private lateinit var storageFunctionAdapter: StorageFunctionAdapter
@@ -27,9 +27,46 @@ class StorageManagerActivity : AppCompatActivity() {
 
         setupToolbar()
         setupRecyclerView()
-        loadStorageFunctions()
+
+        // 检查并请求存储权限
+        checkAndRequestStoragePermissions()
+
         setupClickListeners()
         startStorageMonitoring()
+    }
+
+    private fun checkAndRequestStoragePermissions() {
+        executeWithPermission(
+            PermissionConstants.STORAGE_PERMISSIONS,
+            action = {
+                // 权限已授予，加载存储功能
+                loadStorageFunctions()
+                enableAllFeatures()
+            }
+        )
+    }
+
+    private fun enableAllFeatures() {
+        // 启用所有需要权限的功能
+        // These buttons are referenced in setupClickListeners
+        binding.btnOptimizeNow.isEnabled = true
+        binding.btnStorageAnalysis.isEnabled = true
+        binding.btnStorageMonitor.isEnabled = true
+    }
+
+    private fun disableRestrictedFeatures() {
+        // 禁用需要权限的功能
+        binding.btnOptimizeNow.isEnabled = false
+        binding.btnStorageAnalysis.isEnabled = false
+        binding.btnStorageMonitor.isEnabled = false
+
+        Toast.makeText(this, "存储管理功能需要存储权限", Toast.LENGTH_LONG).show()
+    }
+
+    override fun onReturnFromSettings() {
+        super.onReturnFromSettings()
+        // 从设置返回后重新检查权限
+        checkAndRequestStoragePermissions()
     }
 
     private fun setupToolbar() {
@@ -166,18 +203,26 @@ class StorageManagerActivity : AppCompatActivity() {
     }
 
     private fun handleFunctionClick(function: StorageFunction) {
+        // 对需要存储权限的功能进行权限检查
         when (function.id) {
             "storage_info" -> showStorageInfo()
-            "storage_cleanup" -> performStorageCleanup()
-            "storage_optimization" -> optimizeStorage()
-            "file_defragmentation" -> performDefragmentation()
-            "storage_compression" -> manageCompression()
-            "storage_encryption" -> manageEncryption()
-            "storage_backup" -> manageBackup()
+            "storage_cleanup" -> executeWithStoragePermission { performStorageCleanup() }
+            "storage_optimization" -> executeWithStoragePermission { optimizeStorage() }
+            "file_defragmentation" -> executeWithStoragePermission { performDefragmentation() }
+            "storage_compression" -> executeWithStoragePermission { manageCompression() }
+            "storage_encryption" -> executeWithStoragePermission { manageEncryption() }
+            "storage_backup" -> executeWithStoragePermission { manageBackup() }
             "storage_monitoring" -> showStorageMonitoring()
-            "storage_partition" -> managePartitions()
+            "storage_partition" -> executeWithStoragePermission { managePartitions() }
             "storage_cloud_sync" -> manageCloudSync()
         }
+    }
+
+    private fun executeWithStoragePermission(action: () -> Unit) {
+        executeWithPermission(
+            PermissionConstants.STORAGE_PERMISSIONS,
+            action = action
+        )
     }
 
     private fun startStorageMonitoring() {

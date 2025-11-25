@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Environment
 import android.os.StatFs
 import android.util.Log
+import android.widget.Toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,6 +18,8 @@ import java.io.File
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.*
+import com.lanhe.gongjuxiang.models.DuplicateFileGroup
+import com.lanhe.gongjuxiang.models.DuplicateFileResult  // 导入models包中的类
 import kotlin.math.roundToInt
 
 /**
@@ -35,6 +38,7 @@ class EnhancedStorageOptimizer(private val context: Context) {
 
     private val packageManager = context.packageManager
     private val dataManager = DataManager(context)
+    private val permissionHelper = PermissionHelper.getInstance(context)
 
     // 存储状态流
     private val _storageState = MutableStateFlow<StorageState>(StorageState())
@@ -111,6 +115,13 @@ class EnhancedStorageOptimizer(private val context: Context) {
      * 重复文件检测和清理
      */
     suspend fun findAndRemoveDuplicateFiles(): DuplicateFileResult {
+        // 检查存储权限
+        if (!permissionHelper.checkPermissionGroup(PermissionConstants.STORAGE_PERMISSIONS)) {
+            Log.w(TAG, "Storage permission not granted for duplicate file detection")
+            Toast.makeText(context, "需要存储权限才能检测重复文件", Toast.LENGTH_SHORT).show()
+            return DuplicateFileResult(message = "缺少存储权限")
+        }
+
         return withContext(Dispatchers.IO) {
             try {
                 val duplicates = findDuplicateFiles()
@@ -871,18 +882,7 @@ data class StorageInfo(
     val usagePercent: Int = 0
 )
 
-data class DuplicateFileGroup(
-    val hash: String,
-    val files: List<File>,
-    val totalSize: Long
-)
-
-data class DuplicateFileResult(
-    val duplicateGroups: List<DuplicateFileGroup> = emptyList(),
-    val totalDuplicateSize: Long = 0L,
-    val removedSize: Long = 0L,
-    val message: String = ""
-)
+// DuplicateFileGroup和DuplicateFileResult已经在models包中定义，此处删除重复定义
 
 data class LargeFileInfo(
     val file: File,
